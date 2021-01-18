@@ -1,5 +1,7 @@
 # vue-shopping-cart
 
+A store + shopping cart frontend made using Vue
+
 ## Project setup
 ```
 npm install
