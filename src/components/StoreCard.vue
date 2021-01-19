@@ -1,22 +1,24 @@
 <template>
-    <div class="card large">
-      <router-link to="/stores/1/">
-      <div class="card-image">
-        <figure class="image is-16-by-9">
-          <img src="http://192.168.1.120:8000/media/images/MallMart/mallmart.jpg" title="STORE NAME" alt="STORE NAME">
-        </figure>
-      </div>
-      </router-link>
-      <div class="card-content">
-        <div class="is-4">
-          <router-link to="/stores/1/" class="title">
-            {{ store.name }}
-          </router-link>
+    <div>
+      <div class="card large">
+        <router-link :to="`/stores/${store.id}/`">
+        <div class="card-image">
+          <figure class="image is-16-by-9 center-image-in-card">
+            <img :src="`${store.image}`" :title="`${store.name}`" :alt="`${store.name} Image`">
+          </figure>
         </div>
-        <div class="is-6">
-          <router-link to="/stores/1/" class="subtitle">
-            We've got everything you need!
-          </router-link>
+        </router-link>
+        <div class="card-content">
+          <div class="is-4">
+            <router-link to="/stores/1/" class="title">
+              {{ store.name }}
+            </router-link>
+          </div>
+          <div class="is-6">
+            <router-link to="/stores/1/" class="subtitle">
+              {{ store.description }}
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -31,7 +33,12 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.center-image-in-card {
+  overflow: hidden;
+  display: flex;
+  max-height: 20vh;
+  align-items: center;
+  justify-content: stretch;
+}
 </style>
-

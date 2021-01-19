@@ -23,8 +23,8 @@ export default {
 
 <style lang="scss">
 body {
-  min-height: 100vh;
   background-color: #caf0f8;
+  min-height: 100vh;
 }
 
 a {
@@ -35,5 +35,13 @@ a {
 .bottom-links {
   font-size: 1.2rem;
   margin-top: 3rem;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.cursor-url {
+  cursor: pointer;
 }
 </style>
