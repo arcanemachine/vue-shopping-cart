@@ -6,6 +6,7 @@ import store from './store'
 require('@/assets/main.scss');
 require('@/assets/base.css');
 
+
 Vue.config.productionTip = false
 
 new Vue({

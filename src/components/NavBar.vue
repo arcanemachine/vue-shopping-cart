@@ -1,26 +1,34 @@
 <template>
-  <nav class="navbar is-white border-bottom">
-    <div class="container">
-      <div class="navbar-brand">
-        <a class="navbar-item brand-text" href="/">Vue Store + Shopping Cart</a>
-        <div class="navbar-item-show-on-mobile is-hidden-desktop is-hidden-widescreen">
-          <a class="navbar-item navbar-item-shopping-cart">&#x1f6d2;</a>
-        </div>
-        <span @click="navbarToggle" class="navbar-burger burger" :class="navbarMenuClass" data-target="navMenu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
-      </div>
-      <div id="navbarMenu" class="navbar-menu" :class="navbarMenuClass">
-          <div class="navbar-end">
-            <a class="navbar-item is-hidden-mobile is-hidden-tablet-only">Your Cart <span class="ml-2 is-size-5">&#x1f6d2;</span></a>
-            <a class="navbar-item">Stores</a>
-            <a class="navbar-item">Your Account</a>
+  <section class="hero is-info is-medium is-bold">
+    <div class="hero head">
+      <nav class="navbar is-white border-bottom">
+        <div class="container">
+          <div class="navbar-brand">
+            <a class="navbar-item brand-text" href="/">Vue Store + Shopping Cart</a>
+            <div class="navbar-item-touch is-hidden-desktop is-hidden-widescreen">
+              <a class="navbar-item navbar-cart-container-touch">
+                <i class="bi-cart2 navbar-cart-touch"></i>
+              </a>
+            </div>
+            <span @click="navbarToggle" class="navbar-burger burger" :class="navbarMenuClass" data-target="navMenu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
           </div>
-      </div>
+          <div id="navbarMenu" class="navbar-menu" :class="navbarMenuClass">
+              <div class="navbar-end">
+                <a class="navbar-item is-hidden-mobile is-hidden-tablet-only">
+                  Your Cart <span class="navbar-cart-container-wide"><i class="bi-cart2 is-size-5 shopping-cart-icon-wide"></i></span>
+                </a>
+                <a class="navbar-item">Stores</a>
+                <a class="navbar-item">Your Account</a>
+              </div>
+          </div>
+        </div>
+      </nav>
     </div>
-  </nav>
+  </section>
 </template>
 
 <script>
@@ -61,16 +69,28 @@ export default {
   border-width: 0 0 2px;
 }
 
-.navbar-item-show-on-mobile {
+.navbar-item-touch {
 	display: flex;
 	flex-grow: 1;
 	justify-content: flex-end;
 	align-items: center;
 }
 
-.navbar-item-shopping-cart {
+.navbar-cart-container-touch {
+  margin-right: 0.2rem;
+  background-color: rgb(255, 255, 255, 0.5);
+	padding-bottom: 0.25rem;
+  border-radius: 1.5rem;
 	font-size: 1.3rem;
-	margin-bottom: 0.25rem;
+  transition: background-color 0.5s;
+}
+
+.navbar-cart-touch {
+  margin: -0.35rem 0 0.35rem;
+}
+
+.navbar-cart-container-wide {
+  margin: -0.25rem 0.25rem 0.25rem;
 }
 
 
