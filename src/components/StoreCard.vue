@@ -3,8 +3,11 @@
       <div class="card large">
         <router-link :to="`/stores/${store.id}/`">
         <div class="card-image">
-          <figure class="image is-16-by-9 center-image-in-card">
+          <figure v-if="store.image" class="image is-16-by-9 card-image-container">
             <img :src="`${store.image}`" :title="`${store.name}`" :alt="`${store.name} Image`">
+          </figure>
+          <figure v-else class="image is-16-by-9 card-image-container">
+            <i class="bi bi-camera-fill image-not-available"></i>
           </figure>
         </div>
         </router-link>
@@ -34,11 +37,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.center-image-in-card {
+.card-image-container {
+  background-color: darkgray;
   overflow: hidden;
   display: flex;
-  max-height: 20rem;
+  height: 15rem;
   align-items: center;
   justify-content: stretch;
 }
+
+.image-not-available {
+  width: 100%;
+  font-size: 10rem;
+  color: white;
+}
+  
 </style>
