@@ -51,10 +51,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.navbar-color-custom {
-  background-color: #48cae4;
-}
-
 .border-top {
   border: 2px solid black;
   border-width: 2px 0 0;

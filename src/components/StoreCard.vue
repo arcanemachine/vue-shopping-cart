@@ -37,7 +37,7 @@ export default {
 .center-image-in-card {
   overflow: hidden;
   display: flex;
-  max-height: 20vh;
+  max-height: 20rem;
   align-items: center;
   justify-content: stretch;
 }
