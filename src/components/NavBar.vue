@@ -5,7 +5,7 @@
         <a class="navbar-item brand-text has-text-weight-bold" href="/">Vue Store + Shopping Cart</a>
         <div class="navbar-item-touch is-hidden-desktop is-hidden-widescreen">
           <a class="navbar-item navbar-show-icon-touch-container" alt="User Profile Icon" title="Your Account">
-            <i class="bi-person-circle navbar-show-icon-touch has-text-light icon-person-circle"></i>
+            <i class="bi-person-circle navbar-show-icon-touch icon-person-circle" :style="userProfileIconStyle"></i>
           </a>
           <a class="navbar-item navbar-show-icon-touch-container" alt="Shopping Cart Icon" title="Your Cart">
             <i class="bi-cart2 navbar-show-icon-touch has-text-light"></i>
@@ -42,7 +42,13 @@ export default {
   computed: {
     navbarMenuClass() {
       return {
-        'is-active': this.navbarIsActive ? true : false}
+        'is-active': this.navbarIsActive ? true : false,
+      }
+    },
+    userProfileIconStyle() {
+      return {
+        color: this.$store.getters.userIsAuthenticated ? 'gold' : 'white'
+      }
     }
   },
   methods: {
@@ -90,6 +96,7 @@ export default {
 
 .navbar-show-icon-touch {
   margin: -0.35rem 0 0.35rem;
+  transition: color 0.5s;
 }
 
 .navbar-icon-container-wide {
