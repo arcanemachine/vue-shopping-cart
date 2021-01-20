@@ -11,8 +11,6 @@
 
 import NavBar from './components/NavBar.vue'
 
-var world = 'world!'; // eslint-disable-line
-
 
 export default {
   name: 'App',
