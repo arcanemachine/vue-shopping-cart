@@ -1,10 +1,10 @@
 <template>
     <div>
       <div class="card large">
-        <router-link :to="{name: 'storeDetail', params: {storeId: store.id}}">
+        <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
         <div class="card-image">
-          <figure v-if="store.image" class="image is-16-by-9 card-image-container">
-            <img :src="store.image" :title="store.name" :alt="`${store.name} Image`">
+          <figure v-if="item.image" class="image is-16-by-9 card-image-container">
+            <img :src="item.image" :title="item.name" :alt="`${item.name} Image`">
           </figure>
           <figure v-else class="image is-16-by-9 card-image-container">
             <i class="bi bi-camera-fill image-not-available"></i>
@@ -13,13 +13,13 @@
         </router-link>
         <div class="card-content">
           <div class="is-4">
-            <router-link :to="`/stores/${store.id}/`" class="title">
-              {{ store.name }}
+            <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
+              {{ item.name }}
             </router-link>
           </div>
           <div class="is-6">
-            <router-link :to="`/stores/${store.id}/`" class="subtitle">
-              {{ store.description }}
+            <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
+              {{ item.description }}
             </router-link>
           </div>
         </div>
@@ -29,9 +29,9 @@
 
 <script>
 export default {
-  name: 'StoreCard',
+  name: 'ItemCard',
   props: {
-    store: Object
+    item: Object
   }
 }
 </script>

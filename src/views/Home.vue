@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="row columns is-multiline">
-        <store-card v-for="store in storeList"
+        <store-card v-for="store in stores"
                     :key="store.id"
                     :store="store"
                     class="column">
@@ -29,21 +29,20 @@ export default {
   },
   data() {
     return {
-      storeList: {}
+      stores: {}
     }
   },
   mounted() {
     console.log('hello');
     this.$nextTick(() => {
-      this.getStoreList();
+      this.getStores();
     })
   },
   methods: {
-    getStoreList() {
-      fetch(this.$helpers.urls.storeList, {
-        mode: 'cors'})
+    getStores() {
+      fetch(this.$helpers.urls.storeList)
       .then(response => response.json())
-      .then(data => this.storeList = data)
+      .then(data => this.stores = data)
     }
   }
 }

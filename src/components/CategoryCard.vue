@@ -1,37 +1,55 @@
 <template>
-  <div class="card large">
-    <router-link :to="`/stores/${store.id}/`">
-    <div class="card-image">
-      <figure class="image is-16-by-9">
-        <img src="http://192.168.1.120:8000/media/images/MallMart/mallmart.jpg" title="STORE NAME" alt="STORE NAME">
-      </figure>
-    </div>
-    </router-link>
-    <div class="card-content">
-      <div class="is-4">
-        <router-link to="/stores/1/" class="title">
-          MallMart
+    <div>
+      <div class="card large">
+        <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}">
+        <div class="card-image">
+          <figure v-if="category.image" class="image is-16-by-9 card-image-container">
+            <img :src="category.image" :title="category.name" :alt="`${category.name} Image`">
+          </figure>
+          <figure v-else class="image is-16-by-9 card-image-container">
+            <i class="bi bi-camera-fill image-not-available"></i>
+          </figure>
+        </div>
         </router-link>
-      </div>
-      <div class="is-6">
-        <router-link to="/stores/1/" class="subtitle">
-          We've got everything you need!
-        </router-link>
+        <div class="card-content">
+          <div class="is-4">
+            <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}">
+              {{ category.name }}
+            </router-link>
+          </div>
+          <div class="is-6">
+            <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}">
+              {{ category.description }}
+            </router-link>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
 export default {
-  name: 'NavBar',
+  name: 'CategoryCard',
   props: {
-    store: Object
+    category: Object
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-</style>
+.card-image-container {
+  background-color: darkgray;
+  overflow: hidden;
+  display: flex;
+  height: 15rem;
+  align-items: center;
+  justify-content: stretch;
+}
 
+.image-not-available {
+  width: 100%;
+  font-size: 10rem;
+  color: white;
+}
+  
+</style>

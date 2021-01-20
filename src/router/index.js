@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import StoreDetail from '../views/StoreDetail.vue'
+import CategoryDetail from '../views/CategoryDetail.vue'
+import ItemDetail from '../views/ItemDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -12,14 +14,25 @@ const routes = [
     component: Home
   },
   {
-    path: '/stores/',
-    name: 'StoreList',
-    component: Home
+    path: '/:storeId/',
+    name: 'storeDetail',
+    component: StoreDetail,
+    props: true,
+    pathToRegexpOptions: { strict: true }
   },
   {
-    path: '/stores/:storeId/',
-    name: 'StoreDetail',
-    component: StoreDetail,
+    path: '/:storeId/:categoryId/',
+    name: 'categoryDetail',
+    component: CategoryDetail,
+    props: true,
+    pathToRegexpOptions: { strict: true }
+  },
+  {
+    path: '/:storeId/:categoryId/:itemId/',
+    name: 'itemDetail',
+    component: ItemDetail,
+    props: true,
+    pathToRegexpOptions: { strict: true }
   },
   {
     path: '*',
