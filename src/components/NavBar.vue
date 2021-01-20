@@ -2,7 +2,7 @@
   <nav class="navbar is-dark border-bottom navbar-color-custom">
     <div class="container">
       <div class="navbar-brand">
-        <a class="navbar-item brand-text has-text-weight-bold" href="/">Vue Store + Shopping Cart</a>
+        <router-link :to="{name: 'home'}" class="navbar-item brand-text has-text-weight-bold">Vue Store + Shopping Cart</router-link>
         <div class="navbar-item-touch is-hidden-desktop is-hidden-widescreen">
           <a class="navbar-item navbar-show-icon-touch-container" alt="User Profile Icon" title="Your Account">
             <i class="bi-person-circle navbar-show-icon-touch icon-person-circle" :style="userProfileIconStyle"></i>
