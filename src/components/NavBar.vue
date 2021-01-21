@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar is-dark border-bottom navbar-color-custom">
+  <nav class="navbar is-fixed-top is-dark border-bottom navbar-color-custom">
     <div class="container">
       <div class="navbar-brand">
         <router-link :to="{name: 'home'}" class="navbar-item brand-text has-text-weight-bold">Vue Store + Shopping Cart</router-link>
@@ -32,9 +32,9 @@
             <a class="navbar-item is-hidden-mobile is-hidden-tablet-only">
               Your Cart <span class="navbar-icon-container-wide"><i class="bi-cart2 is-size-5"></i></span>
             </a>
-            <a class="navbar-item has-text-centered">Stores</a>
-            <a class="navbar-item has-text-centered">Your Account</a>
-            <a class="navbar-item has-text-centered">Your Account</a>
+            <router-link class="navbar-item has-text-centered">Stores</router-link>
+            <router-link class="navbar-item has-text-centered">Your Account</router-link>
+            <router-link class="navbar-item has-text-centered">Your Account</router-link>
           </div>
       </div>
     </div>

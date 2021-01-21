@@ -2,7 +2,7 @@
   <div id="app">
     <nav-bar></nav-bar>
     <transition name="fade" mode="out-in">
-      <router-view/>
+      <router-view class="router-view"/>
     </transition>
   </div>
 </template>
@@ -24,6 +24,10 @@ export default {
 <style lang="scss">
 body {
   background-color: #caf0f8;
+}
+
+#app {
+  padding-top: 2rem;
   min-height: 100vh;
 }
 
