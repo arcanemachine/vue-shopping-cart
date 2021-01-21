@@ -9,8 +9,10 @@ import CategoryDetail from '../views/CategoryDetail.vue'
 import ItemDetail from '../views/ItemDetail.vue'
 
 // user
-import UserRegister from '../views/UserRegister.vue'
-import UserLogin from '../views/UserLogin.vue'
+import Register from '../views/Register.vue'
+import Login from '../views/Login.vue'
+import Logout from '../views/Logout.vue'
+import LogoutConfirm from '../views/LogoutConfirm.vue'
 import UserDetail from '../views/UserDetail.vue'
 
 
@@ -20,27 +22,53 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Home'}
+  },
+  {
+    path: '/stores/',
+    name: 'storeList',
+    component: Home,
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Store List'}
   },
 
   // users
   {
     path: '/register/',
-    name: 'userRegister',
-    component: UserRegister,
-    pathToRegexpOptions: { strict: true }
+    name: 'register',
+    component: Register,
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Register New User'}
   },
   {
     path: '/login/',
-    name: 'userLogin',
-    component: UserLogin,
-    pathToRegexpOptions: { strict: true }
+    name: 'login',
+    component: Login,
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'User Login'}
   },
   {
     path: '/my-account/',
     name: 'userDetail',
     component: UserDetail,
-    pathToRegexpOptions: { strict: true }
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Your Account'}
+  },
+  {
+    path: '/logout/confirm/',
+    name: 'logoutConfirm',
+    component: LogoutConfirm,
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Confirm Logout'}
+  },
+  {
+    path: '/logout/',
+    name: 'logout',
+    component: Logout,
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Logout'}
   },
 
   // stores
@@ -49,26 +77,30 @@ const routes = [
     name: 'storeDetail',
     component: StoreDetail,
     props: true,
-    pathToRegexpOptions: { strict: true }
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Store Info'}
   },
   {
     path: '/:storeId/:categoryId/',
     name: 'categoryDetail',
     component: CategoryDetail,
     props: true,
-    pathToRegexpOptions: { strict: true }
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Category Info'}
   },
   {
     path: '/:storeId/:categoryId/:itemId/',
     name: 'itemDetail',
     component: ItemDetail,
     props: true,
-    pathToRegexpOptions: { strict: true }
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Category Info'}
   },
   {
     path: '*',
     name: 'pageNotFound',
-    component: () => import(/* webpackChunkName: "PageNotFound" */ '../components/PageNotFound.vue')
+    component: () => import(/* webpackChunkName: "PageNotFound" */ '../components/PageNotFound.vue'),
+		meta: {title: '404: Page Not Found'}
   }
 ]
 
@@ -77,5 +109,16 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.afterEach((to, from) => { // eslint-disable-line no-unused-vars
+  const DEFAULT_TITLE = 'Vue Shopping Cart';
+  Vue.nextTick(() => {
+    if (!to.meta.title) {
+      document.title = DEFAULT_TITLE;
+    } else {
+      document.title = to.meta.title + ' - ' + DEFAULT_TITLE;
+    }
+  });
+});
 
 export default router
