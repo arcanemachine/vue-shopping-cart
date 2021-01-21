@@ -73,7 +73,7 @@ const routes = [
 
   // stores
   {
-    path: '/:storeId/',
+    path: '/:storeId(\\d+)/',
     name: 'storeDetail',
     component: StoreDetail,
     props: true,
@@ -81,7 +81,7 @@ const routes = [
 		meta: {title: 'Store Info'}
   },
   {
-    path: '/:storeId/:categoryId/',
+    path: '/:storeId(\\d+)/:categoryId(\\d+)/',
     name: 'categoryDetail',
     component: CategoryDetail,
     props: true,
@@ -89,7 +89,7 @@ const routes = [
 		meta: {title: 'Category Info'}
   },
   {
-    path: '/:storeId/:categoryId/:itemId/',
+    path: '/:storeId(\\d+)/:categoryId(\\d+)/:itemId(\\d+)/',
     name: 'itemDetail',
     component: ItemDetail,
     props: true,
