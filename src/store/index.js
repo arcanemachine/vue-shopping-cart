@@ -39,12 +39,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    userLogin (context, userToken) {
+    login (context, userToken) {
       context.commit('userIsAuthenticated', true);
       // context.commit('userIs', user);
       context.commit('userToken', userToken);
     },
-    userLogout (context) {
+    logout (context) {
       context.commit('userIsAuthenticated', false);
       context.commit('userIs', undefined);
     }

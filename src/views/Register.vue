@@ -32,7 +32,7 @@
 <script>
 
 export default {
-  name: 'ItemDetail',
+  name: 'Register',
   components: {
   },
   props: [

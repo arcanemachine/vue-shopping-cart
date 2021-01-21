@@ -1,7 +1,7 @@
 <template>
     <footer class="footer">
       <div class="content has-text-centered">
-        <strong>Copyright 2020. Licensed under <router-link to="/public/LICENSE.txt">MIT License</router-link>.</strong>
+        <strong>Copyright 2020 Nicholas Moen. Licensed under <a href="https://mit-license.org/license.txt">MIT License</a>.</strong>
       </div>
     </footer>
 </template>

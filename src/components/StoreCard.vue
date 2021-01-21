@@ -13,12 +13,12 @@
         </router-link>
         <div class="card-content">
           <div class="is-4">
-            <router-link :to="`/stores/${store.id}/`" class="title">
+            <router-link :to="{name: 'storeDetail', params: {storeId: store.id}}" class="title">
               {{ store.name }}
             </router-link>
           </div>
           <div class="is-6">
-            <router-link :to="`/stores/${store.id}/`" class="subtitle">
+            <router-link :to="{name: 'storeDetail', params: {storeId: store.id}}" class="subtitle">
               {{ store.description }}
             </router-link>
           </div>

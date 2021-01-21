@@ -50,10 +50,15 @@ a {
 }
 
 .fade-enter-active, .fade-leave-active {
-    transition: opacity .3s;
+  transition: opacity .3s;
 }
 
 .fade-enter, .fade-leave-to {
-    opacity: 0;
+  opacity: 0;
+}
+
+/* bulma extensions */
+.is-absolute {
+  position: absolute;
 }
 </style>

@@ -8,6 +8,9 @@ import StoreDetail from '../views/StoreDetail.vue'
 import CategoryDetail from '../views/CategoryDetail.vue'
 import ItemDetail from '../views/ItemDetail.vue'
 
+// cart
+import Cart from '../views/Cart.vue'
+
 // user
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
@@ -32,6 +35,13 @@ const routes = [
     component: Home,
     pathToRegexpOptions: { strict: true },
 		meta: {title: 'Store List'}
+  },
+  {
+    path: '/cart/',
+    name: 'cart',
+    component: Cart,
+    pathToRegexpOptions: { strict: true },
+		meta: {title: 'Your Cart'}
   },
 
   // users

@@ -1,8 +1,8 @@
 export const urls = {
 
   // users
-  getCsrfToken: 'http://192.168.1.100:8000/get_csrftoken/',
   login: 'http://192.168.1.100:8000/api/rest-auth/login/',
+  logout: 'http://192.168.1.100:8000/api/rest-auth/logout/',
 
   // stores
   storeList: 'http://192.168.1.100:8000/api/v1/stores/',
@@ -37,4 +37,17 @@ export function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+export function handleResponse(response) { // , responseType='json') {
+  if (!response.ok) {
+    console.log("HTTP error, status = " + response.status);
+    // throw new Error("HTTP error, status = " + response.status);
+    }
+  // if (responseType === 'none') {
+  //   return undefined;
+  // }
+  // if (responseType === 'json') {
+  // }
+  return response.json();
 }
