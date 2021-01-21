@@ -3,7 +3,17 @@
     <div class="container">
       <div class="navbar-brand">
         <router-link :to="{name: 'home'}" class="navbar-item brand-text has-text-weight-bold">Vue Store + Shopping Cart</router-link>
-        <div class="navbar-item-touch is-hidden-desktop is-hidden-widescreen">
+        <transition name="fade">
+          <div v-if="$store.getters.isLoading" class="navbar-item-touch-container-start is-hidden-desktop is-hidden-widescreen">
+            <a class="navbar-item navbar-show-icon-touch-container loading-animation" alt="Shopping Cart Icon" title="Your Cart">
+              <svg class="bi bi-arrow-repeat navbar-show-icon-touch has-text-light loading-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+              </svg>
+            </a>
+          </div>
+        </transition>
+        <div class="navbar-item-touch-container-end is-hidden-desktop is-hidden-widescreen">
           <router-link :to="userIconUrl" class="navbar-item navbar-show-icon-touch-container" alt="User Profile Icon" title="Your Account">
             <i class="bi-person-circle navbar-show-icon-touch icon-person-circle" :style="userProfileIconStyle"></i>
           </router-link>
@@ -78,7 +88,14 @@ export default {
   border-width: 0 0 2px;
 }
 
-.navbar-item-touch {
+.navbar-item-touch-container-start {
+	display: flex;
+	flex-grow: 1;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.navbar-item-touch-container-end {
 	display: flex;
 	flex-grow: 1;
 	justify-content: flex-end;
@@ -91,6 +108,21 @@ export default {
   border-radius: 0.5rem;
 	font-size: 1.3rem;
   transition: background-color 0.5s;
+}
+
+@keyframes rotate-right {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-icon {
+  padding-top: 0.25rem;
+  transform: scale(2, 2);
+}
+
+.loading-animation {
+  animation: 1.2s infinite rotate-right linear;
 }
 
 .hover-background-white {

@@ -5,11 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isLoading: false,
     userIsAuthenticated: false,
     user: undefined,
     userToken: undefined,
   },
   getters: {
+    isLoading (state) {
+      return state.isLoading;
+    },
     userIsAuthenticated (state) {
       return state.userIsAuthenticated;
     },
@@ -21,6 +25,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    isLoading (state, bool) {
+      state.isLoading = bool;
+    },
     userIsAuthenticated (state, bool) {
       state.userIsAuthenticated = bool;
     },
