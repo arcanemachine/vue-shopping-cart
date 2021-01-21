@@ -33,7 +33,6 @@ export default {
     }
   },
   mounted() {
-    console.log('hello');
     this.$nextTick(() => {
       this.getStores();
     })

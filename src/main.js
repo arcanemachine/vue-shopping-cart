@@ -11,6 +11,8 @@ Vue.prototype.$helpers = helpers;
 
 Vue.config.productionTip = false
 
+
+/* test function */
 new Vue({
   router,
   store,

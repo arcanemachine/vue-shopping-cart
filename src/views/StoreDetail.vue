@@ -27,10 +27,9 @@ export default {
   components: {
     CategoryCard
   },
-  props: {
-    // store: Object,
-    storeId: String
-  },
+  props: [
+    'storeId'
+  ],
   data() {
     return {
       store: {},

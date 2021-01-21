@@ -4,9 +4,9 @@
       <div class="navbar-brand">
         <router-link :to="{name: 'home'}" class="navbar-item brand-text has-text-weight-bold">Vue Store + Shopping Cart</router-link>
         <div class="navbar-item-touch is-hidden-desktop is-hidden-widescreen">
-          <a class="navbar-item navbar-show-icon-touch-container" alt="User Profile Icon" title="Your Account">
+          <router-link :to="userIconUrl" class="navbar-item navbar-show-icon-touch-container" alt="User Profile Icon" title="Your Account">
             <i class="bi-person-circle navbar-show-icon-touch icon-person-circle" :style="userProfileIconStyle"></i>
-          </a>
+          </router-link>
           <a class="navbar-item navbar-show-icon-touch-container" alt="Shopping Cart Icon" title="Your Cart">
             <i class="bi-cart2 navbar-show-icon-touch has-text-light"></i>
           </a>
@@ -43,6 +43,13 @@ export default {
     navbarMenuClass() {
       return {
         'is-active': this.navbarIsActive ? true : false,
+      }
+    },
+    userIconUrl() {
+      if (!this.$store.getters.userIsAuthenticated) {
+        return {name: 'userLogin'};
+      } else {
+        return {name: 'userDetail'};
       }
     },
     userProfileIconStyle() {

@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     userIsAuthenticated: false,
     user: undefined,
+    userToken: undefined,
   },
   getters: {
     userIsAuthenticated (state) {
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     user (state) {
       return state.user;
+    },
+    userToken (state) {
+      return state.userToken;
     }
   },
   mutations: {
@@ -22,12 +26,16 @@ export default new Vuex.Store({
     },
     userIs (state, user) {
       state.user = user;
+    },
+    userToken (state, userToken) {
+      state.userToken = userToken;
     }
   },
   actions: {
-    userLogin (context, user) {
+    userLogin (context, userToken) {
       context.commit('userIsAuthenticated', true);
-      context.commit('userIs', user);
+      // context.commit('userIs', user);
+      context.commit('userToken', userToken);
     },
     userLogout (context) {
       context.commit('userIsAuthenticated', false);
