@@ -31,6 +31,7 @@
             </div>
             <transition name="fade" mode="out-in">
               <div v-if="loginResponse === 'Success!'" class="has-text-weight-bold">Success!</div>
+              <div v-for="message in loginResponse.form_errors" :key="message" class="has-text-weight-bold">{{ message }}</div>
               <div v-for="message in loginResponse.non_field_errors" :key="message" class="has-text-weight-bold">Error: {{ message }}</div>
               <div v-for="message in loginResponse.username" :key="message" class="has-text-weight-bold">Username: {{ message }}</div>
               <div v-for="message in loginResponse.password" :key="message" class="has-text-weight-bold">Password: {{ message }}</div>
@@ -60,6 +61,16 @@ export default {
   methods: {
     async login() {
       event.preventDefault();
+
+      // do not continue if form fields are empty
+      if (!this.form.username || !this.form.password) {
+        this.loginResponse = {form_errors: ['Please complete the form before continuing.']};
+        setTimeout(() => {
+          this.loginResponse = {};
+        }, 4000)
+        return false;
+      }
+
       this.$refs.loginButton.classList.add('is-loading');
 
       let url = this.$helpers.urls.login;
