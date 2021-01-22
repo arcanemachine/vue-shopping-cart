@@ -135,8 +135,7 @@ export default {
 }
 
 .login-hr {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2rem auto 3rem;
   border-bottom: 2px solid black;
 }
 

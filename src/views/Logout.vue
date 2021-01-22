@@ -55,9 +55,7 @@ export default {
 <style>
 
 .logout-hr {
-  width: 25rem;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2rem auto 3rem;
   border-bottom: 2px solid black;
 }
 

@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <nav-bar></nav-bar>
+    <transition name="fade">
+      <status-message class="status-message" v-if="$store.getters.statusMessage" />
+    </transition>
     <transition name="fade" mode="out-in">
       <router-view class="router-view"/>
     </transition>
@@ -8,18 +11,14 @@
 </template>
 
 <script>
-
 import NavBar from './components/NavBar.vue'
-
+import StatusMessage from './components/StatusMessage.vue'
 
 export default {
   name: 'App',
   components: {
-    NavBar
+    NavBar, StatusMessage
   },
-  mounted() {
-    console.log('root component mounted!');
-  }
 }
 
 </script>

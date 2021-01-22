@@ -9,9 +9,6 @@
 <script>
 export default {
   name: 'PageFooter',
-  props: {
-    store: Object
-  }
 }
 </script>
 
