@@ -45,18 +45,18 @@
               Your Cart <span class="navbar-icon-container-wide"><i class="bi-cart2 is-size-5"></i></span>
             </a>
             <router-link :to="{name: 'cart'}"
-                         @click="this.navbarIsActive = false"
+                         @click="navbarIsActive = false"
                          class="navbar-item has-text-centered">Your Cart</router-link>
             <router-link v-if="!$store.getters.userIsAuthenticated"
-                         @click="this.navbarIsActive = false"
+                         @click="navbarIsActive = false"
                          :to="{name: 'userDetail'}"
                          class="navbar-item has-text-centered">Login</router-link>
             <router-link v-if="$store.getters.userIsAuthenticated"
-                         @click="this.navbarIsActive = false"
+                         @click="navbarIsActive = false"
                          :to="{name: 'userDetail'}"
                          class="navbar-item has-text-centered">Your Account</router-link>
             <router-link v-if="$store.getters.userIsAuthenticated"
-                         @click="this.navbarIsActive = false"
+                         @click="navbarIsActive = false"
                          :to="{name: 'logoutConfirm'}"
                          class="navbar-item has-text-centered">Logout</router-link>
           </div>

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import * as helpers from '../assets/js/helpers.js'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -39,14 +41,25 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login (context, userToken) {
+    login (context, token) {
       context.commit('userIsAuthenticated', true);
-      // context.commit('userIs', user);
-      context.commit('userToken', userToken);
+      context.commit('userToken', token);
     },
     logout (context) {
       context.commit('userIsAuthenticated', false);
       context.commit('userIs', undefined);
+    },
+    async getUser (context, token) {
+      let url = helpers.urls.getUser;
+      let user = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
+        },
+      })
+      .then(response => response.json())
+      context.commit('userIs', user);
     }
   },
   modules: {

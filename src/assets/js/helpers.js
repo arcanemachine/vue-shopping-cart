@@ -1,25 +1,28 @@
+const BACKEND_SERVER_URL = 'http://192.168.1.100:8000'
+
 export const urls = {
 
   // users
-  login: 'http://192.168.1.100:8000/api/rest-auth/login/',
-  logout: 'http://192.168.1.100:8000/api/rest-auth/logout/',
+  login: BACKEND_SERVER_URL + '/api/rest-auth/login/',
+  logout: BACKEND_SERVER_URL + '/api/rest-auth/logout/',
+  getUser: BACKEND_SERVER_URL + `/api/v1/users/`,
 
   // stores
-  storeList: 'http://192.168.1.100:8000/api/v1/stores/',
+  storeList: BACKEND_SERVER_URL + '/api/v1/stores/',
   storeCategoryList: (storeId) => {
-    return `http://192.168.1.100:8000/api/v1/stores/${storeId}/categories/`
+    return BACKEND_SERVER_URL + `/api/v1/stores/${storeId}/categories/`
   },
   categoryItemList: (categoryId) => {
-    return `http://192.168.1.100:8000/api/v1/categories/${categoryId}/items/`
+    return BACKEND_SERVER_URL + `/api/v1/categories/${categoryId}/items/`
   },
   storeDetail: (storeId) => {
-    return `http://192.168.1.100:8000/api/v1/stores/${storeId}/`
+    return BACKEND_SERVER_URL + `/api/v1/stores/${storeId}/`
   },
   categoryDetail: (categoryId) => {
-    return `http://192.168.1.100:8000/api/v1/categories/${categoryId}/`
+    return BACKEND_SERVER_URL + `/api/v1/categories/${categoryId}/`
   },
   itemDetail: (itemId) => {
-    return `http://192.168.1.100:8000/api/v1/items/${itemId}/`
+    return BACKEND_SERVER_URL + `/api/v1/items/${itemId}/`
   }
 }
 

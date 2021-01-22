@@ -16,6 +16,9 @@ export default {
   name: 'App',
   components: {
     NavBar
+  },
+  mounted() {
+    console.log('root component mounted!');
   }
 }
 

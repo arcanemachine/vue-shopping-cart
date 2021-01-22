@@ -22,12 +22,7 @@
 <script>
 
 export default {
-  name: 'Login',
-  mounted() {
-    setTimeout(() => {
-      this.logout();
-    }, 1500)
-  },
+  name: 'Logout',
 }
 </script>
 

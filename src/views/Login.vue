@@ -59,6 +59,9 @@ export default {
     }
   },
   methods: {
+    async getUser() {
+      
+    },
     async login() {
       event.preventDefault();
 
@@ -92,7 +95,11 @@ export default {
         if ('key' in data) {
           // successful login
           this.$store.dispatch('login', data.key);
+          this.$store.dispatch('getUser', data.key);
           this.loginResponse = 'Success!';
+          setTimeout(() => {
+            this.$router.push({name: 'userDetail'});
+          }, 750)
         } else {
           // on unsuccessful login, display status message and re-enable login button
           setTimeout(() => {
@@ -105,12 +112,6 @@ export default {
         }
       })
       .catch(error => console.log(error))
-      if (this.$store.getters.userIsAuthenticated) {
-        // redirect on successful login
-        setTimeout(() => {
-          this.$router.push({name: 'userDetail'});
-        }, 750)
-      }
     },
   }
 }

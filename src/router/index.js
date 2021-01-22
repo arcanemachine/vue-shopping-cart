@@ -64,7 +64,10 @@ const routes = [
     name: 'userDetail',
     component: UserDetail,
     pathToRegexpOptions: { strict: true },
-		meta: {title: 'Your Account'}
+		meta: {
+      title: 'Your Account',
+      public: false
+    }
   },
   {
     path: '/logout/confirm/',
