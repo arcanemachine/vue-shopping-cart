@@ -2,7 +2,9 @@
   <nav class="navbar is-fixed-top is-dark border-bottom navbar-color-custom">
     <div class="container">
       <div class="navbar-brand">
-        <router-link :to="{name: 'home'}" class="navbar-item brand-text has-text-weight-bold">Vue Shopping Cart Demo</router-link>
+        <router-link :to="{name: 'home'}"
+                     @click.native="navbarIsActive = false"
+                     class="navbar-item brand-text has-text-weight-bold">Vue Shopping Cart Demo</router-link>
         <transition name="fade">
           <div v-if="$store.getters.isLoading" class="navbar-item-touch-container-start is-hidden-desktop is-hidden-widescreen">
             <a class="navbar-item navbar-show-icon-touch-container loading-animation" alt="Loading Icon" title="Loading...">
@@ -15,12 +17,14 @@
         </transition>
         <div class="navbar-item-touch-container-end is-hidden-desktop is-hidden-widescreen">
           <router-link :to="userIconUrl"
+                       @click.native="navbarIsActive = false"
                        class="navbar-item navbar-show-icon-touch-container"
                        alt="User Profile Icon"
                        title="Your Account">
             <i class="bi-person-circle navbar-show-icon-touch icon-person-circle" :style="userProfileIconStyle"></i>
           </router-link>
           <router-link :to="{name: 'cart'}"
+                       @click.native="navbarIsActive = false"
                        class="navbar-item navbar-show-icon-touch-container"
                        alt="Shopping Cart Icon"
                        title="Your Cart">
