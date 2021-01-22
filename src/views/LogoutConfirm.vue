@@ -11,7 +11,7 @@
           </div>
           <div class="subtitle">Are you sure you want to log out?</div>
           <router-link :to="{name: 'logout'}">
-            <button ref="logoutButton" class="button is-block is-info is-large is-fullwidth">Logout</button>
+            <button class="button is-block is-info is-large is-fullwidth">Logout</button>
           </router-link>
         </div>
       </div>

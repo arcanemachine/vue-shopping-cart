@@ -4,11 +4,12 @@
       <div class="hero body">
         <div class="container has-text-centered">
           <div class="is-4 is-offset-4">
-            <h2 class="title has-text-black">Login</h2>
+            <h2 class="title has-text-black">Register</h2>
             <div class="hr-container">
               <hr class="login-hr">
             </div>
             <p class="login-text subtitle has-text-black">Login to your account</p>
+            <p class="subtitle has-text-black">(This part doesn't work yet.)</p>
             <div class="box">
               <form>
                 <div class="field">
@@ -35,25 +36,13 @@ export default {
   name: 'Register',
   components: {
   },
-  props: [
-    'itemId'
-  ],
   data() {
     return {
-      item: {},
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.getItemDetail(this.itemId);
-    })
   },
   methods: {
-    getItemDetail() { // move this into vuex store
-      fetch(this.$helpers.urls.itemDetail(this.itemId))
-      .then(response => response.json())
-      .then(data => this.item = data)
-    },
   }
 }
 </script>
