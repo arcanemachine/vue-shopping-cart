@@ -11,13 +11,15 @@
           </figure>
         </div>
         </router-link>
-        <div class="card-content">
-          <div class="is-4">
-            <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
+        <div class="card-content has-text-left">
+          <div class="has-size-4">
+            <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}"
+                         class="pt-0 is-size-4">
               {{ item.name }}
             </router-link>
+            <add-to-cart-button :item="item" />
           </div>
-          <div class="is-6">
+          <div>
             <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
               {{ item.description }}
             </router-link>
@@ -28,10 +30,16 @@
 </template>
 
 <script>
+
+import AddToCartButton from './AddToCartButton.vue'
+
 export default {
   name: 'ItemCard',
   props: {
     item: Object
+  },
+  components: {
+    AddToCartButton
   }
 }
 </script>
