@@ -9,6 +9,7 @@ export const urls = {
   login: BACKEND_SERVER_URL + '/api/rest-auth/login/',
   logout: BACKEND_SERVER_URL + '/api/rest-auth/logout/',
   getUser: BACKEND_SERVER_URL + `/api/v1/user/`,
+  getProfile: BACKEND_SERVER_URL + `/api/v1/user/profile/`,
 
   // stores
   storeList: BACKEND_SERVER_URL + '/api/v1/stores/',

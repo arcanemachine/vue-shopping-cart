@@ -9,7 +9,7 @@ import CategoryDetail from '../views/CategoryDetail.vue'
 import ItemDetail from '../views/ItemDetail.vue'
 
 // cart
-import Cart from '../views/Cart.vue'
+import CartDetail from '../views/CartDetail.vue'
 
 // user
 import Register from '../views/Register.vue'
@@ -38,8 +38,8 @@ const routes = [
   },
   {
     path: '/cart/',
-    name: 'cart',
-    component: Cart,
+    name: 'cartDetail',
+    component: CartDetail,
     pathToRegexpOptions: { strict: true },
 		meta: {title: 'Your Cart'}
   },

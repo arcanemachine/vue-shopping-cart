@@ -58,6 +58,11 @@ export default {
       loginResponse: {},
     }
   },
+  mounted() {
+    if (this.$store.getters.userIsAuthenticated) {
+      this.$router.push({name: 'userDetail'});
+    }
+  },
   methods: {
     async getUser() {
       

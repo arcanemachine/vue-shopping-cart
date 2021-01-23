@@ -23,12 +23,12 @@
                        title="Your Account">
             <i class="bi-person-circle navbar-show-icon-touch icon-person-circle" :style="userProfileIconStyle"></i>
           </router-link>
-          <router-link :to="{name: 'cart'}"
+          <router-link :to="{name: 'cartDetail'}"
                        @click.native="navbarIsActive = false"
                        class="navbar-item navbar-show-icon-touch-container"
                        alt="Shopping Cart Icon"
                        title="Your Cart">
-            <i class="bi-cart2 navbar-show-icon-touch has-text-light"></i>
+            <i class="bi-cart2 navbar-show-icon-touch" :style="cartIconStyle"></i>
           </router-link>
         </div>
         <span @click="navbarToggle"
@@ -45,9 +45,9 @@
            class="navbar-menu is-dark"
            :class="navbarMenuClass">
           <div class="navbar-end">
-            <a class="navbar-item is-hidden-mobile is-hidden-tablet-only">
+            <router-link :to="{name: 'cartDetail'}" class="navbar-item is-hidden-mobile is-hidden-tablet-only">
               Your Cart <span class="navbar-icon-container-wide"><i class="bi-cart2 is-size-5"></i></span>
-            </a>
+            </router-link>
             <router-link v-if="!$store.getters.userIsAuthenticated"
                          @click.native="navbarToggle"
                          :to="{name: 'login'}"
@@ -94,6 +94,12 @@ export default {
     userProfileIconStyle() {
       return {
         color: this.$store.getters.userIsAuthenticated ? 'gold' : 'white'
+      }
+    },
+    cartIconStyle() {
+      let userProfile = this.$store.getters.userProfile;
+      return {
+        color: typeof(userProfile) === Object && Object.keys(userProfile.cart).length ? 'gold' : 'white'
       }
     }
   },
@@ -174,6 +180,5 @@ export default {
 .icon-person-circle {
   margin-top: 0;
 }
-
 </style>
 

@@ -16,8 +16,8 @@ export default new Vuex.Store({
     // users
     userIsAuthenticated: false,
     user: undefined,
+    userProfile: undefined,
     userToken: undefined,
-    cart: {},
   },
   getters: {
     isLoading (state) {
@@ -30,6 +30,9 @@ export default new Vuex.Store({
       return state.userIsAuthenticated;
     },
     user (state) {
+      return state.user;
+    },
+    userProfile (state) {
       return state.user;
     },
     userToken (state) {
@@ -52,11 +55,15 @@ export default new Vuex.Store({
     userIs (state, user) {
       state.user = user;
     },
+    userProfileIs (state, userProfile) {
+      state.userProfile = userProfile;
+    },
     userToken (state, userToken) {
       state.userToken = userToken;
     },
     cartAdd (state, item, quantityToAdd=1) {
       // if cart doesn't contain the item, add its key to the cart
+      console.log(`item: ${item.id}`);
       if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
         state.cart[String(item.id)] = quantityToAdd;
       } else {
@@ -88,6 +95,7 @@ export default new Vuex.Store({
     login (context, token) {
       context.dispatch('authenticate', token);
       context.dispatch('getUser', token);
+      context.dispatch('getUserProfile', token);
     },
     authenticate (context, token) {
       context.commit('userIsAuthenticated', true);
@@ -97,6 +105,7 @@ export default new Vuex.Store({
     logout (context) {
       context.commit('userIsAuthenticated', false);
       context.commit('userIs', undefined);
+      context.commit('userProfileIs', undefined);
       Cookies.remove('userToken');
     },
     async getUser (context, token) {
@@ -108,8 +117,30 @@ export default new Vuex.Store({
           'Authorization': `Token ${token}`
         },
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          context.dispatch('logout');
+        }
+        return response.json()
+      })
       context.commit('userIs', user);
+    },
+    async getUserProfile (context, token) {
+      let url = helpers.urls.getProfile;
+      let userProfile = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
+        },
+      })
+      .then(response => {
+        if (!response.ok) {
+          context.dispatch('logout');
+        }
+        return response.json()
+      })
+      context.commit('userProfileIs', userProfile);
     },
     addToCart (context, item, quantity=1) {
       context.commit('cartAdd', item, quantity);

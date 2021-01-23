@@ -8,7 +8,7 @@
     <div class="content">
       <div class="mt-4">
         <p>Update your address</p>
-        <p>View your cart</p>
+        <p><router-link :to="{name: 'cartDetail'}">View your cart</router-link></p>
         <p><router-link :to="{name: 'logoutConfirm'}">Logout</router-link></p>
       </div>
     </div>
