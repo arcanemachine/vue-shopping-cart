@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import Cookies from 'js-cookie' // eslint-disable-line no-unused-vars
+
 import * as helpers from '../assets/js/helpers.js'
 
 Vue.use(Vuex)
@@ -77,19 +79,25 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login (context, token) {
-      context.commit('userIsAuthenticated', true);
-      context.commit('userToken', token);
-    },
-    logout (context) {
-      context.commit('userIsAuthenticated', false);
-      context.commit('userIs', undefined);
-    },
     displayStatusMessage (context, message, displayFor=4000) {
       context.commit('statusMessage', message);
       setTimeout(() => {
         context.commit('statusMessage', '');
       }, displayFor)
+    },
+    login (context, token) {
+      context.dispatch('authenticate', token);
+      context.dispatch('getUser', token);
+    },
+    authenticate (context, token) {
+      context.commit('userIsAuthenticated', true);
+      context.commit('userToken', token);
+      Cookies.set('userToken', token, { sameSite: 'strict' });
+    },
+    logout (context) {
+      context.commit('userIsAuthenticated', false);
+      context.commit('userIs', undefined);
+      Cookies.remove('userToken');
     },
     async getUser (context, token) {
       let url = helpers.urls.getUser;

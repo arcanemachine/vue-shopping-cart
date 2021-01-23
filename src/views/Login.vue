@@ -55,7 +55,7 @@ export default {
         username: '',
         password: ''
       },
-      loginResponse: {}
+      loginResponse: {},
     }
   },
   methods: {
@@ -89,13 +89,11 @@ export default {
           console.log("Fetch error: " + response.status);
         }
         return response.json();
-        // this.$helpers.handleResponse(response);
       })
       .then(data => {
         if ('key' in data) {
           // successful login
           this.$store.dispatch('login', data.key);
-          this.$store.dispatch('getUser', data.key);
           this.loginResponse = 'Success!';
           setTimeout(() => {
             this.$router.push({name: 'userDetail'});

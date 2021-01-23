@@ -2,10 +2,13 @@ const BACKEND_SERVER_URL = 'http://192.168.1.100:8000'
 
 export const urls = {
 
+  // misc
+  getSessionCookie: BACKEND_SERVER_URL + '/get-session-cookie/',
+
   // users
   login: BACKEND_SERVER_URL + '/api/rest-auth/login/',
   logout: BACKEND_SERVER_URL + '/api/rest-auth/logout/',
-  getUser: BACKEND_SERVER_URL + `/api/v1/users/`,
+  getUser: BACKEND_SERVER_URL + `/api/v1/user/`,
 
   // stores
   storeList: BACKEND_SERVER_URL + '/api/v1/stores/',

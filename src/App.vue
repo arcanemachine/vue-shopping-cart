@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <nav-bar></nav-bar>
+    <!--get-session-cookie /-->
     <transition name="fade">
       <status-message class="status-message" v-if="$store.getters.statusMessage" />
     </transition>
@@ -11,6 +12,8 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie' // eslint-disable-line no-unused-vars
+
 import NavBar from './components/NavBar.vue'
 import StatusMessage from './components/StatusMessage.vue'
 
@@ -18,6 +21,15 @@ export default {
   name: 'App',
   components: {
     NavBar, StatusMessage
+  },
+  mounted() {
+    // if userToken cookie exists, get user info from server
+    console.log('mounted');
+    let userToken = Cookies.get('userToken');
+    if (userToken) {
+      console.log('userToken exists');
+      this.$store.dispatch('login', userToken);
+    }
   },
 }
 
