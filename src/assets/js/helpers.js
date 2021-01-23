@@ -58,3 +58,5 @@ export function handleResponse(response) { // , responseType='json') {
   // }
   return response.json();
 }
+
+export const pp = JSON.stringify;

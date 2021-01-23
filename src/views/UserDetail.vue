@@ -3,6 +3,7 @@
     <div class="container has-text-centered">
       <div class="is-4 is-offset-4">
         <h2 class="title has-text-black">User Detail</h2>
+        <h2 class="subtitle has-text-black">{{ user.username }}</h2>
       </div>
     </div>
     <div class="content">
@@ -21,12 +22,20 @@ export default {
   name: 'UserDetail',
   components: {
   },
+  data() {
+    return {
+      user: {},
+    }
+  },
   beforeCreate() {
     if (!this.$store.getters.userIsAuthenticated) {
       this.$router.push({name: 'login'});
     }
   },
-  methods: {
+  mounted() {
+    this.$nextTick(() => {
+      this.user = this.$store.getters.user;
+    })
   }
 }
 </script>

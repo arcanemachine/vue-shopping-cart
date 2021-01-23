@@ -18,6 +18,7 @@ export default new Vuex.Store({
     user: undefined,
     userProfile: undefined,
     userToken: undefined,
+    cart: {},
   },
   getters: {
     isLoading (state) {
@@ -63,8 +64,10 @@ export default new Vuex.Store({
     },
     cartAdd (state, item, quantityToAdd=1) {
       // if cart doesn't contain the item, add its key to the cart
-      console.log(`item: ${item.id}`);
-      if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
+      if (typeof(item) !== Object) {
+        return false
+      }
+      else if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
         state.cart[String(item.id)] = quantityToAdd;
       } else {
         state.cart[String(item.id)] += quantityToAdd;
@@ -72,7 +75,10 @@ export default new Vuex.Store({
     },
     cartRemove (state, item, quantityToRemove=1) {
       // if cart doesn't contain the item, do nothing
-      if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
+      if (typeof(item) !== Object) {
+        return false
+      }
+      else if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
         return false;
       }
       // if cart contains <= [quantity] of the item, delete the key from the cart
@@ -83,6 +89,9 @@ export default new Vuex.Store({
       else {
         state.cart[String(item.id)] -= quantityToRemove;
       }
+    },
+    cartIs (state, cart) {
+      state.cart = cart;
     }
   },
   actions: {
@@ -141,12 +150,12 @@ export default new Vuex.Store({
         return response.json()
       })
       context.commit('userProfileIs', userProfile);
+      context.commit('cartIs', userProfile.cart);
     },
     addToCart (context, item, quantity=1) {
       context.commit('cartAdd', item, quantity);
       let verb = quantity === 1 ? 'has' : 'have';
       context.dispatch('displayStatusMessage', `${quantity} '${item.name}' ${verb} been added to your cart.`);
-      console.log(context.cart);
     }
   },
   modules: {

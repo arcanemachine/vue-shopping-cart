@@ -97,9 +97,11 @@ export default {
       }
     },
     cartIconStyle() {
-      let userProfile = this.$store.getters.userProfile;
+      // let userProfile = this.$store.getters.userProfile;
+      let cart = this.$store.getters.userProfile;
       return {
-        color: typeof(userProfile) === Object && Object.keys(userProfile.cart).length ? 'gold' : 'white'
+        // color: typeof(userProfile) === Object && Object.keys(userProfile.cart).length ? 'gold' : 'white'
+        color: typeof(cart) === Object && Object.keys(cart).length ? 'gold' : 'white'
       }
     }
   },

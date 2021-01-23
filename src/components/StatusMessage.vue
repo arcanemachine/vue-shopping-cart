@@ -14,7 +14,7 @@ export default {
 
 <style scoped lang="scss">
 .status-message-container {
-  position: absolute;
+  position: fixed;
   width: 100vw;
   display: flex;
   justify-content: center;

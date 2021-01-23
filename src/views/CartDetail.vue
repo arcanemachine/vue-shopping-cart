@@ -9,10 +9,10 @@
               <hr class="logout-hr">
             </div>
           </div>
-          <div class="subtitle">Insert cart here</div>
-          <router-link :to="{name: 'logout'}">
-            <button class="button is-block is-info is-large is-fullwidth">Logout</button>
-          </router-link>
+          <ul>
+          <li v-for="item in cart" :key="item">{{ item }} - {{ cart[item] }}</li>
+          </ul>
+          <div class="mt-6">{{ cart }}</div>
         </div>
       </div>
     </div>
@@ -23,6 +23,11 @@
 
 export default {
   name: 'Cart',
+  computed: {
+    cart() {
+      return this.$store.getters.cart
+    }
+  }
 }
 </script>
 

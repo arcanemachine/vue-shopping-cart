@@ -24,10 +24,8 @@ export default {
   },
   mounted() {
     // if userToken cookie exists, get user info from server
-    console.log('mounted');
     let userToken = Cookies.get('userToken');
     if (userToken) {
-      console.log('userToken exists');
       this.$store.dispatch('login', userToken);
     }
   },
