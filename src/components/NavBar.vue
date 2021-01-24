@@ -111,7 +111,7 @@ export default {
     },
     cartIconStyle() {
       // let userProfile = this.$store.getters.userProfile;
-      let cart = this.$store.getters.userProfile;
+      let cart = this.$store.getters.cart;
       return {
         color: typeof(cart) === "object" && Object.keys(cart).length ? 'gold' : 'white'
       }
