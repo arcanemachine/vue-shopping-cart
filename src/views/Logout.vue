@@ -13,7 +13,7 @@
             Logging you out...
           </div>
           <transition name="fade">
-            <div v-if="!$store.getters.userIsAuthenticated" class="content">
+            <div v-if="!$store.getters.userIsAuthenticated" class="content is-bold">
               Success!
             </div>
           </transition>

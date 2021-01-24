@@ -87,7 +87,7 @@ export default {
     },
     cartItemCount() {
       if (this.$store.getters.cartItemCount > 99) {
-        return '99+';
+        return '99';
       } else {
         return this.$store.getters.cartItemCount;
       }
@@ -200,8 +200,8 @@ export default {
   display: flex;
   background-color: gold;
 
-  height: 1.5rem;
-  width: 1.5rem;
+  height: 1.4rem;
+  width: 1.4rem;
   margin-top: 1.3rem;
   margin-right: -0.35rem;
 
@@ -213,7 +213,6 @@ export default {
 }
 
 .cart-item-count {
-  margin-bottom: 0.15rem;
   color: black;
   font-weight: bold;
 }

@@ -13,7 +13,7 @@ export const urls = {
 
   // cart
   cartDetail: BACKEND_SERVER_URL + '/api/v1/cart/',
-  cartUpdate: (itemId, quantity) => {
+  cartItemUpdate: (itemId, quantity) => {
     return BACKEND_SERVER_URL + `/api/v1/cart/update/${itemId}/${quantity}/`;
   },
   cartClearItem: (itemId) => {

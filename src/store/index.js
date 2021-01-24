@@ -19,6 +19,7 @@ export default new Vuex.Store({
     userProfile: undefined,
     userToken: undefined,
     cart: {},
+    cartModifiedAt: undefined,
   },
   getters: {
     isLoading (state) {
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     },
     cart (state) {
       return state.cart;
+    },
+    cartModifiedAt (state) {
+      return state.cartModifiedAt;
     },
     cartItemCount (state) {
       if (!Object.keys(state.cart).length) {return 0;}
@@ -68,24 +72,26 @@ export default new Vuex.Store({
     userToken (state, userToken) {
       state.userToken = userToken;
     },
+    cartModifiedAt (state, newDate=undefined) {
+      state.cartModifiedAt = newDate ? newDate : new Date();
+    },
     cartAdd (state, item, quantityToAdd=1) {
       // if cart doesn't contain the item, add its key to the cart
       if (typeof(item) !== "object") {
         return false
       }
-      else if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
+      if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
         state.cart[String(item.id)] = quantityToAdd;
       } else {
         state.cart[String(item.id)] += quantityToAdd;
       }
-      console.log(state.cart);
     },
     cartRemove (state, item, quantityToRemove=1) {
       // if cart doesn't contain the item, do nothing
       if (typeof(item) !== "object") {
         return false
       }
-      else if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
+      if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
         return false;
       }
       // if cart contains <= [quantity] of the item, delete the key from the cart
@@ -96,6 +102,48 @@ export default new Vuex.Store({
       else {
         state.cart[String(item.id)] -= quantityToRemove;
       }
+    },
+    cartUpdate (state, payload) {
+
+      let item = payload.item;
+      let quantity = payload.quantity;
+  
+      // sanity checks
+      if (quantity === 0) {
+        state.dispatch('displayStatusMessage', 'Quantity must be a non-zero integer value.');
+        return false;
+      }
+      else if (typeof(item) !== "object") {
+        return false
+      }
+
+      // add to cart
+      if (quantity >= 1) {
+        if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
+          state.cart[String(item.id)] = quantity;
+        } else {
+          state.cart[String(item.id)] += quantity;
+        }
+      } else {
+        if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
+          return false;
+        }
+        // if cart contains <= [quantity] of the item, delete the key from the cart
+        else if (state.cart[String(item.id)] <= quantity) {
+          delete state.cart[String(item.id)];
+        }
+        // otherwise, decrease the quantity as expected
+        else {
+          state.cart[String(item.id)] += quantity;
+          // this is hacky, item should be removed up top
+          if (state.cart[String(item.id)] === 0) {
+            delete state.cart[String(item.id)];
+          }
+        }
+      }
+    },
+    cartClearItem(state, item) {
+      state.cart.pop(String(item.id));
     },
     cartIs (state, cart) {
       state.cart = cart;
@@ -112,6 +160,9 @@ export default new Vuex.Store({
       context.dispatch('authenticate', token);
       context.dispatch('getUser', token);
       context.dispatch('getUserProfile', token);
+      if (context.getters.cartModifiedAt && context.getters.cartModifiedAt > context.getters.userProfile.cart_modified_at) {
+        context.dispatch('cartSyncLocalOntoRemote')
+      }
     },
     authenticate (context, token) {
       context.commit('userIsAuthenticated', true);
@@ -123,6 +174,8 @@ export default new Vuex.Store({
       context.commit('userIs', undefined);
       context.commit('userProfileIs', undefined);
       Cookies.remove('userToken');
+      Cookies.remove('cart');
+      Cookies.remove('cartModifiedAt');
     },
     async getUser (context, token) {
       let url = helpers.urls.getUser;
@@ -153,27 +206,85 @@ export default new Vuex.Store({
       .then(response => {
         if (!response.ok) {
           context.dispatch('logout');
+          return false;
         }
         return response.json()
       })
       context.commit('userProfileIs', userProfile);
+
+      // TODO: prevent conflicts between different carts
+      // use the cart that has been updated most recently
+      if (context.getters.cartModifiedAt > context.getters.userProfile.cart_modified_at)
+        // if userProfile cart isn't empty
+          // save userProfile cart to userProfile.old_carts
+        context.commit('cartIs', context.getters.cart);
+      else
+        context.commit('cartIs', context.getters.userProfile.cart);
       context.commit('cartIs', userProfile.cart);
     },
-    updateCart (context, item, quantity=1) {
-      // let url = helpers.urls.cartUpdate(item.id, quantity);
+    cartClear(context) {
+      context.commit('cartIs', {});
+      Cookies.remove('cart');
+    },
+    cartSyncLocalOntoRemote(context) {
+      let url = helpers.urls.cartUpdate;
+      let postData = {cart: context.getters.cart}
+      fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${context.getters.userToken}`,
+        },
+        body: JSON.stringify(postData)
+      })
+      .then(response => response.json())
+      // .then(data => console.log(data))
+    },
+    cartUpdateItem (context, payload) {
+      /*
+      Add or remove a given quantity of an item.
+      */
 
-      // if (context.getters.userToken) {
-      //   fetch(url, {
-      //     method: 'POST',
-      //     headers: {
-      //       'Authorization': `Token ${context.getters.userToken}.
-      //     }
-      //   })
-      // }
+      let item = payload.item;
+      let quantity = payload.quantity;
 
-      let verb = quantity === 1 ? 'has' : 'have';
+      // if userProfile is present (user logged in), perform remote cart update and sync to local
+      if (context.getters.userProfile) {
+        // send cart action to server
+        let url = helpers.urls.cartItemUpdate(item.id, quantity);
+
+        if (context.getters.userToken) {
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Token ${context.getters.userToken}`,
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            context.commit('userProfileIs', data);
+            context.commit('cartIs', data.cart);
+            context.commit('cartModifiedAt', data.cart_modified_at);
+          })
+          .catch(error => console.log('store updateCart(): ' + error))
+        }
+
+      // if userProfile is not present (user not logged in), perform all actions locally
+      } else {
+        // add item to cart
+        context.commit('cartUpdate', {item, quantity});
+        // update cartModifiedAt time
+        context.commit('cartModifiedAt', new Date());
+      }
+
+      // save local cart to cookies
+      // Cookies.set('cart', JSON.stringify(context.getters.cart));
+      Cookies.set('cartModifiedAt', JSON.stringify(context.getters.cartModifiedAt));
+
+      let verb = Math.abs(quantity) === 1 ? 'has' : 'have';
       let adjective = quantity >= 0 ? 'added' : 'removed';
-      context.dispatch('displayStatusMessage', `${quantity} '${item.name}' ${verb} been ${adjective} to your cart.`);
+      let preposition = quantity >= 0 ? 'to' : 'from';
+      context.dispatch('displayStatusMessage', `${Math.abs(quantity)} '${item.name}' ${verb} been ${adjective} ${preposition} your cart.`);
     }
   },
   modules: {

@@ -1,5 +1,5 @@
 <template>
-  <!--div @click="$store.dispatch('addToCart', item)" -->
+  <!--div @click="addToCart"-->
   <div @click="addToCart"
        class="button is-success add-to-cart-button">
     Add to Cart <i class="ml-3 pb-1 bi-cart2 navbar-show-icon-touch has-text-light"></i>
@@ -16,6 +16,9 @@ export default {
     addToCart() {
       this.$store.commit('cartAdd', this.item);
     }
+  },
+  addToCart() {
+    this.$store.dispatch('cartUpdateItem', {item: this.item, quantity: 1})
   }
 }
 </script>

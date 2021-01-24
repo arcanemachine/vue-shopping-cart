@@ -27,6 +27,12 @@ export default {
     let userToken = Cookies.get('userToken');
     if (userToken) {
       this.$store.dispatch('login', userToken);
+    } else {
+      // get cart info from cookies
+      if (Cookies.get('cart')) {
+        this.$store.commit('cartIs', JSON.parse(Cookies.get('cart')));
+        this.$store.commit('cartModifiedAt', JSON.parse(Cookies.get('cartModifiedAt')));
+      }
     }
   },
 }
