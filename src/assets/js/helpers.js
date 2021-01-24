@@ -1,15 +1,25 @@
-const BACKEND_SERVER_URL = 'http://192.168.1.100:8000'
+const BACKEND_SERVER_URL = 'http://192.168.1.120:8000'
 
 export const urls = {
 
   // misc
   getSessionCookie: BACKEND_SERVER_URL + '/get-session-cookie/',
 
-  // users
+  // user
   login: BACKEND_SERVER_URL + '/api/rest-auth/login/',
   logout: BACKEND_SERVER_URL + '/api/rest-auth/logout/',
   getUser: BACKEND_SERVER_URL + `/api/v1/user/`,
   getProfile: BACKEND_SERVER_URL + `/api/v1/user/profile/`,
+
+  // cart
+  cartDetail: BACKEND_SERVER_URL + '/api/v1/cart/',
+  cartUpdate: (itemId, quantity) => {
+    return BACKEND_SERVER_URL + `/api/v1/cart/update/${itemId}/${quantity}/`;
+  },
+  cartClearItem: (itemId) => {
+    return BACKEND_SERVER_URL + `/api/v1/cart/clear/${itemId}/`;
+  },
+  cartClearAll: BACKEND_SERVER_URL + '/api/v1/cart/clear/all/',
 
   // stores
   storeList: BACKEND_SERVER_URL + '/api/v1/stores/',
@@ -27,6 +37,9 @@ export const urls = {
   },
   itemDetail: (itemId) => {
     return BACKEND_SERVER_URL + `/api/v1/items/${itemId}/`
+  },
+  cartItemList: (itemsString) => {
+    return BACKEND_SERVER_URL + `/api/v1/items/${itemsString}/`
   }
 }
 

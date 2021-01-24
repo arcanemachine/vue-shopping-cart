@@ -92,6 +92,7 @@ export default {
       .then(response => {
         if (!response.ok) {
           console.log("Fetch error: " + response.status);
+          this.$refs.loginButton.classList.remove('is-loading');
         }
         return response.json();
       })

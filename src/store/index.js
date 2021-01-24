@@ -41,6 +41,12 @@ export default new Vuex.Store({
     },
     cart (state) {
       return state.cart;
+    },
+    cartItemCount (state) {
+      if (!Object.keys(state.cart).length) {return 0;}
+      let cartCountList = Object.values(state.cart);
+      let result = cartCountList.reduce((a, b) => a + b, 0);
+      return result;
     }
   },
   mutations: {
@@ -64,7 +70,7 @@ export default new Vuex.Store({
     },
     cartAdd (state, item, quantityToAdd=1) {
       // if cart doesn't contain the item, add its key to the cart
-      if (typeof(item) !== Object) {
+      if (typeof(item) !== "object") {
         return false
       }
       else if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
@@ -72,10 +78,11 @@ export default new Vuex.Store({
       } else {
         state.cart[String(item.id)] += quantityToAdd;
       }
+      console.log(state.cart);
     },
     cartRemove (state, item, quantityToRemove=1) {
       // if cart doesn't contain the item, do nothing
-      if (typeof(item) !== Object) {
+      if (typeof(item) !== "object") {
         return false
       }
       else if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
@@ -124,7 +131,7 @@ export default new Vuex.Store({
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Token ${token}`
-        },
+        }
       })
       .then(response => {
         if (!response.ok) {
@@ -141,7 +148,7 @@ export default new Vuex.Store({
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Token ${token}`
-        },
+        }
       })
       .then(response => {
         if (!response.ok) {
@@ -152,10 +159,21 @@ export default new Vuex.Store({
       context.commit('userProfileIs', userProfile);
       context.commit('cartIs', userProfile.cart);
     },
-    addToCart (context, item, quantity=1) {
-      context.commit('cartAdd', item, quantity);
+    updateCart (context, item, quantity=1) {
+      // let url = helpers.urls.cartUpdate(item.id, quantity);
+
+      // if (context.getters.userToken) {
+      //   fetch(url, {
+      //     method: 'POST',
+      //     headers: {
+      //       'Authorization': `Token ${context.getters.userToken}.
+      //     }
+      //   })
+      // }
+
       let verb = quantity === 1 ? 'has' : 'have';
-      context.dispatch('displayStatusMessage', `${quantity} '${item.name}' ${verb} been added to your cart.`);
+      let adjective = quantity >= 0 ? 'added' : 'removed';
+      context.dispatch('displayStatusMessage', `${quantity} '${item.name}' ${verb} been ${adjective} to your cart.`);
     }
   },
   modules: {
