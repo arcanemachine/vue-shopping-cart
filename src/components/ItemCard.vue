@@ -57,6 +57,7 @@ export default {
 .image-not-available {
   width: 100%;
   font-size: 10rem;
+  margin-bottom: 3rem;
   color: white;
 }
   
