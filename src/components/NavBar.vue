@@ -30,6 +30,9 @@
                        title="Your Cart">
             <i class="bi-cart2 navbar-show-icon-touch" :style="cartIconStyle"></i>
           </router-link>
+          <div v-if="Object.keys(cart).length" class="cart-item-container">
+            <div class="cart-item-count">{{ cartItemCount }}</div>
+          </div>
         </div>
         <span @click="navbarToggle"
               class="navbar-burger burger hover-background-white"
@@ -79,6 +82,16 @@ export default {
     }
   },
   computed: {
+    cart() {
+      return this.$store.getters.cart;
+    },
+    cartItemCount() {
+      if (this.$store.getters.cartItemCount > 99) {
+        return '99+';
+      } else {
+        return this.$store.getters.cartItemCount;
+      }
+    },
     navbarMenuClass() {
       return {
         'is-active': this.navbarIsActive ? true : false,
@@ -100,8 +113,7 @@ export default {
       // let userProfile = this.$store.getters.userProfile;
       let cart = this.$store.getters.userProfile;
       return {
-        // color: typeof(userProfile) === Object && Object.keys(userProfile.cart).length ? 'gold' : 'white'
-        color: typeof(cart) === Object && Object.keys(cart).length ? 'gold' : 'white'
+        color: typeof(cart) === "object" && Object.keys(cart).length ? 'gold' : 'white'
       }
     }
   },
@@ -140,7 +152,7 @@ export default {
 }
 
 .navbar-show-icon-touch-container {
-  margin-right: 0.2rem;
+  margin-right: 0.3rem;
 	padding-bottom: 0.25rem;
   border-radius: 0.5rem;
 	font-size: 1.3rem;
@@ -180,7 +192,30 @@ export default {
 }
 
 .icon-person-circle {
-  margin-top: 0;
+  margin-bottom: 0.1rem;
+}
+
+.cart-item-container {
+  position: absolute;
+  display: flex;
+  background-color: gold;
+
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-top: 1.3rem;
+  margin-right: -0.35rem;
+
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0.9;
+  border-radius: 50%;
+}
+
+.cart-item-count {
+  margin-bottom: 0.15rem;
+  color: black;
+  font-weight: bold;
 }
 </style>
 
