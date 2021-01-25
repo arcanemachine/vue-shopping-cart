@@ -9,36 +9,41 @@
               <hr class="logout-hr">
             </div>
           </div>
-          <div v-for="item in cartData"
-               :key="item.id"
-               class="card large">
-            <div class="card-content">
-              <div class="media">
-                <div class="media-left">
-                  <figure v-if="item.image" class="image is-48x48">
-                    <img :src="item.image" :alt="item.name">
-                  </figure>
-                </div>
-                <div class="media-content">
-                  <p class="title is-4 no-padding">
-                    {{ item.name }}
-                  </p>
-                  <p>
-                    <span class="subtitle is-6">{{ item.description }}</span>
-                  </p>
-                </div>
-                <div class="cart-quantity-container">
-                  <button @click="itemRemove(item)" class="button cart-quantity-button">-</button>
-                  <input type="text" v-model="cart[item.id]" class="input cart-quantity-text" disabled>
-                  <button @click="itemAdd(item)" class="button cart-quantity-button">+</button>
+          <transition name="fade">
+            <div v-if="isMounted && cartEmpty" class="cart-empty mt-6 container has-text-centered">
+              <div class="title">Your cart is empty.</div>
+            </div>
+          </transition>
+          <transition-group name="fade">
+            <div v-for="(item, index) in cartData"
+                 :key="index">
+              <div class="card large">
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-left">
+                      <figure v-if="item.image" class="image is-48x48">
+                        <img v-if="item.image" :src="item.image" :alt="item.name">
+                        <div v-else></div>
+                      </figure>
+                    </div>
+                    <div class="media-content">
+                      <p class="title is-4 no-padding">
+                        {{ item.name }}
+                      </p>
+                      <p>
+                        <span class="subtitle is-6">{{ item.description }}</span>
+                      </p>
+                    </div>
+                    <div class="cart-quantity-container">
+                      <button @click="itemRemove(item)" class="button cart-quantity-button">-</button>
+                      <input type="text" v-model="cart[item.id]" class="input cart-quantity-text" disabled>
+                      <button @click="itemAdd(item)" class="button cart-quantity-button">+</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <br><br>
-          <div class="mt-6">{{ cart }}</div>
-          <div class="mt-6">{{ cartData }}</div>
-          <div v-if="!Object.keys(cart).length" class="subtitle">Your cart is empty.</div>
+          </transition-group>
         </div>
       </div>
     </div>
@@ -51,17 +56,25 @@ export default {
   name: 'Cart',
   data() {
     return {
-      cartData: {}
+      cartData: {},
+      isMounted: false,
     }
   },
   computed: {
     cart() {
       return this.$store.getters.cart;
     },
+    cartEmpty() {
+      if (!this.isMounted) {
+        return false;
+      }
+      return !!Object.keys(this.cart).length;
+    }
   },
   mounted() {
     this.$nextTick(() => {
       this.getCartData();
+      this.isMounted = true;
     })
   },
   methods: {
@@ -84,13 +97,27 @@ export default {
     },
     itemRemove(item) {
       this.$store.dispatch('cartUpdateItem', {item: item, quantity: -1})
+
       // if item no longer in cartData, remove it
-    },
+      let cartDataIds = this.cartData.map(x => x.id);
+      let currentItemIndex = cartDataIds.indexOf(item.id)
+      // let currentItemCount = this.cartData[currentItemIndex];
+      if (!this.cart[String(item.id)]) {
+        this.cartData.splice(currentItemIndex, 1);
+      }
+    }
   }
 }
 </script>
 
 <style>
+
+div.cart-empty {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transition-delay: 1s;
+}
 
 .logout-hr {
   width: 25rem;
@@ -115,7 +142,7 @@ export default {
 
 .input.cart-quantity-text {
   margin: auto 0.5rem;
-  width: 3rem;
+  width: 2rem;
   text-align: center;
 }
 

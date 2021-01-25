@@ -75,6 +75,10 @@ a {
   opacity: 0;
 }
 
+.delay-transition-1000 {
+  transition-delay: 1s;
+}
+
 /* bulma extensions */
 .is-absolute {
   position: absolute;
