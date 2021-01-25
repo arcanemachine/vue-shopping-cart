@@ -1,6 +1,6 @@
 <template>
   <div @click="addToCart"
-       class="button is-success add-to-cart-button">
+       class="mt-3 button is-success add-to-cart-button">
     Add to Cart <i class="ml-3 pb-1 bi-cart2 navbar-show-icon-touch has-text-light"></i>
   </div>
 </template>
@@ -21,7 +21,6 @@ export default {
 
 <style scoped lang="scss">
 .button {
-  float: right;
   margin-top: 0.4rem;
   padding: 1.5rem;
   font-size: 1.2rem;

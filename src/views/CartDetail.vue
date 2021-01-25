@@ -10,13 +10,15 @@
             </div>
           </div>
           <transition name="fade">
-            <div v-if="isMounted && cartEmpty" class="cart-empty mt-6 container has-text-centered">
+            <div v-if="isMounted && !Object.keys(cartData).length" class="cart-empty mt-6 container has-text-centered">
               <div class="title">Your cart is empty.</div>
+              <router-link :to="{name: 'storeList'}">
+                <button class="button is-success is-4">Let's go shopping!</button>
+              </router-link>
             </div>
           </transition>
           <transition-group name="fade">
-            <div v-for="(item, index) in cartData"
-                 :key="index">
+            <div v-for="item in cartData" :key="item.id">
               <div class="card large">
                 <div class="card-content">
                   <div class="media">
@@ -40,18 +42,12 @@
             </div>
           </transition-group>
           <transition name="fade">
-            <div>
-              <button v-if="!cartEmpty"
-                      @click="cartClearConfirm=true"
-                      class="mt-5 button is-danger clear-cart-button">
-                Remove all Items <i class="trash-icon bi-trash navbar-show-icon-touch"></i>
-              </button>
-            </div>
+            <button v-if="Object.keys(cartData).length"
+                    @click="cartClear"
+                    class="mt-6 button is-danger clear-cart-button">
+              Remove all Items <i class="trash-icon bi-trash navbar-show-icon-touch"></i>
+            </button>
           </transition>
-          <div v-if="cartClearConfirm" class="modal-background">
-            <div class="modal-content">
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -61,7 +57,7 @@
 <script>
 
 export default {
-  name: 'Cart',
+  name: 'CartDetail',
   data() {
     return {
       cartData: {},
@@ -73,12 +69,6 @@ export default {
     cart() {
       return this.$store.getters.cart;
     },
-    cartEmpty() {
-      if (!this.isMounted) {
-        return false;
-      }
-      return !!Object.keys(this.cart).length;
-    }
   },
   mounted() {
     this.isMounted = true;
@@ -102,6 +92,7 @@ export default {
         .then(request => request.json())
         .then(data => {this.cartData = data;})
       }
+      this.$forceUpdate();
     },
     itemAdd(item) {
       console.log(item)
@@ -116,6 +107,10 @@ export default {
       if (!this.cart[String(item.id)]) {
         this.cartData.splice(currentItemIndex, 1);
       }
+    },
+    cartClear() {
+      this.$store.dispatch('cartClear');
+      this.cartData = {};
     }
   }
 }
@@ -147,7 +142,7 @@ div.cart-empty {
   position: absolute;
   left: 0;
   right: 0;
-  transition-delay: 1s;
+  transition-delay: 0.4s;
 }
 
 .logout-hr {
@@ -175,10 +170,6 @@ div.cart-empty {
   margin: auto 0.5rem;
   width: 2rem;
   text-align: center;
-}
-
-.clear-cart-button {
-  transition-delay: 1s;
 }
 
 .trash-icon {

@@ -110,9 +110,8 @@ export default {
       }
     },
     cartIconStyle() {
-      // let userProfile = this.$store.getters.userProfile;
       return {
-        color: Object.keys(this.$store.getters.cart).length > 0 ? 'gold' : 'white'
+        color: this.$store.getters.cartItemCount ? 'gold' : 'white'
       }
     }
   },

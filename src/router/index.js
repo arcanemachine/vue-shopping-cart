@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '../views/Home.vue'
 
 // store
+import StoreList from '../views/StoreList.vue'
 import StoreDetail from '../views/StoreDetail.vue'
 import CategoryDetail from '../views/CategoryDetail.vue'
 import ItemDetail from '../views/ItemDetail.vue'
@@ -25,14 +25,14 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home,
+    component: CartDetail,
     pathToRegexpOptions: { strict: true },
 		meta: {title: 'Home'}
   },
   {
     path: '/stores/',
     name: 'storeList',
-    component: Home,
+    component: StoreList,
     pathToRegexpOptions: { strict: true },
 		meta: {title: 'Store List'}
   },

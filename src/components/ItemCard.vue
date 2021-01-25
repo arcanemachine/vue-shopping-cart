@@ -1,7 +1,6 @@
 <template>
     <div>
       <div class="card large">
-        <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
         <div class="card-image">
           <figure v-if="item.image" class="image is-16-by-9 card-image-container">
             <img :src="item.image" :title="item.name" :alt="`${item.name} Image`">
@@ -10,20 +9,24 @@
             <i class="bi bi-camera-fill image-not-available"></i>
           </figure>
         </div>
-        </router-link>
-        <div class="card-content has-text-left">
+        <div class="card-content">
           <div class="has-size-4">
-            <span :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}"
-                         class="pt-0 is-size-4">
+            <span class="pt-0 is-size-4">
               {{ item.name }}
             </span>
-            <add-to-cart-button :item="item" />
           </div>
           <div>
-            <span :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
+            <span :to="{
+              name: 'itemDetail',
+              params: {
+                storeId: item.store_id,
+                categoryId: item.category_id,
+                itemId: item.id}
+              }">
               {{ item.description }}
             </span>
           </div>
+          <add-to-cart-button :item="item" />
         </div>
       </div>
     </div>
@@ -46,18 +49,21 @@ export default {
 
 <style scoped lang="scss">
 .card-image-container {
-  background-color: darkgray;
-  overflow: hidden;
   display: flex;
+  margin: auto;
+  background-color: white;
+  overflow: hidden;
   height: 15rem;
-  align-items: center;
+  width: 15rem;
   justify-content: center;
+  align-items: center;
 }
 
 .image-not-available {
+  background-color: darkgray;
   width: 100%;
   font-size: 10rem;
-  margin-bottom: 3rem;
+  padding-bottom: 4rem;
   color: white;
 }
   

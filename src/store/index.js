@@ -117,14 +117,16 @@ export default new Vuex.Store({
         return false
       }
 
-      // add to cart
-      if (quantity >= 1) {
+      if (quantity >= 1) {  // add to cart
         if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
-          state.cart[String(item.id)] = quantity;
+          // state.cart[String(item.id)] = quantity;
+          // state.cart = Object.assign({}, state.cart, {itemId: quantity});
+          Vue.set(state.cart, item.id, quantity);
+
         } else {
           state.cart[String(item.id)] += quantity;
         }
-      } else {
+      } else {  // remove from cart
         if (!Object.prototype.hasOwnProperty.call(state.cart, String(item.id))) {
           return false;
         }
@@ -135,7 +137,7 @@ export default new Vuex.Store({
         // otherwise, decrease the quantity as expected
         else {
           state.cart[String(item.id)] += quantity;
-          // this is hacky, item should be removed up top
+          // this is hacky, item should be removed up top (ed. where?)
           if (state.cart[String(item.id)] === 0) {
             delete state.cart[String(item.id)];
           }

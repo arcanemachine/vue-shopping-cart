@@ -13,12 +13,12 @@
         </router-link>
         <div class="card-content">
           <div class="is-4">
-            <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}">
+            <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}" class="title">
               {{ category.name }}
             </router-link>
           </div>
           <div class="is-6">
-            <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}">
+            <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}" class="subtitle">
               {{ category.description }}
             </router-link>
           </div>
