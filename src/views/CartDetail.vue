@@ -26,13 +26,8 @@
                         <div v-else></div>
                       </figure>
                     </div>
-                    <div class="media-content">
-                      <p class="title is-4 no-padding">
-                        {{ item.name }}
-                      </p>
-                      <p>
-                        <span class="subtitle is-6">{{ item.description }}</span>
-                      </p>
+                    <div class="media-content cart-item-container">
+                      <p class="cart-item-name">{{ item.name }}</p>
                     </div>
                     <div class="cart-quantity-container">
                       <button @click="itemRemove(item)" class="button cart-quantity-button">-</button>
@@ -44,6 +39,19 @@
               </div>
             </div>
           </transition-group>
+          <transition name="fade">
+            <div>
+              <button v-if="!cartEmpty"
+                      @click="cartClearConfirm=true"
+                      class="mt-5 button is-danger clear-cart-button">
+                Remove all Items <i class="trash-icon bi-trash navbar-show-icon-touch"></i>
+              </button>
+            </div>
+          </transition>
+          <div v-if="cartClearConfirm" class="modal-background">
+            <div class="modal-content">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -58,6 +66,7 @@ export default {
     return {
       cartData: {},
       isMounted: false,
+      cartClearConfirm: false
     }
   },
   computed: {
@@ -72,18 +81,21 @@ export default {
     }
   },
   mounted() {
+    this.isMounted = true;
     this.$nextTick(() => {
       this.getCartData();
-      this.isMounted = true;
     })
   },
   methods: {
     async getCartData() {
       if (Object.keys(this.cart).length > 0) {
+
         // get list of item IDs from cart keys
         let cartItems = Object.keys(this.cart);
+
         // convert list to string of comma-seperated values
         let itemsString = cartItems.toString();
+
         // get array of items from server that match the CSVs
         let url = this.$helpers.urls.cartItemList(itemsString);
         await fetch(url)
@@ -101,7 +113,6 @@ export default {
       // if item no longer in cartData, remove it
       let cartDataIds = this.cartData.map(x => x.id);
       let currentItemIndex = cartDataIds.indexOf(item.id)
-      // let currentItemCount = this.cartData[currentItemIndex];
       if (!this.cart[String(item.id)]) {
         this.cartData.splice(currentItemIndex, 1);
       }
@@ -111,6 +122,26 @@ export default {
 </script>
 
 <style>
+
+.cart-item-container {
+  margin: auto;
+}
+
+.cart-item-name {
+  font-size: 1.3rem;
+  overflow-x: initial;
+}
+
+.modal-background {
+  position: absolute;
+  display: flex;
+
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+
+}
 
 div.cart-empty {
   position: absolute;
@@ -144,6 +175,16 @@ div.cart-empty {
   margin: auto 0.5rem;
   width: 2rem;
   text-align: center;
+}
+
+.clear-cart-button {
+  transition-delay: 1s;
+}
+
+.trash-icon {
+  font-size: 1.3rem;
+  margin-left: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 </style>

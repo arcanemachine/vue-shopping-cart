@@ -13,16 +13,16 @@
         </router-link>
         <div class="card-content has-text-left">
           <div class="has-size-4">
-            <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}"
+            <span :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}"
                          class="pt-0 is-size-4">
               {{ item.name }}
-            </router-link>
+            </span>
             <add-to-cart-button :item="item" />
           </div>
           <div>
-            <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
+            <span :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}">
               {{ item.description }}
-            </router-link>
+            </span>
           </div>
         </div>
       </div>
@@ -51,7 +51,7 @@ export default {
   display: flex;
   height: 15rem;
   align-items: center;
-  justify-content: stretch;
+  justify-content: center;
 }
 
 .image-not-available {

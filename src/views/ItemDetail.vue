@@ -3,10 +3,10 @@
     <div class="section has-text-centered">
       <div class="columns">
         <div class="column">
-          <h1 class="title">{{ item.name }}</h1>
-          <h2 class="subtitle">{{ item.description }}</h2>
-          <figure class="image is-16-by-9 card-image-container">
-            <img :src="item.image" :title="item.name" :alt="`${item.name} Image`">
+          <h1 class="title">ITEM: {{ item.name }}</h1>
+          <h2 class="subtitle">DESCRIPTION: {{ item.description }}</h2>
+          <figure class="image is-4by3 card-image-container">
+            IMAGE: <img :src="item.image" :title="item.name" :alt="`${item.name} Image`">
           </figure>
           <h2 class="subtitle">{{ item.price }}</h2>
         </div>

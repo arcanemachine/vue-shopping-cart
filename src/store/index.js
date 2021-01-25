@@ -222,10 +222,6 @@ export default new Vuex.Store({
         context.commit('cartIs', context.getters.userProfile.cart);
       context.commit('cartIs', userProfile.cart);
     },
-    cartClear(context) {
-      context.commit('cartIs', {});
-      Cookies.remove('cart');
-    },
     cartSyncLocalOntoRemote(context) {
       let url = helpers.urls.cartUpdate;
       let postData = {cart: context.getters.cart}
@@ -238,7 +234,6 @@ export default new Vuex.Store({
         body: JSON.stringify(postData)
       })
       .then(response => response.json())
-      // .then(data => console.log(data))
     },
     cartUpdateItem (context, payload) {
       /*
@@ -278,13 +273,23 @@ export default new Vuex.Store({
       }
 
       // save local cart to cookies
-      // Cookies.set('cart', JSON.stringify(context.getters.cart));
+      Cookies.set('cart', JSON.stringify(context.getters.cart));
       Cookies.set('cartModifiedAt', JSON.stringify(context.getters.cartModifiedAt));
 
       let verb = Math.abs(quantity) === 1 ? 'has' : 'have';
       let adjective = quantity >= 0 ? 'added' : 'removed';
       let preposition = quantity >= 0 ? 'to' : 'from';
       context.dispatch('displayStatusMessage', `${Math.abs(quantity)} '${item.name}' ${verb} been ${adjective} ${preposition} your cart.`);
+
+    },
+    cartClear (context) {
+      // if userProfile is present, perform the reset via API and retrieve the empty cart as a confirmation
+
+      context.commit('cartIs', {});
+
+      Cookies.set('cart', JSON.stringify(context.getters.cart));
+      Cookies.set('cartModifiedAt', JSON.stringify(context.getters.cartModifiedAt));
+      // if userProfile is not present, perform all actions locally
     }
   },
   modules: {
