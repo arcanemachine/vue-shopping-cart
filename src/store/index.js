@@ -137,7 +137,7 @@ export default new Vuex.Store({
         // otherwise, decrease the quantity as expected
         else {
           state.cart[String(item.id)] += quantity;
-          // this is hacky, item should be removed up top (ed. where?)
+          // this is hacky, item should be removed up top
           if (state.cart[String(item.id)] === 0) {
             delete state.cart[String(item.id)];
           }
@@ -162,8 +162,15 @@ export default new Vuex.Store({
       context.dispatch('authenticate', token);
       context.dispatch('getUser', token);
       context.dispatch('getUserProfile', token);
-      if (context.getters.cartModifiedAt && context.getters.cartModifiedAt > context.getters.userProfile.cart_modified_at) {
+
+      let localCartModifiedAt = context.getters.cartModifiedAt;
+      let remoteCart = context.getters.cart;
+
+      if (localCartModifiedAt && localCartModifiedAt > context.getters.userProfile.cart_modified_at) {
         context.dispatch('cartSyncLocalOntoRemote')
+      } 
+      else if (Object.keys(remoteCart).length) {
+        context.commit('cartIs', remoteCart);
       }
     },
     authenticate (context, token) {
@@ -216,7 +223,7 @@ export default new Vuex.Store({
 
       // TODO: prevent conflicts between different carts
       // use the cart that has been updated most recently
-      if (context.getters.cartModifiedAt > context.getters.userProfile.cart_modified_at)
+      if (context.getters.cartModifiedAt > userProfile.cart_modified_at)
         // if userProfile cart isn't empty
           // save userProfile cart to userProfile.old_carts
         context.commit('cartIs', context.getters.cart);
@@ -285,12 +292,12 @@ export default new Vuex.Store({
 
     },
     cartClear (context) {
-      // if userProfile is present, perform the reset via API and retrieve the empty cart as a confirmation
+      // if userProfile is present, perform the reset via API and clear the local cart as a confirmation
 
       context.commit('cartIs', {});
 
-      Cookies.set('cart', JSON.stringify(context.getters.cart));
-      Cookies.set('cartModifiedAt', JSON.stringify(context.getters.cartModifiedAt));
+      Cookies.remove('cart');
+      Cookies.remove('cartModifiedAt');
       // if userProfile is not present, perform all actions locally
     }
   },

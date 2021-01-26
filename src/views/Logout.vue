@@ -28,9 +28,18 @@
 export default {
   name: 'Logout',
   mounted() {
+    if (!Object.keys(this.$store.getters.userProfile).length) {
+      this.$router.push({name: 'cartDetail'});
+    }
     setTimeout(() => {
       this.logout();
     }, 1500)
+    if (this.clearCart) {
+      this.$store.dispatch('cartClear');
+    }
+  },
+  props: {
+    clearCart: Boolean
   },
   methods: {
     async logout() {
@@ -43,7 +52,7 @@ export default {
         if ('detail' in data && data.detail === "Successfully logged out.") {
           this.$store.dispatch('logout');
           setTimeout(() => {
-            this.$router.push({name: 'login'});
+            this.$router.push({name: 'cartDetail'});
           }, 1250)
         }
       })

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+// misc
+import About from '../views/About.vue'
 
 // store
 import StoreList from '../views/StoreList.vue'
@@ -25,7 +27,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: CartDetail,
+    component: About,
     pathToRegexpOptions: { strict: true },
 		meta: {title: 'Home'}
   },
@@ -81,6 +83,9 @@ const routes = [
     name: 'logout',
     component: Logout,
     pathToRegexpOptions: { strict: true },
+    props(route) {
+      return { clearCart: Boolean(route.query.clearCart) }
+    },
 		meta: {title: 'Logout'}
   },
 
