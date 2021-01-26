@@ -41,7 +41,7 @@ export default new Vuex.Store({
       return state.userToken;
     },
     cart (state) {
-      return state.cart;
+      return JSON.parse(JSON.stringify(state.cart));
     },
     cartModifiedAt (state) {
       return state.cartModifiedAt;
@@ -173,8 +173,8 @@ export default new Vuex.Store({
       context.commit('userIs', undefined);
       context.commit('userProfileIs', undefined);
       Cookies.remove('userToken');
-      Cookies.remove('cart');
-      Cookies.remove('cartModifiedAt');
+      // Cookies.remove('cart');
+      // Cookies.remove('cartModifiedAt');
     },
     async getUser (context, token) {
       let url = helpers.urls.getUser;
@@ -213,24 +213,25 @@ export default new Vuex.Store({
       })
       .then(data => {
         let userProfile = data;
+        let localCart = context.getters.cart;
         let localCartModifiedAt = context.getters.cartModifiedAt;
-        let remoteCart = context.getters.cart;
+        let remoteCart = userProfile.cart;
 
         // assign userProfile to the response object
         context.commit('userProfileIs', userProfile);
 
         // if local cart is newer than the remote, sync the local cart contents onto the remote
-        if (localCartModifiedAt && localCartModifiedAt > new Date(userProfile.cart_modified_at)) {
+        if (Object.keys(localCart).length && localCartModifiedAt && localCartModifiedAt > new Date(userProfile.cart_modified_at)) {
           context.dispatch('cartSyncLocalOntoRemote');
         } 
-        // otherwise, sync the remote cart onto the local cart
+        // otherwise, sync the remote cart onto the local cart if the remote cart is not empty
         else if (Object.keys(remoteCart).length) {
           context.commit('cartIs', remoteCart);
         }
       })
     },
     cartSyncLocalOntoRemote(context) {
-      let url = helpers.urls.cartUpdate;
+      let url = helpers.urls.cartDetail;
       let postData = {cart: context.getters.cart}
       fetch(url, {
         method: 'PATCH',
@@ -249,6 +250,11 @@ export default new Vuex.Store({
 
       let item = payload.item;
       let quantity = payload.quantity;
+
+      // TODO: check this
+      if (context.getters.cart[String(item.id)] >= 99) {
+        context.dispatch('displayStatusMessage', "You cannot have more than 99 of a given item in your cart.")
+      }
 
       // if userProfile is present (user logged in), perform remote cart update and sync to local
       if (context.getters.userProfile) {

@@ -73,4 +73,4 @@ export function handleResponse(response) { // , responseType='json') {
 }
 
 export const pp = JSON.stringify;
-export const obs = (obj) => {JSON.parse(JSON.stringify(obj))};
+export const parseObs = (obj) => {JSON.parse(JSON.stringify(obj))};

@@ -2,7 +2,7 @@
   <nav class="navbar is-fixed-top is-dark border-bottom navbar-color-custom">
     <div class="container">
       <div class="navbar-brand">
-        <router-link :to="{name: 'home'}"
+        <router-link :to="{name: 'storeList'}"
                      @click.native="navbarIsActive = false"
                      class="navbar-item brand-text has-text-weight-bold">Vue Shopping Cart Demo</router-link>
         <transition name="fade">
@@ -51,6 +51,9 @@
             <router-link :to="{name: 'cartDetail'}" class="navbar-item is-hidden-mobile is-hidden-tablet-only">
               Your Cart <span class="navbar-icon-container-wide"><i class="bi-cart2 is-size-5"></i></span>
             </router-link>
+            <router-link @click.native="navbarToggle"
+                         :to="{name: 'storeList'}"
+                         class="navbar-item has-text-centered">View Stores</router-link>
             <router-link v-if="!$store.getters.userIsAuthenticated"
                          @click.native="navbarToggle"
                          :to="{name: 'login'}"
@@ -198,21 +201,27 @@ export default {
   display: flex;
   background-color: #88f;
 
-  height: 1.4rem;
-  width: 1.4rem;
+  height: 1.3rem;
+  width: 1.3rem;
   margin-top: 1.3rem;
   margin-right: 0rem;
 
   justify-content: center;
   align-items: center;
 
-  opacity: 0.9;
+  opacity: 0.8;
   border-radius: 50%;
 }
 
 .cart-item-count {
   color: black;
+  cursor: default;
+  user-select: none;
+  font-size: 0.9rem;
   font-weight: bold;
+  margin-left: 0rem;
+  margin-bottom: 0.1rem;
+  opacity: 1;
 }
 </style>
 

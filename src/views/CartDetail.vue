@@ -54,6 +54,8 @@
         </div>
       </div>
     </div>
+    <div>{{ cart }}</div>
+    <div>{{ cartData }}</div>
   </div>
 </template>
 
@@ -65,7 +67,6 @@ export default {
     return {
       cartData: {},
       isMounted: false,
-      cartClearConfirm: false
     }
   },
   computed: {
@@ -173,7 +174,8 @@ div.cart-empty {
 
 .input.cart-quantity-text {
   margin: auto 0.5rem;
-  width: 2rem;
+  pointer-events: none;
+  width: 3rem;
   text-align: center;
 }
 
