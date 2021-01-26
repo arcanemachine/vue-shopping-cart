@@ -112,7 +112,7 @@ const routes = [
     component: ItemDetail,
     props: true,
     pathToRegexpOptions: { strict: true },
-		meta: {title: 'Category Info'}
+		meta: {title: 'Item Info'}
   },
   {
     path: '*',

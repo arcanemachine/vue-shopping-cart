@@ -1,18 +1,21 @@
 <template>
   <div class="container">
     <div class="section has-text-centered">
+      <div class="mb-6 title">
+        <router-link :to="{name: 'storeDetail', params: {'storeId': category.store_id}}">&larr; Return to '{{ category.store_name }}'</router-link>
+      </div>
       <div class="columns">
         <div class="column">
           <h1 class="title">{{ category.name }}</h1>
           <h2 class="subtitle">{{ category.description }}</h2>
         </div>
       </div>
-      <div class="row columns is-multiline">
-        <item-card v-for="(item, index) in items"
+      <div class="row columns is-multiline is-centered">
+        <item-card v-for="item in items"
                     :key="item.id"
                     :item="item"
-                    class="column is-4"
-                    :class="columnCenterClass(index)">
+                    class="column is-4">
+                    <!--:class="columnCenterClass(index)"-->
         </item-card>
       </div>
     </div>
@@ -44,18 +47,18 @@ export default {
     })
   },
   methods: {
-    columnCenterClass(index) {
-      if (this.items.length % 3 === 2) {
-        return [];
-      } else if (this.items.length % 3 === 1) {
-        if (this.items[index] === this.items.slice(-1)) {
-          return ['is-red'];
-        }
-        return [''];
-      } else {
-        return [];
-      }
-    },
+    // columnCenterClass(index) {
+    //   if (this.items.length % 3 === 2) {
+    //     return [];
+    //   } else if (this.items.length % 3 === 1) {
+    //     if (this.items[index] === this.items.slice(-1)) {
+    //       return ['is-red'];
+    //     }
+    //     return [''];
+    //   } else {
+    //     return [];
+    //   }
+    // },
     getCategoryDetail() { // move this into vuex store
       fetch(this.$helpers.urls.categoryDetail(this.categoryId))
       .then(response => response.json())

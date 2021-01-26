@@ -72,5 +72,24 @@ export function handleResponse(response) { // , responseType='json') {
   return response.json();
 }
 
+export function zeroPadder(num, minLength=2) {
+  // get the minimum length of the result
+  let sliceLength = minLength;
+  let numLength = String(num).length;
+  if (numLength > minLength) {sliceLength = numLength;}
+
+  // create a string of zeroes
+  let zeroString = '';
+  for (let i = 0; i < sliceLength; i++) {zeroString += '0'}
+  // return a string that is at least as long as minLength
+  return (zeroString + String(num)).slice(numLength);
+}
+
+export function getFormattedPrice(price) {
+  let dollars = String(Math.floor(price / 100));
+  let cents = zeroPadder(price % 100);
+  return `$${dollars}.${cents}`;
+}
+
 export const pp = JSON.stringify;
 export const parseObs = (obj) => {JSON.parse(JSON.stringify(obj))};

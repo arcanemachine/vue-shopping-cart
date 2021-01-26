@@ -1,18 +1,13 @@
 <template>
   <div class="container">
     <div class="section has-text-centered">
-      <div class="columns">
-        <div class="column">
-          <h1 class="title">ITEM: {{ item.name }}</h1>
-          <h2 class="subtitle">DESCRIPTION: {{ item.description }}</h2>
-          <figure class="image is-4by3 card-image-container">
-            IMAGE: <img :src="item.image" :title="item.name" :alt="`${item.name} Image`">
-          </figure>
-          <h2 class="subtitle">{{ item.price }}</h2>
-        </div>
+      <div class="mb-6 title">
+        <router-link :to="{name: 'categoryDetail', params: {'storeId': item.store_id, 'categoryId': item.category_id}}">&larr; Return to '{{ item.category_name }}'</router-link>
       </div>
-      <div class="row columns is-multiline">
-        {{ item.name }}
+      <div class="columns">
+        <item-card :item="item"
+                   class="column is-6 is-offset-3">
+        </item-card>
       </div>
     </div>
   </div>
@@ -20,9 +15,12 @@
 
 <script>
 
+import ItemCard from '../components/ItemCard.vue'
+
 export default {
   name: 'ItemDetail',
   components: {
+    ItemCard
   },
   props: [
     'itemId'
@@ -38,11 +36,46 @@ export default {
     })
   },
   methods: {
+    columnCenterClass(index) {
+      if (this.items.length % 3 === 2) {
+        return [];
+      } else if (this.items.length % 3 === 1) {
+        if (this.items[index] === this.items.slice(-1)) {
+          return ['is-red'];
+        }
+        return [''];
+      } else {
+        return [];
+      }
+    },
     getItemDetail() { // move this into vuex store
       fetch(this.$helpers.urls.itemDetail(this.itemId))
       .then(response => response.json())
-      .then(data => this.item = data)
+      .then(data => this.item = data[0])
     },
   }
 }
 </script>
+
+<style>
+
+.card-image-container {
+  display: flex;
+  margin: auto;
+  background-color: white;
+  overflow: hidden;
+  height: 15rem;
+  width: 15rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-not-available {
+  background-color: darkgray;
+  width: 100%;
+  font-size: 10rem;
+  padding-bottom: 4rem;
+  color: white;
+}
+
+</style>

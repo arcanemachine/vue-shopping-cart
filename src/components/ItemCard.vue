@@ -11,12 +11,15 @@
         </div>
         <div class="card-content">
           <div class="has-size-4">
-            <span class="pt-0 is-size-4">
+            <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}" class="pt-0 is-size-4">
               {{ item.name }}
-            </span>
+            </router-link>
           </div>
           <div class="item-description">
             {{ item.description }}
+          </div>
+          <div class="item-price">
+            {{ $helpers.getFormattedPrice(item.price) }}
           </div>
         </div>
         <add-to-cart-button :item="item" class="add-to-cart-button" />
@@ -40,22 +43,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.card-image {
+  height: 15rem;
+}
+
 .card-image-container {
-  display: flex;
-  margin: auto;
   background-color: white;
   overflow: hidden;
-  height: 15rem;
-  width: 15rem;
-  justify-content: center;
+  display: flex;
   align-items: center;
+  justify-content: stretch;
 }
 
 .image-not-available {
   background-color: darkgray;
   width: 100%;
   font-size: 10rem;
-  padding-bottom: 4rem;
   color: white;
 }
 
@@ -63,6 +66,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.item-price {
+  font-weight: bold;
 }
 
 .add-to-cart-button {

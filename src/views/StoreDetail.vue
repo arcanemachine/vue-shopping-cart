@@ -1,17 +1,20 @@
 <template>
   <div class="container">
     <div class="section has-text-centered">
+        <div class="mb-6 title">
+          <router-link :to="{name: 'storeList'}">&larr; Return to store list</router-link>
+        </div>
       <div class="columns">
         <div class="column">
           <h1 class="title">{{ store.name }}</h1>
           <h2 class="subtitle">{{ store.description }}</h2>
         </div>
       </div>
-      <div class="row columns is-multiline">
+      <div class="row columns is-multiline is-centered">
         <category-card v-for="category in categories"
                     :key="category.id"
                     :category="category"
-                    class="column">
+                    class="column is-4">
         </category-card>
       </div>
     </div>

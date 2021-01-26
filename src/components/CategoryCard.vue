@@ -37,20 +37,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.card-image {
+  height: 15rem;
+}
+
 .card-image-container {
-  background-color: darkgray;
+  background-color: white;
   overflow: hidden;
   display: flex;
-  height: 15rem;
   align-items: center;
   justify-content: stretch;
 }
 
 .image-not-available {
+  background-color: darkgray;
   width: 100%;
   font-size: 10rem;
-  margin-bottom: 3rem;
   color: white;
 }
-  
+ 
 </style>

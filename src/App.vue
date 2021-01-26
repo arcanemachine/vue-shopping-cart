@@ -51,7 +51,7 @@ body {
 
 a {
   font-weight: bold;
-  color: #ade8f4;
+  color: #8bc6d2;
 }
 
 .bottom-links {

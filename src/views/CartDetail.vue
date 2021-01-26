@@ -32,7 +32,9 @@
                       </figure>
                     </div>
                     <div class="media-content cart-item-container">
-                      <p class="cart-item-name">{{ item.name }}</p>
+                      <router-link :to="{name: 'itemDetail', params: {'storeId': item.store_id, 'categoryId': item.category_id, 'itemId': item.id}}">
+                        <p class="cart-item-name">{{ item.name }}</p>
+                      </router-link>
                     </div>
                     <div class="cart-quantity-container">
                       <button @click="itemRemove(item)" class="button cart-quantity-button">-</button>
@@ -53,11 +55,14 @@
           </transition>
         </div>
       </div>
+<div>{{ cartData }}</div>
     </div>
-    <div>{{ cart }}</div>
-    <div>{{ cartData }}</div>
   </div>
 </template>
+
+<!--
+<div>{{ cart }}</div>
+-->
 
 <script>
 
@@ -130,6 +135,7 @@ export default {
 }
 
 .cart-item-name {
+  color: #222;
   font-size: 1.3rem;
   overflow-x: initial;
 }

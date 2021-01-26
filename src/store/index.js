@@ -241,7 +241,10 @@ export default new Vuex.Store({
         },
         body: JSON.stringify(postData)
       })
-      .then(response => response.json())
+      .then(response => {
+        context.dispatch('displayStatusMessage', "Your cart has been synced to your online account.");
+        return response.json()
+      })
     },
     cartUpdateItem (context, payload) {
       /*
