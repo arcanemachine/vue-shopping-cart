@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <div class="hero">
+    <div class="container">
       <div class="hero body">
         <div class="container has-text-centered">
           <div class="is-4 is-offset-4">
@@ -10,10 +10,13 @@
             </div>
           </div>
           <transition name="fade">
-            <div v-if="isMounted && !Object.keys(cartData).length" class="cart-empty mt-6 container has-text-centered">
-              <div class="title">Your cart is empty.</div>
+            <div v-if="isMounted && !Object.keys(cartData).length" class="cart-empty container has-text-centered">
+              <div class="mb-6 title">Your cart is empty.</div>
               <router-link :to="{name: 'storeList'}">
-                <button class="button is-success is-4">Let's go shopping!</button>
+                <button class="button is-large is-success is-4 is-fullwidth">Let's go shopping!</button>
+              </router-link>
+              <router-link v-if="!$store.getters.userProfile" :to="{name: 'login'}">
+                <button class="mt-3 button is-large is-info is-fullwidth">Login to your account</button>
               </router-link>
             </div>
           </transition>
@@ -44,7 +47,7 @@
           <transition name="fade">
             <button v-if="Object.keys(cartData).length"
                     @click="cartClear"
-                    class="mt-6 button is-danger clear-cart-button">
+                    class="mt-6 button is-large is-danger clear-cart-button">
               Remove all Items <i class="trash-icon bi-trash navbar-show-icon-touch"></i>
             </button>
           </transition>
@@ -106,6 +109,9 @@ export default {
       let currentItemIndex = cartDataIds.indexOf(item.id)
       if (!this.cart[String(item.id)]) {
         this.cartData.splice(currentItemIndex, 1);
+      }
+      if (!Object.keys(this.cartData).length) {
+        this.$store.dispatch('cartClear');
       }
     },
     cartClear() {
@@ -174,7 +180,7 @@ div.cart-empty {
 .trash-icon {
   font-size: 1.3rem;
   margin-left: 0.5rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
 }
 
 </style>

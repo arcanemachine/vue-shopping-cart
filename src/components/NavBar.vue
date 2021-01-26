@@ -106,12 +106,12 @@ export default {
     },
     userProfileIconStyle() {
       return {
-        color: this.$store.getters.userIsAuthenticated ? 'gold' : 'white'
+        color: this.$store.getters.userIsAuthenticated ? '#88f' : 'white'
       }
     },
     cartIconStyle() {
       return {
-        color: this.$store.getters.cartItemCount ? 'gold' : 'white'
+        color: this.$store.getters.cartItemCount ? '#88f' : 'white'
       }
     }
   },
@@ -196,12 +196,12 @@ export default {
 .cart-item-container {
   position: absolute;
   display: flex;
-  background-color: gold;
+  background-color: #88f;
 
-  height: 1.3rem;
-  width: 1.3rem;
+  height: 1.4rem;
+  width: 1.4rem;
   margin-top: 1.3rem;
-  margin-right: 0.1rem;
+  margin-right: 0rem;
 
   justify-content: center;
   align-items: center;

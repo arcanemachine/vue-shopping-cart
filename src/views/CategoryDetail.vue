@@ -8,10 +8,11 @@
         </div>
       </div>
       <div class="row columns is-multiline">
-        <item-card v-for="item in items"
+        <item-card v-for="(item, index) in items"
                     :key="item.id"
                     :item="item"
-                    class="column">
+                    class="column is-4"
+                    :class="columnCenterClass(index)">
         </item-card>
       </div>
     </div>
@@ -43,6 +44,18 @@ export default {
     })
   },
   methods: {
+    columnCenterClass(index) {
+      if (this.items.length % 3 === 2) {
+        return [];
+      } else if (this.items.length % 3 === 1) {
+        if (this.items[index] === this.items.slice(-1)) {
+          return ['is-red'];
+        }
+        return [''];
+      } else {
+        return [];
+      }
+    },
     getCategoryDetail() { // move this into vuex store
       fetch(this.$helpers.urls.categoryDetail(this.categoryId))
       .then(response => response.json())
@@ -56,3 +69,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.is-red {
+  color: red;
+}
+</style>

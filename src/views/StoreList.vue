@@ -20,6 +20,8 @@
 
 <script>
 
+import Cookies from 'js-cookie'
+
 import StoreCard from '../components/StoreCard.vue'
 
 export default {
@@ -34,6 +36,9 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      if (!Cookies.get('introSeen')) {
+        this.$router.push({name: 'about'});
+      }
       this.getStores();
     })
   },

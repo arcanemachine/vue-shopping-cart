@@ -15,19 +15,11 @@
               {{ item.name }}
             </span>
           </div>
-          <div>
-            <span :to="{
-              name: 'itemDetail',
-              params: {
-                storeId: item.store_id,
-                categoryId: item.category_id,
-                itemId: item.id}
-              }">
-              {{ item.description }}
-            </span>
+          <div class="item-description">
+            {{ item.description }}
           </div>
-          <add-to-cart-button :item="item" />
         </div>
+        <add-to-cart-button :item="item" class="add-to-cart-button" />
       </div>
     </div>
 </template>
@@ -66,5 +58,14 @@ export default {
   padding-bottom: 4rem;
   color: white;
 }
-  
+
+.item-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-to-cart-button {
+  margin-bottom: 1rem;  
+}
 </style>

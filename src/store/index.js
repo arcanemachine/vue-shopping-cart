@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import Cookies from 'js-cookie' // eslint-disable-line no-unused-vars
+import Cookies from 'js-cookie'
 
 import * as helpers from '../assets/js/helpers.js'
 
@@ -161,17 +161,7 @@ export default new Vuex.Store({
     login (context, token) {
       context.dispatch('authenticate', token);
       context.dispatch('getUser', token);
-      context.dispatch('getUserProfile', token);
-
-      let localCartModifiedAt = context.getters.cartModifiedAt;
-      let remoteCart = context.getters.cart;
-
-      if (localCartModifiedAt && localCartModifiedAt > context.getters.userProfile.cart_modified_at) {
-        context.dispatch('cartSyncLocalOntoRemote')
-      } 
-      else if (Object.keys(remoteCart).length) {
-        context.commit('cartIs', remoteCart);
-      }
+      context.dispatch('getUserProfile', token)
     },
     authenticate (context, token) {
       context.commit('userIsAuthenticated', true);
@@ -196,6 +186,7 @@ export default new Vuex.Store({
         }
       })
       .then(response => {
+        // if response is not successful, log the user out
         if (!response.ok) {
           context.dispatch('logout');
         }
@@ -205,7 +196,7 @@ export default new Vuex.Store({
     },
     async getUserProfile (context, token) {
       let url = helpers.urls.getProfile;
-      let userProfile = await fetch(url, {
+      await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -213,23 +204,30 @@ export default new Vuex.Store({
         }
       })
       .then(response => {
+        // if response is not successful, log the user out
         if (!response.ok) {
           context.dispatch('logout');
           return false;
         }
         return response.json()
       })
-      context.commit('userProfileIs', userProfile);
+      .then(data => {
+        let userProfile = data;
+        let localCartModifiedAt = context.getters.cartModifiedAt;
+        let remoteCart = context.getters.cart;
 
-      // TODO: prevent conflicts between different carts
-      // use the cart that has been updated most recently
-      if (context.getters.cartModifiedAt > userProfile.cart_modified_at)
-        // if userProfile cart isn't empty
-          // save userProfile cart to userProfile.old_carts
-        context.commit('cartIs', context.getters.cart);
-      else
-        context.commit('cartIs', context.getters.userProfile.cart);
-      context.commit('cartIs', userProfile.cart);
+        // assign userProfile to the response object
+        context.commit('userProfileIs', userProfile);
+
+        // if local cart is newer than the remote, sync the local cart contents onto the remote
+        if (localCartModifiedAt && localCartModifiedAt > new Date(userProfile.cart_modified_at)) {
+          context.dispatch('cartSyncLocalOntoRemote');
+        } 
+        // otherwise, sync the remote cart onto the local cart
+        else if (Object.keys(remoteCart).length) {
+          context.commit('cartIs', remoteCart);
+        }
+      })
     },
     cartSyncLocalOntoRemote(context) {
       let url = helpers.urls.cartUpdate;
@@ -295,12 +293,13 @@ export default new Vuex.Store({
       // if userProfile is present, perform the reset via API and clear the local cart as a confirmation
 
       context.commit('cartIs', {});
+      context.commit('cartModifiedAt', undefined);
 
       Cookies.remove('cart');
       Cookies.remove('cartModifiedAt');
       // if userProfile is not present, perform all actions locally
+
+      context.dispatch('displayStatusMessage', "Your cart has been cleared.");
     }
   },
-  modules: {
-  }
 })

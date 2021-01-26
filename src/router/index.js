@@ -26,15 +26,15 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: About,
+    name: 'storeList',
+    component: StoreList,
     pathToRegexpOptions: { strict: true },
 		meta: {title: 'Home'}
   },
   {
-    path: '/stores/',
-    name: 'storeList',
-    component: StoreList,
+    path: '/about/',
+    name: 'about',
+    component: About,
     pathToRegexpOptions: { strict: true },
 		meta: {title: 'Store List'}
   },
