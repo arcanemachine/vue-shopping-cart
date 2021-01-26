@@ -198,10 +198,10 @@ export default {
   display: flex;
   background-color: gold;
 
-  height: 1.4rem;
-  width: 1.4rem;
+  height: 1.3rem;
+  width: 1.3rem;
   margin-top: 1.3rem;
-  margin-right: -0.35rem;
+  margin-right: 0.1rem;
 
   justify-content: center;
   align-items: center;
