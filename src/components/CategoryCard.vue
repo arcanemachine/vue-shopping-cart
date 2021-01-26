@@ -45,6 +45,7 @@ export default {
   background-color: white;
   overflow: hidden;
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: stretch;
 }

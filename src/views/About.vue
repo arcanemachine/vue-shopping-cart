@@ -5,17 +5,15 @@
       <div class="columns">
         <div class="column is-half is-offset-one-quarter">
           <div class="about">
-            <h4 class="is-size-4 has-text-centered">About</h4>
             <p class="mt-4">This demo simulates a user-base shopping/checkout experience. Users can browse items, add them to their cart, manage the cart (add/remove items), and perform a checkout process.</p>
             <p class="mt-2"><strong>This demo is a simulation only. No real money is spent when using this demo.</strong></p>
           </div>
           <div class="about">
             <h4 class="mt-4 is-size-4 has-text-centered">Features</h4>
-            <div class="mt-4">This demo uses the following features/technologies:</div>
           <ul class="ml-5 mr-5 list-style-dashed has-text-left">
             <li class="mt-2">The frontend is powered by Vue/Node.js.</li>
             <li>The backend uses a REST API powered by Django + Django Rest Framework</li>
-            <li>The shopping cart will be stored locally unless the user creates an account</li>
+            <li>The shopping cart will be stored locally unless the user creates an account.</li>
             <li>If the user creates an account, all items will be synced to the the backend server and can be accessed from any computer the user logs in to.</li>
             <li>Users can add and edit their address and preferred payment methods.</li>
           </ul>

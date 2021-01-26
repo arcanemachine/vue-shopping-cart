@@ -92,4 +92,4 @@ export function getFormattedPrice(price) {
 }
 
 export const pp = JSON.stringify;
-export const parseObs = (obj) => {JSON.parse(JSON.stringify(obj))};
+export const parseObs = (obs) => {JSON.parse(JSON.stringify(obs))};

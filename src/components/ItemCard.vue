@@ -43,14 +43,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.card-image {
-  height: 15rem;
-}
-
 .card-image-container {
   background-color: white;
   overflow: hidden;
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: stretch;
 }
@@ -61,8 +58,7 @@ export default {
   font-size: 10rem;
   color: white;
 }
-
-.item-description {
+ .item-description {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -73,6 +69,6 @@ export default {
 }
 
 .add-to-cart-button {
-  margin-bottom: 1rem;  
+  margin-bottom: 1.5rem;
 }
 </style>

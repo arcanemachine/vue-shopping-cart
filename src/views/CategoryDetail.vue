@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="section has-text-centered">
-      <div class="mb-6 title">
-        <router-link :to="{name: 'storeDetail', params: {'storeId': category.store_id}}">&larr; Return to '{{ category.store_name }}'</router-link>
+      <div class="mb-4 title">
+        <router-link :to="{name: 'storeDetail', params: {storeId: category.store_id}}">&larr; Return to '{{ category.store_name }}'</router-link>
       </div>
       <div class="columns">
         <div class="column">

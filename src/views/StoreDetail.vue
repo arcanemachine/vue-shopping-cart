@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="section has-text-centered">
-        <div class="mb-6 title">
+        <div class="mb-4 title">
           <router-link :to="{name: 'storeList'}">&larr; Return to store list</router-link>
         </div>
       <div class="columns">

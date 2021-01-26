@@ -37,14 +37,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.card-image {
-  height: 15rem;
-}
-
 .card-image-container {
   background-color: white;
   overflow: hidden;
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: stretch;
 }

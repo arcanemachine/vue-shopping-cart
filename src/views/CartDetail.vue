@@ -3,7 +3,7 @@
     <div class="container">
       <div class="hero body">
         <div class="container has-text-centered">
-          <div class="is-4 is-offset-4">
+          <div class="is-6 is-offset-3">
             <h2 class="title has-text-black">Your Cart</h2>
             <div class="hr-container">
               <hr class="logout-hr">
@@ -21,25 +21,28 @@
             </div>
           </transition>
           <transition-group name="fade">
-            <div v-for="item in cartData" :key="item.id">
-              <div class="card large">
-                <div class="card-content">
-                  <div class="media">
-                    <div class="media-left">
-                      <figure v-if="item.image" class="image is-48x48">
-                        <img v-if="item.image" :src="item.image" :alt="item.name">
-                        <div v-else></div>
-                      </figure>
-                    </div>
-                    <div class="media-content cart-item-container">
-                      <router-link :to="{name: 'itemDetail', params: {'storeId': item.store_id, 'categoryId': item.category_id, 'itemId': item.id}}">
-                        <p class="cart-item-name">{{ item.name }}</p>
-                      </router-link>
-                    </div>
-                    <div class="cart-quantity-container">
-                      <button @click="itemRemove(item)" class="button cart-quantity-button">-</button>
-                      <input type="text" v-model="cart[item.id]" class="input cart-quantity-text" disabled>
-                      <button @click="itemAdd(item)" class="button cart-quantity-button">+</button>
+            <div v-for="item in cartData" :key="item.id" class="mb-3">
+              <div class="card large cart-item-card">
+                <div class="cart-item-card-container">
+                  <div class="card-content">
+                    <div class="media">
+                      <div class="media-left">
+                        <figure v-if="item.image" class="image is-48x48">
+                          <img v-if="item.image" :src="item.image" :alt="item.name">
+                          <div v-else></div>
+                        </figure>
+                      </div>
+                      <div class="media-content cart-item-container">
+                        <router-link :to="{name: 'itemDetail', params: {'storeId': item.store_id, 'categoryId': item.category_id, 'itemId': item.id}}">
+                          <div class="cart-item-name">{{ item.name }}</div>
+                          <div class="has-text-black">Price/ea: {{ $helpers.getFormattedPrice(item.price) }}</div>
+                        </router-link>
+                      </div>
+                      <div class="cart-quantity-container">
+                        <button @click="itemRemove(item)" class="button cart-quantity-button">-</button>
+                        <input type="text" v-model="cart[item.id]" class="input cart-quantity-text" disabled>
+                        <button @click="itemAdd(item)" class="button cart-quantity-button">+</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -47,7 +50,27 @@
             </div>
           </transition-group>
           <transition name="fade">
-            <button v-if="Object.keys(cartData).length"
+            <div v-if="!cartIsEmpty" class="mt-6 card large has-background-light">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left mb-2 checkout-icon-container">
+                    <figure class="image">
+                      <i class="bi-cart is-size-3"></i>
+                    </figure>
+                  </div>
+                  <div class="media-content checkout-text-container">
+                    <div class="mb-2">Item Count: {{ itemCount }}</div>
+                    <div>Total Price: {{ totalPrice }}</div>
+                  </div>
+                  <div class="media-right checkout-button-container">
+                    <button class="button is-success checkout-button">Checkout</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </transition>
+          <transition name="fade">
+            <button v-if="!cartIsEmpty"
                     @click="cartClear"
                     class="mt-6 button is-large is-danger clear-cart-button">
               Remove all Items <i class="trash-icon bi-trash navbar-show-icon-touch"></i>
@@ -55,13 +78,13 @@
           </transition>
         </div>
       </div>
-<div>{{ cartData }}</div>
     </div>
   </div>
 </template>
 
 <!--
-<div>{{ cart }}</div>
+    <div>{{ cart }}</div>
+    <div>{{ cartData }}</div>
 -->
 
 <script>
@@ -78,6 +101,28 @@ export default {
     cart() {
       return this.$store.getters.cart;
     },
+    cartIsEmpty() {
+    return !Object.keys(this.cartData).length;
+    },
+    itemCount() {
+      let cartItemCounts = Object.values(this.cart);
+      let sum = cartItemCounts.reduce((a, b) => a + b);
+      return sum;
+    },
+    totalPrice() {
+      if (!this.isMounted) {
+        return 0;
+      }
+      let price = 0;
+      for (let i = 0; i < Object.keys(this.cart).length; i++) {
+        // get item info from cartData
+        let currentCartObj = this.cartData[i];
+        let currentItemCount = this.cart[currentCartObj.id];
+        let currentItemPrice = this.cartData[i].price;
+        price += (currentItemCount * currentItemPrice);
+      }
+      return this.$helpers.getFormattedPrice(price);
+    }
   },
   mounted() {
     this.isMounted = true;
@@ -104,7 +149,6 @@ export default {
       this.$forceUpdate();
     },
     itemAdd(item) {
-      console.log(item)
       this.$store.dispatch('cartUpdateItem', {item: item, quantity: 1})
     },
     itemRemove(item) {
@@ -129,6 +173,14 @@ export default {
 </script>
 
 <style>
+
+.cart-item-card {
+  height: 8rem;
+}
+
+.cart-item-card-container {
+  margin-top: 1rem;
+}
 
 .cart-item-container {
   margin: auto;
@@ -183,6 +235,23 @@ div.cart-empty {
   pointer-events: none;
   width: 3rem;
   text-align: center;
+}
+
+.checkout-icon-container {
+  margin-left: 0.4rem;
+}
+
+.checkout-text-container {
+  margin: auto;
+}
+
+.checkout-button-container {
+  display: flex;
+  max-width: 9rem;
+  align-self: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .trash-icon {

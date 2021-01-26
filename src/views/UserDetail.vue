@@ -20,8 +20,6 @@
 
 export default {
   name: 'UserDetail',
-  components: {
-  },
   data() {
     return {
       user: {},
