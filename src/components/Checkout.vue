@@ -26,7 +26,8 @@
           <button @click="$emit('cancel-checkout')" class="delete" aria-label="close"></button>
         </header>
 
-        <section v-if="currentStep === 'Confirm Your Order'" class="modal-card-body">
+        <!-- orderConfirm -->
+        <section v-if="currentStep === steps.orderConfirm" class="pb-5 modal-card-body">
           <div class="subtitle">Please confirm your order:</div>
           <div class="is-size-4">Items:</div>
           <ol class="mt-3">
@@ -43,29 +44,44 @@
 
         </section>
 
-        <section v-if="currentStep === 'Confirm Your Address'" class="modal-card-body">
+        <!-- addressConfirm -->
+        <section v-if="currentStep === steps.addressConfirm" class="pb-5 modal-card-body">
           <div class="mb-5 is-size-5">We have the following address on file for you:</div>
-          <div class="ml-4 address">
-            <div class="name">{{ address.name }}</div>
-            <div class="address1">{{ address.address1 }}</div>
-            <div v-if="address.address2" class="address2">{{ address.address2 }}</div>
-            <div class="city-state-zip">
-              {{ address.city }}, {{ address.state }}{{ noCommaIfStateIsAbbreviated }}{{ address.zip }}
+            <div class="ml-4 address-display">
+              <div class="name">{{ address.name }}</div>
+              <div class="address1">{{ address.address1 }}</div>
+              <div v-if="address.address2" class="address2">{{ address.address2 }}</div>
+              <div class="city-state-zip">
+                {{ address.city }}, {{ address.state }}{{ noCommaIfStateIsAbbreviated }}{{ address.zip }}
+              </div>
+              <div class="phone">{{ address.phone }}</div>
             </div>
-            <div class="phone">{{ address.phone }}</div>
-          </div>
-          <div class="mt-5 mb-2 is-size-5">Is this correct?</div>
+          <div class="mt-5 is-size-5">Is this correct?</div>
+        </section>
+
+        <!-- addressUpdate -->
+        <section v-if="currentStep === steps.addressUpdate" class="pb-5 modal-card-body">
+          <div class="mb-5 is-size-5">Please enter your address*:</div>
+            <div class="ml-4 address-form">
+              <div class="name">{{ address.name }}</div>
+              <div class="address1">{{ address.address1 }}</div>
+              <div v-if="address.address2" class="address2">{{ address.address2 }}</div>
+              <div class="city-state-zip">
+                {{ address.city }}, {{ address.state }}{{ noCommaIfStateIsAbbreviated }}{{ address.zip }}
+              </div>
+              <div class="phone">{{ address.phone }}</div>
+            </div>
+          <div class="mt-5 is-size-5">Is this correct?</div>
         </section>
 
         <footer class="modal-card-foot">
-          <button @click="goToNextStep" class="button is-success">{{ primaryButtonText }}</button>
+          <button @click="goToNextStep" class="button is-success">Confirm</button>
           <button v-if="secondaryButtonText"
                   @click="secondaryButtonClicked"
-                  class="button"
-                  :class="secondaryButtonClass">
+                  class="button is-warning">
             {{ secondaryButtonText }}
           </button>
-          <button @click="checkoutCancel" class="button">Cancel</button>
+          <button @click="checkoutCancel" class="button is-danger">Cancel Checkout</button>
         </footer>
       </div>
     </transition>
@@ -91,14 +107,13 @@ export default {
         addressUpdate: 'Change Your Address',
       },
       // currentStep: '',
-      currentStep: 'Confirm Your Order',
-      primaryButtonText: 'Confirm',
+      currentStep: '',
       secondaryButtonText: '',
       stepTransitionName: 'slide-next',
 
       isLoading: true,
       loadingMessage: '',
-      defaultLoadingTime: 1500,
+      defaultLoadingTime: 2000,
       purchaseComplete: false,
 
       address: {
@@ -111,7 +126,6 @@ export default {
         country: 'Canada',
         phone: '+1 (555) 555-1234',
       },
-
       paymentMethod: {
         name: 'Saved Payment Method',
         cardholderName: 'Jamie Smith',
@@ -122,12 +136,6 @@ export default {
     }
   },
   computed: {
-    secondaryButtonClass() {
-      return {
-        // 'is-success': this.currentStep !== this.steps.confirmAddress ? true : false,
-        'is-warning': this.currentStep === this.steps.addressConfirm ? true : false
-      }
-    },
     noCommaIfStateIsAbbreviated() {
       return this.address.state.length <= 2 ? ' ' : ', ';
     },
@@ -140,6 +148,8 @@ export default {
   mounted() {
     this.isMounted = true;
 
+    this.goToAddressUpdate();
+
     // cancel checkout when Esc key is pressed
     document.addEventListener('keyup', this.checkoutCancelOnKeyEsc)
   },
@@ -149,6 +159,15 @@ export default {
         this.checkoutCancel();
         console.log('checkoutCancelOnKeyEsc()');
       }
+    },
+    displayLoadingMessage(message, loadingTime=undefined) {
+      if (loadingTime === undefined) {
+        loadingTime = this.defaultLoadingTime;
+      }
+      this.loadingMessage = message;
+      setTimeout(() => {
+        this.loadingMessage = '';
+      }, loadingTime)
     },
     goToOrderConfirm(loadingTime=undefined) {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
@@ -161,17 +180,19 @@ export default {
     goToAddressConfirm(loadingTime=undefined) {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
+
+      this.secondaryButtonText = 'Change address';
       setTimeout(() => {
-        this.secondaryButtonText = 'Change Address';
         this.currentStep = this.steps.addressConfirm;
       }, loadingTime)
     },
     goToAddressUpdate(loadingTime=undefined) {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
+
+      this.secondaryButtonText = 'Go back';
       setTimeout(() => {
         this.currentStep = this.steps.addressUpdate;
-        this.secondaryButtonText = '';
       }, loadingTime)
     },
     goToPaymentMethodConfirm(loadingTime=undefined) {
@@ -195,7 +216,11 @@ export default {
           this.goToPaymentMethodConfirm();
         }
         else if (this.currentStep === this.steps.addressUpdate) {
-          this.goToAddressConfirm();
+          this.stepTransitionName = 'slide-previous';
+          this.displayLoadingMessage("Saving...");
+          this.$nextTick(() => {
+            this.goToAddressConfirm();
+          })
         }
       })
     },
@@ -211,6 +236,9 @@ export default {
         else if (this.currentStep === this.steps.addressConfirm) {
           this.goToOrderConfirm(loadingTime);
         }
+        else if (this.currentStep === this.steps.addressUpdate) {
+          this.goToAddressConfirm(loadingTime);
+        }
       })
       setTimeout(() => {
         this.isLoading = true;
@@ -218,7 +246,16 @@ export default {
     },
     secondaryButtonClicked() {
       if (this.currentStep === this.steps.addressConfirm) {
-        this.goToUpdateAddress();
+        this.stepTransitionName = 'slide-next';
+        this.$nextTick(() => {
+          this.goToAddressUpdate();
+        })
+      }
+      else if (this.currentStep === this.steps.addressUpdate) {
+        this.stepTransitionName = 'slide-previous';
+        this.$nextTick(() => {
+          this.goToAddressConfirm();
+        })
       }
     },
     checkoutCancel() {
@@ -308,7 +345,6 @@ div.modal-card {
 
   height: 1.4rem;
   width: 1.4rem;
-  padding-left: 0.1rem;
   padding-bottom: 0.2rem;
 
   justify-content: center;
@@ -320,4 +356,11 @@ div.modal-card {
 .back-arrow {
   color: white;
 }
+
+.address-display {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 </style>
