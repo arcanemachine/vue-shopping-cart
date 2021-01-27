@@ -2,7 +2,7 @@
   <div class="modal-background">
 
     <transition>
-      <div v-if="!currentStep && loadingTime" class="loading-container">
+      <div v-if="!currentStep && isLoading" class="loading-container">
         <div class="loading-box">
           <transition-group name="fade">
             <img v-if="!purchaseComplete" :key="purchaseComplete" src="../assets/img/spinner.svg" class="loading-icon">
@@ -17,8 +17,6 @@
     </transition>
 
     <transition :name="stepTransitionName">
-    </transition>
-    <transition name="slide-left">
       <div v-if="currentStep" class="modal-card">
         <header class="modal-card-head">
           <div v-if="hasPreviousStep" @click="goToPreviousStep" class="pt-1 back-arrow-container">
@@ -96,10 +94,11 @@ export default {
       currentStep: 'Confirm Your Order',
       primaryButtonText: 'Confirm',
       secondaryButtonText: '',
-      stepTransitionName: 'slide-left',
+      stepTransitionName: 'slide-next',
 
+      isLoading: true,
       loadingMessage: '',
-      loadingTime: 2000,
+      defaultLoadingTime: 1500,
       purchaseComplete: false,
 
       address: {
@@ -152,23 +151,23 @@ export default {
       }
     },
     goToOrderConfirm(loadingTime=undefined) {
-      if (loadingTime === undefined) {loadingTime = this.loadingTime}
+      if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
       setTimeout(() => {
         this.secondaryButtonText = '';
         this.currentStep = this.steps.orderConfirm;
-      }, this.loadingTime)
+      }, loadingTime)
     },
     goToAddressConfirm(loadingTime=undefined) {
-      if (loadingTime === undefined) {loadingTime = this.loadingTime}
+      if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
       setTimeout(() => {
         this.secondaryButtonText = 'Change Address';
         this.currentStep = this.steps.addressConfirm;
-      }, this.loadingTime)
+      }, loadingTime)
     },
     goToAddressUpdate(loadingTime=undefined) {
-      if (loadingTime === undefined) {loadingTime = this.loadingTime}
+      if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
       setTimeout(() => {
         this.currentStep = this.steps.addressUpdate;
@@ -176,36 +175,46 @@ export default {
       }, loadingTime)
     },
     goToPaymentMethodConfirm(loadingTime=undefined) {
-      if (loadingTime === undefined) {loadingTime = this.loadingTime}
+      if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
       setTimeout(() => {
         this.currentStep = this.steps.paymentMethodConfirm;
         this.secondaryButtonText = '';
-      }, this.loadingTime)
+      }, loadingTime)
     },
     checkoutFinish() {
-      this.$helpers.delay(2000).then(() => this.currentStep = this.steps.orderConfirm);
-    },
-    goToPreviousStep() {
-      if (this.currentStep === this.steps.paymentMethodConfirm) {
-        this.secondaryButtonText = '';
-        this.goToAddressConfirm(0);
-      }
-      else if (this.currentStep === this.steps.addressConfirm) {
-        this.secondaryButtonText = '';
-        this.goToOrderConfirm(0);
-      }
+      this.$helpers.delay(1500).then(() => this.currentStep = this.steps.orderConfirm);
     },
     goToNextStep() {
-      if (this.currentStep === this.steps.orderConfirm) {
-        this.goToAddressConfirm();
-      }
-      else if (this.currentStep === this.steps.addressConfirm) {
-        this.goToPaymentMethodConfirm();
-      }
-      else if (this.currentStep === this.steps.addressUpdate) {
-        this.goToAddressConfirm();
-      }
+      this.stepTransitionName = 'slide-next';
+      this.$nextTick(() => {
+        if (this.currentStep === this.steps.orderConfirm) {
+          this.goToAddressConfirm();
+        }
+        else if (this.currentStep === this.steps.addressConfirm) {
+          this.goToPaymentMethodConfirm();
+        }
+        else if (this.currentStep === this.steps.addressUpdate) {
+          this.goToAddressConfirm();
+        }
+      })
+    },
+    goToPreviousStep() {
+      let loadingTime = 600;
+      this.isLoading = false;
+      this.stepTransitionName = 'slide-previous';
+
+      this.$nextTick(() => {
+        if (this.currentStep === this.steps.paymentMethodConfirm) {
+          this.goToAddressConfirm(loadingTime);
+        }
+        else if (this.currentStep === this.steps.addressConfirm) {
+          this.goToOrderConfirm(loadingTime);
+        }
+      })
+      setTimeout(() => {
+        this.isLoading = true;
+      }, loadingTime)
     },
     secondaryButtonClicked() {
       if (this.currentStep === this.steps.addressConfirm) {

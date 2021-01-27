@@ -102,48 +102,37 @@ a {
 }
 
 
-/* slide-left */
-.slide-left-enter-active, .slide-left-leave-active {
+/* slide-previous */
+.slide-previous-enter-active, .slide-previous-leave-active {
   transition: transform 1s;
 }
 
-@media(min-width: 992px) {
-  .slide-left-enter-active, .slide-left-leave-active {
-    transition: transform 1.5s;
-  }
-}
-
-.slide-left-enter {
-  transform: translate(120vw, 0);
-}
-
-.slide-left-leave-to {
+.slide-previous-enter {
   transform: translate(-120vw, 0);
 }
 
+.slide-previous-leave-to {
+  transform: translate(120vw, 0);
+}
 
-/* slide-right */
-.slide-right-enter-active, .slide-right-leave-active {
+/* slide-next */
+.slide-next-enter-active, .slide-next-leave-active {
   transition: transform 1s;
 }
 
-@media(min-width: 992px) {
-  .slide-right-enter-active, .slide-right-leave-active {
-    transition: transform 1.5s;
-  }
+.slide-next-enter {
+  transform: translate(120vw, 0);
 }
 
-.slide-right-enter {
+.slide-next-leave-to {
   transform: translate(-120vw, 0);
 }
 
-.slide-right-leave-to {
-  transform: translate(120vw, 0);
-}
 
 .delay-transition-1000 {
   transition-delay: 1s;
 }
+
 
 /* bulma extensions */
 .is-absolute {
