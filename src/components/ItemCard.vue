@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="card large">
+      <div v-if="Object.keys(item).length" class="pt-3 card large">
         <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}" class="pt-0 is-size-4">
           <div class="card-image" :style="cardImageStyle">
             <figure v-if="item.image" class="image is-16-by-9 card-image-container">
@@ -17,9 +17,10 @@
         </router-link>
         <div class="card-content">
           <div class="has-size-4">
-            <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}" class="pt-0 is-size-4">
+            <router-link v-if="$route.name !== 'itemDetail'" :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}" class="pt-0 is-size-4">
               {{ item.name }}
             </router-link>
+            <span v-else class="pt-0 is-size-4">{{ item.name }}</span>
           </div>
           <div class="item-description">
             {{ item.description }}
@@ -54,9 +55,6 @@ export default {
       return {'cursor': this.$route.name === "itemDetail" ? 'default' : 'pointer'}
     }
   },
-  mounted() {
-    
-  }
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div @click="addToCart"
-       class="mt-3 button is-success add-to-cart-button">
-    Add to Cart <i class="ml-3 pb-1 bi-cart2 navbar-show-icon-touch has-text-light"></i>
+       class="button is-success add-to-cart-button">
+    Add to Cart <i class="ml-2 pb-2 is-size-4 bi-cart2 navbar-show-icon-touch has-text-light"></i>
   </div>
 </template>
 

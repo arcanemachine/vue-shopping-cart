@@ -20,6 +20,7 @@ export default new Vuex.Store({
     userToken: undefined,
     cart: {},
     cartModifiedAt: undefined,
+    checkoutData: {}
   },
   getters: {
     isLoading (state) {
@@ -51,6 +52,9 @@ export default new Vuex.Store({
       let cartCountList = Object.values(state.cart);
       let result = cartCountList.reduce((a, b) => a + b, 0);
       return result;
+    },
+    checkoutData (state) {
+      return state.checkoutData;
     }
   },
   mutations: {
@@ -149,14 +153,25 @@ export default new Vuex.Store({
     },
     cartIs (state, cart) {
       state.cart = cart;
+    },
+    checkoutData (state, payload) {
+      state.checkoutData = payload;
     }
   },
   actions: {
-    displayStatusMessage (context, message, displayFor=4000) {
+    displayStatusMessage (context, payload) {
+      let message = payload.message ? payload.message : '';
+      if (!message) {
+        return false;
+      }
+      let displayFor = payload.displayFor ? payload.displayFor : 4000;
       context.commit('statusMessage', message);
       setTimeout(() => {
         context.commit('statusMessage', '');
       }, displayFor)
+    },
+    clearStatusMessage (context) {
+      context.dispatch('displayStatusMessage', {displayFor: 0});
     },
     login (context, token) {
       context.dispatch('authenticate', token);

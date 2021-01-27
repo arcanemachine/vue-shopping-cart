@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div class="section has-text-centered">
-        <div class="mb-4 title">
-          <router-link v-if="Object.keys(store).length" :to="{name: 'storeList'}">&larr; Return to store list</router-link>
-        </div>
+      <div class="mb-4 subtitle has-text-left">
+        <router-link v-if="Object.keys(store).length" :to="{name: 'storeList'}">&larr; Return to store list</router-link>
+      </div>
       <div class="columns">
         <div class="column">
           <h1 class="title">{{ store.name }}</h1>

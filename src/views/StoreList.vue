@@ -29,11 +29,6 @@ export default {
   components: {
     StoreCard
   },
-  data() {
-    return {
-      stores: {}
-    }
-  },
   mounted() {
     this.$nextTick(() => {
       if (!Cookies.get('introSeen')) {
@@ -51,3 +46,7 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+
+</style>

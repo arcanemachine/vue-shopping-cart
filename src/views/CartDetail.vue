@@ -35,8 +35,8 @@
                       <div class="media-content cart-item-container">
                         <router-link :to="{name: 'itemDetail', params: {'storeId': item.store_id, 'categoryId': item.category_id, 'itemId': item.id}}">
                           <div class="cart-item-name">{{ item.name }}</div>
-                          <div class="has-text-black">Price/ea: {{ $helpers.getFormattedPrice(item.price) }}</div>
                         </router-link>
+                          <div class="has-text-black">Price/ea: {{ $helpers.getFormattedPrice(item.price) }}</div>
                       </div>
                       <div class="cart-quantity-container">
                         <button @click="itemRemove(item)" class="button cart-quantity-button">-</button>
@@ -60,17 +60,18 @@
                   </div>
                   <div class="media-content checkout-text-container">
                     <div class="mb-2">Item Count: {{ itemCount }}</div>
-                    <div>Total Price: {{ totalPrice }}</div>
+                    <div>Total Price: {{ totalFormattedPrice }}</div>
                   </div>
                   <div class="media-right checkout-button-container">
-                    <button class="button is-success checkout-button">Checkout</button>
+                    <button @click="toggleCheckout"
+                            class="button is-success checkout-button">Checkout</button>
                   </div>
                 </div>
               </div>
             </div>
           </transition>
           <transition name="fade">
-            <button v-if="!cartIsEmpty"
+            <button v-if="false"
                     @click="cartClear"
                     class="mt-6 button is-large is-danger clear-cart-button">
               Remove all Items <i class="trash-icon bi-trash navbar-show-icon-touch"></i>
@@ -79,6 +80,9 @@
         </div>
       </div>
     </div>
+    <transition name="fade">
+      <checkout v-if="performCheckout" @cancel-checkout="toggleCheckout()" />
+    </transition>
   </div>
 </template>
 
@@ -89,12 +93,16 @@
 
 <script>
 
+import Checkout from '../components/Checkout.vue'
+
 export default {
   name: 'CartDetail',
+  components: { Checkout },
   data() {
     return {
       cartData: {},
       isMounted: false,
+      performCheckout: false
     }
   },
   computed: {
@@ -121,7 +129,10 @@ export default {
         let currentItemPrice = this.cartData[i].price;
         price += (currentItemCount * currentItemPrice);
       }
-      return this.$helpers.getFormattedPrice(price);
+      return price;
+    },
+    totalFormattedPrice() {
+      return this.$helpers.getFormattedPrice(this.totalPrice);
     }
   },
   mounted() {
@@ -131,6 +142,25 @@ export default {
     })
   },
   methods: {
+    toggleCheckout() {
+      // commit current checkout data to vuex store
+      if (Object.keys(this.$store.getters.checkoutData).length) {
+        this.performCheckout = false;
+        this.$store.commit('checkoutData', {});
+        this.$store.dispatch('displayStatusMessage', {
+          message: "Your checkout session has been canceled."
+        })
+        return false;
+      }
+      this.$store.commit('checkoutData', {
+        checkoutStatus: {},
+        cart: this.cart,
+        cartData: this.cartData,
+        totalPrice: this.totalPrice
+      })
+      this.performCheckout = true;
+      this.$store.dispatch('clearStatusMessage');
+    },
     async getCartData() {
       if (Object.keys(this.cart).length > 0) {
 
@@ -146,7 +176,6 @@ export default {
         .then(request => request.json())
         .then(data => {this.cartData = data;})
       }
-      this.$forceUpdate();
     },
     itemAdd(item) {
       this.$store.dispatch('cartUpdateItem', {item: item, quantity: 1})
@@ -206,7 +235,6 @@ div.cart-empty {
   position: absolute;
   left: 0;
   right: 0;
-  /* transition-delay: 0.4s; */
 }
 
 .logout-hr {
@@ -252,6 +280,10 @@ div.cart-empty {
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+}
+
+.clear-cart-button {
+  display: none;
 }
 
 .trash-icon {

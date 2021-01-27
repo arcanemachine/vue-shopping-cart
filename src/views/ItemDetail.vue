@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="section has-text-centered">
-      <div class="mb-4 title">
-        <router-link :to="{name: 'categoryDetail', params: {storeId: item.store_id, categoryId: item.category_id}}">&larr; Return to '{{ item.category_name }}'</router-link>
+      <div class="mb-4 subtitle has-text-left">
+        <router-link v-if="Object.keys(item).length" :to="{name: 'categoryDetail', params: {storeId: item.store_id, categoryId: item.category_id}}">&larr; Return to '{{ item.category_name }}'</router-link>
       </div>
       <div class="columns">
         <item-card :item="item"
