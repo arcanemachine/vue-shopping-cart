@@ -161,9 +161,6 @@ export default new Vuex.Store({
   actions: {
     displayStatusMessage (context, payload) {
       let message = payload.message ? payload.message : '';
-      if (!message) {
-        return false;
-      }
       let displayFor = payload.displayFor ? payload.displayFor : 4000;
       context.commit('statusMessage', message);
       setTimeout(() => {
@@ -171,7 +168,7 @@ export default new Vuex.Store({
       }, displayFor)
     },
     clearStatusMessage (context) {
-      context.dispatch('displayStatusMessage', {displayFor: 0});
+      context.dispatch('displayStatusMessage', {message: '', displayFor: 0});
     },
     login (context, token) {
       context.dispatch('authenticate', token);

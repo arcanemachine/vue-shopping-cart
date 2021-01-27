@@ -17,8 +17,8 @@
         </section>
 
         <footer class="modal-card-foot">
-          <button @click="handleNextStep" class="button is-success">Confirm</button>
-          <button @click="$emit('cancel-checkout')" class="button">Cancel</button>
+          <button @click="nextStep" class="button is-success">Confirm</button>
+          <button @click="checkoutCancel" class="button">Cancel</button>
         </footer>
 
       </div>
@@ -33,9 +33,10 @@ export default {
   data() {
     return {
       isMounted: false,
+      eventListenerEsc: undefined,
 
       currentStep: 'confirm',
-      isLoading: false,
+      // isLoading: false,
 
       /*
       enterAddress: false,
@@ -47,25 +48,56 @@ export default {
   },
   mounted() {
     this.isMounted = true;
+
+    // cancel checkout when Esc key is pressed
+    document.addEventListener('keyup', this.checkoutCancelOnKeyEsc)
   },
   methods: {
-    handleNextStep() {
-      if (this.currentStep === 'confirm') {
-        this.currentStep = undefined;
-        this.isLoading = true;
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 1000)
+    checkoutCancelOnKeyEsc(e) {
+      if (e.key === 'Escape') {
+        this.checkoutCancel();
+        console.log('checkoutCancelOnKeyEsc()');
       }
-    }
+    },
+    checkoutCancel() {
+      this.$emit('cancel-checkout');
+    },
+    nextStep() {
+      if (this.currentStep === 'confirm') {
+        this.currentStep = 'loading';
+        setTimeout(() => {
+          this.currentStep = 'confirm';
+        }, 700)
+      }
+    },
+    previousStep() {
+      if (this.currentStep === 'confirm') {
+        this.currentStep = 'loading';
+        setTimeout(() => {
+          this.currentStep = 'confirm';
+        }, 700)
+      }
+    },
+  },
+  destroyed() {
+    document.removeEventListener('keyup', this.checkoutCancelOnKeyEsc)
   }
 }
+
 </script>
 
 <style scoped lang="scss">
 
 div.modal-card {
   align-self: center;
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: opacity .3s;
+}
+
+.slide-enter, .slide-leave-to {
+  opacity: 0;
 }
 
 </style>
