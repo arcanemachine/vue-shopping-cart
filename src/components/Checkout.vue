@@ -62,16 +62,12 @@
         <!-- addressUpdate -->
         <section v-if="currentStep === steps.addressUpdate" class="pb-5 modal-card-body">
           <div class="mb-5 is-size-5">Please enter your address*:</div>
-            <div class="ml-4 address-form">
-              <div class="name">{{ address.name }}</div>
-              <div class="address1">{{ address.address1 }}</div>
-              <div v-if="address.address2" class="address2">{{ address.address2 }}</div>
-              <div class="city-state-zip">
-                {{ address.city }}, {{ address.state }}{{ noCommaIfStateIsAbbreviated }}{{ address.zip }}
+            <div class="address-form">
+              <div class="field">
+                <label class="label">Name</label>
               </div>
-              <div class="phone">{{ address.phone }}</div>
             </div>
-          <div class="mt-5 is-size-5">Is this correct?</div>
+          <div class="mt-5 is-size-5">Press 'Confirm' when you are finished, or 'Go back' to undo any changes.</div>
         </section>
 
         <footer class="modal-card-foot">
@@ -111,9 +107,9 @@ export default {
       secondaryButtonText: '',
       stepTransitionName: 'slide-next',
 
-      isLoading: true,
+      isLoading: false,
       loadingMessage: '',
-      defaultLoadingTime: 2000,
+      defaultLoadingTime: 1500,
       purchaseComplete: false,
 
       address: {
@@ -148,7 +144,10 @@ export default {
   mounted() {
     this.isMounted = true;
 
-    this.goToAddressUpdate();
+    this.stepTransitionName = 'fade';
+    this.$nextTick(() => {
+      this.goToOrderConfirm(0);
+    })
 
     // cancel checkout when Esc key is pressed
     document.addEventListener('keyup', this.checkoutCancelOnKeyEsc)
@@ -208,6 +207,7 @@ export default {
     },
     goToNextStep() {
       this.stepTransitionName = 'slide-next';
+      this.isLoading = true;
       this.$nextTick(() => {
         if (this.currentStep === this.steps.orderConfirm) {
           this.goToAddressConfirm();
@@ -254,7 +254,7 @@ export default {
       else if (this.currentStep === this.steps.addressUpdate) {
         this.stepTransitionName = 'slide-previous';
         this.$nextTick(() => {
-          this.goToAddressConfirm();
+          this.goToAddressConfirm(2000);
         })
       }
     },
