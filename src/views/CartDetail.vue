@@ -81,7 +81,11 @@
       </div>
     </div>
     <transition name="fade">
-      <checkout v-if="performCheckout" @cancel-checkout="toggleCheckout()" />
+      <checkout v-if="performCheckout"
+                :cart="cart"
+                :cartData="cartData"
+                :totalFormattedPrice="totalFormattedPrice"
+                @cancel-checkout="toggleCheckout()" />
     </transition>
   </div>
 </template>
@@ -156,7 +160,7 @@ export default {
         checkoutStatus: {},
         cart: this.cart,
         cartData: this.cartData,
-        totalPrice: this.totalPrice
+        totalFormattedPrice: this.totalFormattedPrice
       })
       this.performCheckout = true;
       this.$store.dispatch('clearStatusMessage');
@@ -197,6 +201,12 @@ export default {
       this.$store.dispatch('cartClear');
       this.cartData = {};
     }
+  },
+  destroyed() {
+    this.$store.commit('checkoutData', {});
+    this.$store.dispatch('displayStatusMessage', {
+      message: "Your checkout session has been canceled."
+    })
   }
 }
 </script>

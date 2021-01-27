@@ -93,3 +93,4 @@ export function getFormattedPrice(price) {
 
 export const pp = JSON.stringify;
 export const parseObs = (obs) => {JSON.parse(JSON.stringify(obs))};
+export const delay = t => new Promise(resolve => setTimeout(resolve, t));

@@ -35,7 +35,7 @@
           </div>
         </div>
         <span @click="navbarToggle"
-              class="navbar-burger burger hover-background-white"
+              class="navbar-burger hover-background-white"
               :class="navbarMenuClass"
               data-target="navMenu"
               title="Menu">

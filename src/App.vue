@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <nav-bar></nav-bar>
-    <!--get-session-cookie /-->
+    <nav-bar />
     <transition name="fade">
       <status-message class="status-message" v-if="$store.getters.statusMessage" />
     </transition>
@@ -59,6 +58,10 @@ a {
   margin-top: 3rem;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 .underline {
   text-decoration: underline;
 }
@@ -67,12 +70,75 @@ a {
   cursor: pointer;
 }
 
+
+
+/* unnamed transitions (same as fade) */
+.v-enter-active, .v-leave-active {
+  transition: opacity .3s;
+}
+
+.v-enter, .v-leave-to {
+  opacity: 0;
+}
+
+
+/* fade */
 .fade-enter-active, .fade-leave-active {
   transition: opacity .3s;
 }
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+
+/* fade-long */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+
+/* slide-left */
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: transform 1s;
+}
+
+@media(min-width: 992px) {
+  .slide-left-enter-active, .slide-left-leave-active {
+    transition: transform 1.5s;
+  }
+}
+
+.slide-left-enter {
+  transform: translate(120vw, 0);
+}
+
+.slide-left-leave-to {
+  transform: translate(-120vw, 0);
+}
+
+
+/* slide-right */
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: transform 1s;
+}
+
+@media(min-width: 992px) {
+  .slide-right-enter-active, .slide-right-leave-active {
+    transition: transform 1.5s;
+  }
+}
+
+.slide-right-enter {
+  transform: translate(-120vw, 0);
+}
+
+.slide-right-leave-to {
+  transform: translate(120vw, 0);
 }
 
 .delay-transition-1000 {
