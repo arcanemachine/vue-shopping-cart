@@ -102,7 +102,7 @@ export default {
       return this.$store.getters.cart;
     },
     cartIsEmpty() {
-    return !Object.keys(this.cartData).length;
+      return !Object.keys(this.cart).length;
     },
     itemCount() {
       let cartItemCounts = Object.values(this.cart);
@@ -110,7 +110,7 @@ export default {
       return sum;
     },
     totalPrice() {
-      if (!this.isMounted) {
+      if (!this.isMounted || !this.cartData.length) {
         return 0;
       }
       let price = 0;
@@ -206,7 +206,7 @@ div.cart-empty {
   position: absolute;
   left: 0;
   right: 0;
-  transition-delay: 0.4s;
+  /* transition-delay: 0.4s; */
 }
 
 .logout-hr {

@@ -2,25 +2,25 @@
     <div>
       <div class="card large">
         <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}">
-        <div class="card-image">
-          <figure v-if="category.image" class="image is-16-by-9 card-image-container">
-            <img :src="category.image" :title="category.name" :alt="`${category.name} Image`">
-          </figure>
-          <figure v-else class="image is-16-by-9 card-image-container">
-            <i class="bi bi-camera-fill image-not-available"></i>
-          </figure>
-        </div>
+          <div class="card-image" :style="cardImageStyle">
+            <figure v-if="category.image" class="image is-16-by-9 card-image-container">
+              <img :src="category.image" :title="category.name" :alt="`${category.name} Image`">
+            </figure>
+            <figure v-else class="image is-16-by-9 card-image-container">
+              <i class="bi bi-camera-fill image-not-available"></i>
+            </figure>
+          </div>
         </router-link>
         <div class="card-content">
           <div class="is-4">
-            <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}" class="title">
+            <router-link v-if="Object.keys(category).length"
+                         :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}"
+                         class="title">
               {{ category.name }}
             </router-link>
           </div>
           <div class="is-6">
-            <router-link :to="{name: 'categoryDetail', params: {storeId: category.store_id, categoryId: category.id}}" class="subtitle">
-              {{ category.description }}
-            </router-link>
+            {{ category.description }}
           </div>
         </div>
       </div>
@@ -32,6 +32,11 @@ export default {
   name: 'CategoryCard',
   props: {
     category: Object
+  },
+  computed: {
+    cardImageStyle() {
+      return {'background-color': this.category.image ? 'white' : 'darkgray'}
+    }
   }
 }
 </script>

@@ -1,14 +1,20 @@
 <template>
     <div>
       <div class="card large">
-        <div class="card-image">
-          <figure v-if="item.image" class="image is-16-by-9 card-image-container">
-            <img :src="item.image" :title="item.name" :alt="`${item.name} Image`">
-          </figure>
-          <figure v-else class="image is-16-by-9 card-image-container">
-            <i class="bi bi-camera-fill image-not-available"></i>
-          </figure>
-        </div>
+        <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}" class="pt-0 is-size-4">
+          <div class="card-image" :style="cardImageStyle">
+            <figure v-if="item.image" class="image is-16-by-9 card-image-container">
+                <img :src="item.image"
+                     :title="item.name"
+                     :alt="`${item.name} Image`"
+                     :style="itemImageStyle"
+                     class="card-img">
+            </figure>
+            <figure v-else class="image card-image-container">
+              <i class="bi bi-camera-fill image-not-available"></i>
+            </figure>
+          </div>
+        </router-link>
         <div class="card-content">
           <div class="has-size-4">
             <router-link :to="{name: 'itemDetail', params: {storeId: item.store_id, categoryId: item.category_id, itemId: item.id}}" class="pt-0 is-size-4">
@@ -38,27 +44,43 @@ export default {
   },
   components: {
     AddToCartButton
+  },
+  computed: {
+    cardImageStyle() {
+      return {'background-color': this.item.image ? 'white' : 'darkgray'}
+    },
+    itemImageStyle() {
+      // don't show mouse pointer icon on itemDetail
+      return {'cursor': this.$route.name === "itemDetail" ? 'default' : 'pointer'}
+    }
+  },
+  mounted() {
+    
   }
 }
 </script>
 
 <style scoped lang="scss">
+
 .card-image-container {
   background-color: white;
-  overflow: hidden;
   display: flex;
-  width: 100%;
+  justify-content: center;
   align-items: center;
-  justify-content: stretch;
+}
+
+img.card-img {
+  width: auto;
+  height: 15rem;
 }
 
 .image-not-available {
-  background-color: darkgray;
   width: 100%;
   font-size: 10rem;
   color: white;
 }
- .item-description {
+
+.item-description {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

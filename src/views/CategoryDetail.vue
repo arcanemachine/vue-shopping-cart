@@ -2,7 +2,10 @@
   <div class="container">
     <div class="section has-text-centered">
       <div class="mb-4 title">
-        <router-link :to="{name: 'storeDetail', params: {storeId: category.store_id}}">&larr; Return to '{{ category.store_name }}'</router-link>
+        <router-link v-if="Object.keys(category).length"
+                     :to="{name: 'storeDetail', params: {storeId: category.store_id}}">
+          &larr; Return to '{{ category.store_name }}'
+        </router-link>
       </div>
       <div class="columns">
         <div class="column">
@@ -15,7 +18,6 @@
                     :key="item.id"
                     :item="item"
                     class="column is-4">
-                    <!--:class="columnCenterClass(index)"-->
         </item-card>
       </div>
     </div>
@@ -47,18 +49,6 @@ export default {
     })
   },
   methods: {
-    // columnCenterClass(index) {
-    //   if (this.items.length % 3 === 2) {
-    //     return [];
-    //   } else if (this.items.length % 3 === 1) {
-    //     if (this.items[index] === this.items.slice(-1)) {
-    //       return ['is-red'];
-    //     }
-    //     return [''];
-    //   } else {
-    //     return [];
-    //   }
-    // },
     getCategoryDetail() { // move this into vuex store
       fetch(this.$helpers.urls.categoryDetail(this.categoryId))
       .then(response => response.json())

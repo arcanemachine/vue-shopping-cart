@@ -2,14 +2,14 @@
     <div>
       <div class="card large">
         <router-link :to="{name: 'storeDetail', params: {storeId: store.id}}">
-        <div class="card-image">
-          <figure v-if="store.image" class="image is-16-by-9 card-image-container">
-            <img :src="store.image" :title="store.name" :alt="`${store.name} Image`">
-          </figure>
-          <figure v-else class="image is-16-by-9 card-image-container">
-            <i class="bi bi-camera-fill image-not-available"></i>
-          </figure>
-        </div>
+          <div class="card-image" :style="cardImageStyle">
+            <figure v-if="store.image" class="image is-16-by-9 card-image-container">
+              <img :src="store.image" :title="store.name" :alt="`${store.name} Image`">
+            </figure>
+            <figure v-else class="image is-16-by-9 card-image-container">
+              <i class="bi bi-camera-fill image-not-available"></i>
+            </figure>
+          </div>
         </router-link>
         <div class="card-content">
           <div class="is-4">
@@ -32,6 +32,11 @@ export default {
   name: 'StoreCard',
   props: {
     store: Object
+  },
+  computed: {
+    cardImageStyle() {
+      return {'background-color': this.store.image ? 'white' : 'darkgray'}
+    }
   }
 }
 </script>
