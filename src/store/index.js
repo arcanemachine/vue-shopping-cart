@@ -114,7 +114,7 @@ export default new Vuex.Store({
   
       // sanity checks
       if (quantity === 0) {
-        state.dispatch('displayStatusMessage', 'Quantity must be a non-zero integer value.');
+        state.dispatch('displayStatusMessage', {message: 'Quantity must be a non-zero integer value.'});
         return false;
       }
       else if (typeof(item) !== "object") {
@@ -254,7 +254,7 @@ export default new Vuex.Store({
         body: JSON.stringify(postData)
       })
       .then(response => {
-        context.dispatch('displayStatusMessage', "Your cart has been synced to your online account.");
+        context.dispatch('displayStatusMessage', {message: "Your cart has been synced to your online account."});
         return response.json()
       })
     },
@@ -268,7 +268,8 @@ export default new Vuex.Store({
 
       // TODO: check this
       if (context.getters.cart[String(item.id)] >= 99) {
-        context.dispatch('displayStatusMessage', "You cannot have more than 99 of a given item in your cart.")
+        context.dispatch('displayStatusMessage', {message: "You cannot have more than 99 of a given item in your cart."})
+        return false;
       }
 
       // if userProfile is present (user logged in), perform remote cart update and sync to local
@@ -324,7 +325,7 @@ export default new Vuex.Store({
       Cookies.remove('cartModifiedAt');
       // if userProfile is not present, perform all actions locally
 
-      context.dispatch('displayStatusMessage', "Your cart has been cleared.");
+      context.dispatch('displayStatusMessage', {message: "Your cart has been cleared."});
     }
   },
 })
