@@ -112,7 +112,7 @@ export default {
           this.$store.dispatch('login', data.key);
           this.loginResponse = 'Success!';
           setTimeout(() => {
-            this.$router.push({name: 'userDetail'});
+            this.$router.replace({name: 'userDetail'});
           }, 750)
         } else {
           // on unsuccessful login, display status message and re-enable login button
