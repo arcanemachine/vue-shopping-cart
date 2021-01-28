@@ -17,7 +17,7 @@
     </transition>
 
     <transition :name="stepTransitionName">
-      <div v-if="currentStep" class="modal-card">
+      <div v-if="currentStep" class="mb-4 modal-card">
         <header class="modal-card-head">
           <div v-if="hasPreviousStep" @click="goToPreviousStep" class="pt-1 back-arrow-container">
             <font-awesome-icon icon="arrow-left" class="back-arrow" />
@@ -50,34 +50,71 @@
             <div class="ml-4 address-display">
               <div class="name">{{ address.name }}</div>
               <div class="address1">{{ address.address1 }}</div>
-              <div v-if="address.address2" class="address2">{{ address.address2 }}</div>
               <div class="city-state-zip">
                 {{ address.city }}, {{ address.state }}{{ noCommaIfStateIsAbbreviated }}{{ address.zip }}
               </div>
-              <div class="phone">{{ address.phone }}</div>
+              <div class="country">{{ address.country }}</div>
             </div>
           <div class="mt-5 is-size-5">Is this correct?</div>
         </section>
 
         <!-- addressUpdate -->
         <section v-if="currentStep === steps.addressUpdate" class="pb-5 modal-card-body">
-          <div class="mb-5 is-size-5">Please enter your address*:</div>
-            <div class="address-form">
+          <div class="mb-5 is-size-5">Please enter your address:</div>
+            <form class="address-form" @submit="addressUpdate">
               <div class="field">
                 <label class="label">Name</label>
+                <div class="control">
+                  <input class="input" type="search"
+                         v-model="newAddress.name" @keyup.enter="addressUpdate" ref="formname"
+                         aria-required="true" required="required">
+                </div>
+                <label class="label">Address</label>
+                <div class="control">
+                  <input class="input" type="search"
+                         v-model="newAddress.address" @keyup.enter="addressUpdate" ref="formaddress"
+                         aria-required="true" required="required">
+                </div>
+                <label class="label">City</label>
+                <div class="control">
+                  <input class="input" type="search"
+                         v-model="newAddress.city" @keyup.enter="addressUpdate" ref="formcity"
+                         aria-required="true" required="required">
+                </div>
+                <label class="label">State/Province</label>
+                <div class="control">
+                  <input class="input" type="search"
+                         v-model="newAddress.state" @keyup.enter="addressUpdate" ref="formstate"
+                         aria-required="true" required="required">
+                </div>
+                <label class="label">ZIP/Postal Code</label>
+                <div class="control">
+                  <input class="input" type="search"
+                         v-model="newAddress.zip" @keyup.enter="addressUpdate" ref="formzip"
+                         aria-required="true" required="required">
+                </div>
+                <label class="label">Country</label>
+                <div class="control">
+                  <input class="input" type="search"
+                         v-model="newAddress.country" @keyup.enter="addressUpdate" ref="formcountry"
+                         aria-required="true" required="required">
+                </div>
               </div>
-            </div>
-          <div class="mt-5 is-size-5">Press 'Confirm' when you are finished, or 'Go back' to undo any changes.</div>
+            </form>
         </section>
 
         <footer class="modal-card-foot">
-          <button @click="goToNextStep" class="button is-success">Confirm</button>
-          <button v-if="secondaryButtonText"
-                  @click="secondaryButtonClicked"
-                  class="button is-warning">
-            {{ secondaryButtonText }}
-          </button>
-          <button @click="checkoutCancel" class="button is-danger">Cancel Checkout</button>
+          <div class="columns is-multiline">
+            <div class="column">
+              <button @click="goToNextStep" class="button is-success">Confirm</button>
+              <button v-if="secondaryButtonText"
+                      @click="secondaryButtonClicked"
+                      class="button is-warning">
+                {{ secondaryButtonText }}
+              </button>
+              <button @click="checkoutCancel" class="button is-danger">Cancel</button>
+            </div>
+          </div>
         </footer>
       </div>
     </transition>
@@ -102,7 +139,7 @@ export default {
         addressConfirm: 'Confirm Your Address',
         addressUpdate: 'Change Your Address',
       },
-      // currentStep: '',
+
       currentStep: '',
       secondaryButtonText: '',
       stepTransitionName: 'slide-next',
@@ -114,13 +151,19 @@ export default {
 
       address: {
         name: 'Jamie Smith',
-        address1: '123 Fake St.',
-        address2: '',
+        address: '123 Fake St.',
         city: 'Fakeville',
         state: 'Alberta',
         zip: '90210',
-        country: 'Canada',
-        phone: '+1 (555) 555-1234',
+        country: 'USA',
+      },
+      newAddress: {
+        name: 'Bill Murray',
+        address: '123 Real St.',
+        city: 'Realville',
+        state: 'RL',
+        zip: '90210',
+        country: 'Realtopia',
       },
       paymentMethod: {
         name: 'Saved Payment Method',
@@ -146,19 +189,41 @@ export default {
 
     this.stepTransitionName = 'fade';
     this.$nextTick(() => {
-      this.goToOrderConfirm(0);
+      // this.goToOrderConfirm(0);
+      this.goToAddressUpdate(0);
     })
 
     // cancel checkout when Esc key is pressed
-    document.addEventListener('keyup', this.checkoutCancelOnKeyEsc)
+    // document.addEventListener('keyup', this.checkoutCancelOnKeyEsc)
   },
   methods: {
-    checkoutCancelOnKeyEsc(e) {
-      if (e.key === 'Escape') {
-        this.checkoutCancel();
-        console.log('checkoutCancelOnKeyEsc()');
+    addressUpdate() {
+      event.preventDefault();
+
+      let formFields = this.newAddress;
+      for (let i = 0; i < Object.keys(formFields).length; i++) {
+        let currentkey = Object.keys(formFields)[i];
+        if (!formFields[currentkey].length) {
+          console.log(`key: ${currentkey}, formFields[currentkey]: ${formFields[currentkey]}`);
+          this.$store.dispatch('displayStatusMessage', {message: "Please fill out all fields before continuing."});
+          let evalString = `this.$refs.form${currentkey}.select()`;
+          console.log(evalString);
+          eval(evalString);
+          return false;
+        }
       }
+      // if all fields have been populated, assign the new address values onto the old values
+      // this.address = Object.assign({}, this.newAddress);
+      debugger;
+      this.address = this.newAddress;
+      return true;
     },
+    // checkoutCancelOnKeyEsc(e) {
+    //   if (e.key === 'Escape') {
+    //     this.checkoutCancel();
+    //     console.log('checkoutCancelOnKeyEsc()');
+    //   }
+    // },
     displayLoadingMessage(message, loadingTime=undefined) {
       if (loadingTime === undefined) {
         loadingTime = this.defaultLoadingTime;
@@ -180,7 +245,7 @@ export default {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
 
-      this.secondaryButtonText = 'Change address';
+      this.secondaryButtonText = 'Update';
       setTimeout(() => {
         this.currentStep = this.steps.addressConfirm;
       }, loadingTime)
@@ -189,7 +254,7 @@ export default {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
 
-      this.secondaryButtonText = 'Go back';
+      this.secondaryButtonText = 'Undo changes';
       setTimeout(() => {
         this.currentStep = this.steps.addressUpdate;
       }, loadingTime)
@@ -217,16 +282,19 @@ export default {
         }
         else if (this.currentStep === this.steps.addressUpdate) {
           this.stepTransitionName = 'slide-previous';
-          this.displayLoadingMessage("Saving...");
-          this.$nextTick(() => {
-            this.goToAddressConfirm();
-          })
+          let addressUpdated = this.addressUpdate();
+          if (addressUpdated) {
+            this.$nextTick(() => {
+              this.displayLoadingMessage("Saving...");
+              this.goToAddressConfirm();
+            })
+          }
         }
       })
     },
     goToPreviousStep() {
       let loadingTime = 600;
-      this.isLoading = false;
+      // this.isLoading = false;
       this.stepTransitionName = 'slide-previous';
 
       this.$nextTick(() => {
@@ -242,20 +310,18 @@ export default {
       })
       setTimeout(() => {
         this.isLoading = true;
-      }, loadingTime)
+      }, loadingTime + 300)
     },
     secondaryButtonClicked() {
       if (this.currentStep === this.steps.addressConfirm) {
         this.stepTransitionName = 'slide-next';
+        this.isLoading = false;
         this.$nextTick(() => {
-          this.goToAddressUpdate();
+          this.goToAddressUpdate(600);
         })
       }
       else if (this.currentStep === this.steps.addressUpdate) {
-        this.stepTransitionName = 'slide-previous';
-        this.$nextTick(() => {
-          this.goToAddressConfirm(2000);
-        })
+        this.goToPreviousStep();
       }
     },
     checkoutCancel() {
@@ -263,7 +329,7 @@ export default {
     }
   },
   destroyed() {
-    document.removeEventListener('keyup', this.checkoutCancelOnKeyEsc)
+    // document.removeEventListener('keyup', this.checkoutCancelOnKeyEsc)
   }
 }
 
@@ -284,6 +350,7 @@ div.modal-card {
   left: 0;
   height: 100vh;
   width: 100vw;
+  /* overscroll-behavior: contain; */
 
   justify-content: center;
   align-items: center;
@@ -325,8 +392,8 @@ div.modal-card {
   justify-content: center;
   align-items: center;
 
-  border-radius: 1rem;
-  border: 2px solid darkgray;
+  border-radius: 0.5rem;
+  border: 1px solid darkgray;
 }
 
 .loading-message {
@@ -334,7 +401,7 @@ div.modal-card {
   font-size: 1.2rem;
   font-weight: bold;
 
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 1rem;
 }
 
 .back-arrow-container {

@@ -128,6 +128,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+nav {
+  width: 100vw;
+}
+
 .border-top {
   border: 2px solid black;
   border-width: 2px 0 0;

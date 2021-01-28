@@ -108,10 +108,12 @@ a {
 }
 
 .slide-previous-enter {
+	overflow: hidden;
   transform: translate(-120vw, 0);
 }
 
 .slide-previous-leave-to {
+	overflow: hidden;
   transform: translate(120vw, 0);
 }
 
@@ -121,10 +123,12 @@ a {
 }
 
 .slide-next-enter {
+	overflow: hidden;
   transform: translate(120vw, 0);
 }
 
 .slide-next-leave-to {
+	overflow: hidden;
   transform: translate(-120vw, 0);
 }
 
