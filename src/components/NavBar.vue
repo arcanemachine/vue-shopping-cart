@@ -207,7 +207,7 @@ nav {
 
   height: 1.3rem;
   width: 1.3rem;
-  margin-top: 1rem;
+  margin-top: 0.8rem;
   margin-right: 0rem;
 
   justify-content: center;
