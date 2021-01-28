@@ -66,37 +66,37 @@
                 <label class="label">Name</label>
                 <div class="control">
                   <input class="input" type="search"
-                         v-model="newAddress.name" @keyup.enter="addressUpdate" ref="formname"
+                         v-model="newAddress.name" @keyup.enter="goToNextStep" ref="formname"
                          aria-required="true" required="required">
                 </div>
                 <label class="label">Address</label>
                 <div class="control">
                   <input class="input" type="search"
-                         v-model="newAddress.address" @keyup.enter="addressUpdate" ref="formaddress"
+                         v-model="newAddress.address" @keyup.enter="goToNextStep" ref="formaddress"
                          aria-required="true" required="required">
                 </div>
                 <label class="label">City</label>
                 <div class="control">
                   <input class="input" type="search"
-                         v-model="newAddress.city" @keyup.enter="addressUpdate" ref="formcity"
+                         v-model="newAddress.city" @keyup.enter="goToNextStep" ref="formcity"
                          aria-required="true" required="required">
                 </div>
                 <label class="label">State/Province</label>
                 <div class="control">
                   <input class="input" type="search"
-                         v-model="newAddress.state" @keyup.enter="addressUpdate" ref="formstate"
+                         v-model="newAddress.state" @keyup.enter="goToNextStep" ref="formstate"
                          aria-required="true" required="required">
                 </div>
                 <label class="label">ZIP/Postal Code</label>
                 <div class="control">
                   <input class="input" type="search"
-                         v-model="newAddress.zip" @keyup.enter="addressUpdate" ref="formzip"
+                         v-model="newAddress.zip" @keyup.enter="goToNextStep" ref="formzip"
                          aria-required="true" required="required">
                 </div>
                 <label class="label">Country</label>
                 <div class="control">
                   <input class="input" type="search"
-                         v-model="newAddress.country" @keyup.enter="addressUpdate" ref="formcountry"
+                         v-model="newAddress.country" @keyup.enter="goToNextStep" ref="formcountry"
                          aria-required="true" required="required">
                 </div>
               </div>
@@ -158,15 +158,14 @@ export default {
         country: 'USA',
       },
       newAddress: {
-        name: 'Bill Murray',
-        address: '123 Real St.',
-        city: 'Realville',
-        state: 'RL',
-        zip: '90210',
-        country: 'Realtopia',
+        name: '',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        country: '',
       },
       paymentMethod: {
-        name: 'Saved Payment Method',
         cardholderName: 'Jamie Smith',
         cardNumber: '1234123412341234',
         expiryDate: '1234',
@@ -194,7 +193,7 @@ export default {
     })
 
     // cancel checkout when Esc key is pressed
-    // document.addEventListener('keyup', this.checkoutCancelOnKeyEsc)
+    document.addEventListener('keyup', this.checkoutCancelOnKeyEsc)
   },
   methods: {
     addressUpdate() {
@@ -204,26 +203,24 @@ export default {
       for (let i = 0; i < Object.keys(formFields).length; i++) {
         let currentkey = Object.keys(formFields)[i];
         if (!formFields[currentkey].length) {
-          console.log(`key: ${currentkey}, formFields[currentkey]: ${formFields[currentkey]}`);
+          // console.log(`key: ${currentkey}, formFields[currentkey]: ${formFields[currentkey]}`);
           this.$store.dispatch('statusMessageDisplay', {message: "Please fill out all fields before continuing."});
+          // select the first missing field
           let evalString = `this.$refs.form${currentkey}.select()`;
-          console.log(evalString);
+          // console.log(evalString);
           eval(evalString);
           return false;
         }
       }
-      // if all fields have been populated, assign the new address values onto the old values
-      // this.address = Object.assign({}, this.newAddress);
-      // debugger;
-      this.address = this.newAddress;
+      this.address = Object.assign({}, this.newAddress);
       return true;
     },
-    // checkoutCancelOnKeyEsc(e) {
-    //   if (e.key === 'Escape') {
-    //     this.checkoutCancel();
-    //     console.log('checkoutCancelOnKeyEsc()');
-    //   }
-    // },
+    checkoutCancelOnKeyEsc(e) {
+      if (e.key === 'Escape') {
+        this.checkoutCancel();
+        // console.log('checkoutCancelOnKeyEsc()');
+      }
+    },
     displayLoadingMessage(message, loadingTime=undefined) {
       if (loadingTime === undefined) {
         loadingTime = this.defaultLoadingTime;
@@ -282,10 +279,9 @@ export default {
         }
         else if (this.currentStep === this.steps.addressUpdate) {
           this.stepTransitionName = 'slide-previous';
-          let addressUpdated = this.addressUpdate();
-          if (addressUpdated) {
+          this.displayLoadingMessage("Saving...");
+          if (this.addressUpdate()) {
             this.$nextTick(() => {
-              this.displayLoadingMessage("Saving...");
               this.goToAddressConfirm();
             })
           }
@@ -329,7 +325,7 @@ export default {
     }
   },
   destroyed() {
-    // document.removeEventListener('keyup', this.checkoutCancelOnKeyEsc)
+    document.removeEventListener('keyup', this.checkoutCancelOnKeyEsc)
     this.$store.dispatch('statusMessageDisplay', {
       message: "Your checkout session has been canceled."
     })
@@ -346,7 +342,7 @@ export default {
 div.modal-card {
   align-self: center;
   margin-top: 4rem;
-  max-height: 85vh;
+  max-height: 80vh;
 }
 
 .loading-container {
