@@ -164,7 +164,7 @@ export default new Vuex.Store({
       let displayFor = payload.displayFor ? payload.displayFor : 4000;
       context.commit('statusMessage', message);
       setTimeout(() => {
-        context.commit('statusMessage', '');
+        context.commit('clearstatusMessage');
       }, displayFor)
     },
     clearStatusMessage (context) {
@@ -307,7 +307,11 @@ export default new Vuex.Store({
       let verb = Math.abs(quantity) === 1 ? 'has' : 'have';
       let adjective = quantity >= 0 ? 'added' : 'removed';
       let preposition = quantity >= 0 ? 'to' : 'from';
-      context.dispatch('displayStatusMessage', `${Math.abs(quantity)} '${item.name}' ${verb} been ${adjective} ${preposition} your cart.`);
+      
+      context.dispatch('displayStatusMessage', {
+        message: `${Math.abs(quantity)} '${item.name}' ${verb} been ${adjective} ${preposition} your cart.`
+      })
+
 
     },
     cartClear (context) {
