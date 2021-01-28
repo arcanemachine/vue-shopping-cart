@@ -317,16 +317,15 @@ export default new Vuex.Store({
       Cookies.set('cart', JSON.stringify(context.getters.cart));
       Cookies.set('cartModifiedAt', JSON.stringify(context.getters.cartModifiedAt));
 
-      let isPositive = quantity >= 0 ? true : false;
-      let isPlural = Math.abs(quantity) != 1 ? true : false;
-
       let getStatusMessage = (quantity) => {
-        let pluralizer = isPlural ? 's' : '';
+        let isPositive = quantity >= 0 ? true : false;
+        let isPlural = Math.abs(quantity) !== 1 ? true : false;
+        let verbPluralized = isPlural ? 's' : '';
         let verb = isPlural ? 'have' : 'has';
         let adjective = isPositive ? 'added' : 'removed';
         let preposition = isPositive ? 'to' : 'from';
         
-        return `${Math.abs(quantity)} '${item.name}' item${pluralizer} ${verb} been ${adjective} ${preposition} your cart.`;
+        return `${Math.abs(quantity)} '${item.name}' item${verbPluralized} ${verb} been ${adjective} ${preposition} your cart.`;
       }
 
       let newStatusMessage = getStatusMessage(quantity);
