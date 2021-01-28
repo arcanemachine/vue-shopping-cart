@@ -320,12 +320,11 @@ export default new Vuex.Store({
       let getStatusMessage = (quantity) => {
         let isPositive = quantity >= 0 ? true : false;
         let isPlural = Math.abs(quantity) !== 1 ? true : false;
-        let verbPluralized = isPlural ? 's' : '';
+        let nounPluralized = isPlural ? 's' : '';
         let verb = isPlural ? 'have' : 'has';
-        let adjective = isPositive ? 'added' : 'removed';
-        let preposition = isPositive ? 'to' : 'from';
+        let action = isPositive ? 'added to' : 'removed from';
         
-        return `${Math.abs(quantity)} '${item.name}' item${verbPluralized} ${verb} been ${adjective} ${preposition} your cart.`;
+        return `${Math.abs(quantity)} '${item.name}' item${nounPluralized} ${verb} been ${action} your cart.`;
       }
 
       let newStatusMessage = getStatusMessage(quantity);
@@ -340,7 +339,12 @@ export default new Vuex.Store({
         let existingQuantity = Number(existingStatusMessage.match(getQuantityRegEx)[0]);
 
         if (existingQuantity) {
-          quantity += existingQuantity;
+          let previousActionIsPositiveRegEx = /(added to)/;
+          if (existingStatusMessage.match(previousActionIsPositiveRegEx)) {
+            quantity += existingQuantity;
+          } else {
+            quantity -= existingQuantity;
+          }
           newStatusMessage = getStatusMessage(quantity);
         }
       }
