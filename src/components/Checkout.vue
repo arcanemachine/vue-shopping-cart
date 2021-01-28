@@ -339,9 +339,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.modal-background {
+  position: fixed;
+}
 
 div.modal-card {
   align-self: center;
+  margin-top: 4rem;
+  max-height: 85vh;
 }
 
 .loading-container {
@@ -353,7 +358,6 @@ div.modal-card {
   left: 0;
   height: 100vh;
   width: 100vw;
-  /* overscroll-behavior: contain; */
 
   justify-content: center;
   align-items: center;
