@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// import store from '../store'
+import Cookies from 'js-cookie'
 
 // misc
 import About from '../views/About.vue'
 
-// store
+// stores
 import StoreList from '../views/StoreList.vue'
 import StoreDetail from '../views/StoreDetail.vue'
 import CategoryDetail from '../views/CategoryDetail.vue'
@@ -67,8 +69,8 @@ const routes = [
     component: UserDetail,
     pathToRegexpOptions: { strict: true },
 		meta: {
+      requiresAuth: true,
       title: 'Your Account',
-      public: false
     }
   },
   {
@@ -76,7 +78,9 @@ const routes = [
     name: 'logoutConfirm',
     component: LogoutConfirm,
     pathToRegexpOptions: { strict: true },
-		meta: {title: 'Confirm Logout'}
+		meta: {
+      title: 'Confirm Logout',
+    }
   },
   {
     path: '/logout/',
@@ -86,7 +90,9 @@ const routes = [
     props(route) {
       return { clearCart: Boolean(route.query.clearCart) }
     },
-		meta: {title: 'Logout'}
+		meta: {
+      title: 'Logout',
+    }
   },
 
   // stores
@@ -127,6 +133,18 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  // requiresAuth
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!Cookies.get('userToken')) {
+      next({name: 'login'});
+      return;
+    }
+  }
+  next();
+})
+
 
 router.afterEach((to, from) => { // eslint-disable-line no-unused-vars
   const DEFAULT_TITLE = 'Vue Shopping Cart';
