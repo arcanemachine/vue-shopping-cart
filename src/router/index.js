@@ -139,12 +139,10 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!Cookies.get('userToken')) {
       next({name: 'login'});
-      return;
     }
   }
   next();
 })
-
 
 router.afterEach((to, from) => { // eslint-disable-line no-unused-vars
   const DEFAULT_TITLE = 'Vue Shopping Cart';
