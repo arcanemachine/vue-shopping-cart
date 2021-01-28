@@ -1,6 +1,6 @@
 <template>
   <div class="status-message-container">
-    <div @click="clearStatusMessage" class="status-message button is-info">
+    <div @click="statusMessageClear" class="status-message button is-info">
       {{ $store.getters.statusMessage }}
     </div>
   </div>
@@ -10,8 +10,8 @@
 export default {
   name: 'StatusMessage',
   methods: {
-    clearStatusMessage() {
-      this.$store.dispatch('displayStatusMessage', {message: '', displayFor: 0});
+    statusMessageClear() {
+      this.$store.dispatch('statusMessageClear');
     }
   }
 }

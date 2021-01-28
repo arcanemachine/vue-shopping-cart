@@ -205,7 +205,7 @@ export default {
         let currentkey = Object.keys(formFields)[i];
         if (!formFields[currentkey].length) {
           console.log(`key: ${currentkey}, formFields[currentkey]: ${formFields[currentkey]}`);
-          this.$store.dispatch('displayStatusMessage', {message: "Please fill out all fields before continuing."});
+          this.$store.dispatch('statusMessageDisplay', {message: "Please fill out all fields before continuing."});
           let evalString = `this.$refs.form${currentkey}.select()`;
           console.log(evalString);
           eval(evalString);
@@ -214,7 +214,7 @@ export default {
       }
       // if all fields have been populated, assign the new address values onto the old values
       // this.address = Object.assign({}, this.newAddress);
-      debugger;
+      // debugger;
       this.address = this.newAddress;
       return true;
     },
@@ -330,6 +330,9 @@ export default {
   },
   destroyed() {
     // document.removeEventListener('keyup', this.checkoutCancelOnKeyEsc)
+    this.$store.dispatch('statusMessageDisplay', {
+      message: "Your checkout session has been canceled."
+    })
   }
 }
 

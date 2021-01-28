@@ -151,7 +151,7 @@ export default {
       if (Object.keys(this.$store.getters.checkoutData).length) {
         this.performCheckout = false;
         this.$store.commit('checkoutData', {});
-        this.$store.dispatch('displayStatusMessage', {
+        this.$store.dispatch('statusMessageDisplay', {
           message: "Your checkout session has been canceled."
         })
         return false;
@@ -163,7 +163,7 @@ export default {
         totalFormattedPrice: this.totalFormattedPrice
       })
       this.performCheckout = true;
-      this.$store.dispatch('clearStatusMessage');
+      this.$store.dispatch('statusMessageClear');
     },
     async getCartData() {
       if (Object.keys(this.cart).length > 0) {
@@ -204,9 +204,6 @@ export default {
   },
   destroyed() {
     this.$store.commit('checkoutData', {});
-    this.$store.dispatch('displayStatusMessage', {
-      message: "Your checkout session has been canceled."
-    })
   }
 }
 </script>

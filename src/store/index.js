@@ -124,7 +124,7 @@ export default new Vuex.Store({
   
       // sanity checks
       if (quantity === 0) {
-        state.dispatch('displayStatusMessage', {message: 'Quantity must be a non-zero integer value.'});
+        state.dispatch('statusMessageDisplay', {message: 'Quantity must be a non-zero integer value.'});
         return false;
       }
       else if (typeof(item) !== "object") {
@@ -169,10 +169,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    displayStatusMessage (context, payload) {
+    statusMessageDisplay (context, payload) {
 
       let message = payload.message ? payload.message : '';
-      let displayFor = payload.displayFor ? payload.displayFor : 2000;
+      let displayFor = payload.displayFor ? payload.displayFor : 3500;
 
       context.commit('statusMessage', message);
       context.commit('statusMessageTimeoutClear');
@@ -180,8 +180,8 @@ export default new Vuex.Store({
         context.commit('statusMessage', '');
       }, displayFor))
     },
-    clearStatusMessage (context) {
-      context.dispatch('displayStatusMessage', {message: '', displayFor: 0});
+    statusMessageClear (context) {
+      context.dispatch('statusMessageDisplay', {message: '', displayFor: 0});
     },
     login (context, token) {
       context.dispatch('authenticate', token);
@@ -267,20 +267,20 @@ export default new Vuex.Store({
         body: JSON.stringify(postData)
       })
       .then(response => {
-        context.dispatch('displayStatusMessage', {message: "Your cart has been synced to your online account."});
+        context.dispatch('statusMessageDisplay', {message: "Your cart has been synced to your online account."});
         return response.json()
       })
     },
     cartUpdateItem (context, payload) {
       /*
-      Add or remove a given quantity of an item.
+      Add or remove a given quantity of an item to the cart.
       */
 
       let item = payload.item;
       let quantity = payload.quantity;
 
       if (quantity >= 1 && context.getters.cart[String(item.id)] >= 99) {
-        context.dispatch('displayStatusMessage', {message: "You cannot have more than 99 of a given item in your cart."})
+        context.dispatch('statusMessageDisplay', {message: "Maximum item quantity reached"})
         return false;
       }
 
@@ -317,13 +317,16 @@ export default new Vuex.Store({
       Cookies.set('cart', JSON.stringify(context.getters.cart));
       Cookies.set('cartModifiedAt', JSON.stringify(context.getters.cartModifiedAt));
 
+      let isPositive = quantity >= 0 ? true : false;
+      let isPlural = Math.abs(quantity) != 1 ? true : false;
+
       let getStatusMessage = (quantity) => {
-        let verb = Math.abs(quantity) === 1 ? 'has' : 'have';
-        let adjective = quantity >= 0 ? 'added' : 'removed';
-        let preposition = quantity >= 0 ? 'to' : 'from';
-        let plural = quantity != 1 ? 's' : '';
+        let pluralizer = isPlural ? 's' : '';
+        let verb = isPlural ? 'have' : 'has';
+        let adjective = isPositive ? 'added' : 'removed';
+        let preposition = isPositive ? 'to' : 'from';
         
-        return `${Math.abs(quantity)} '${item.name}' item${plural} ${verb} been ${adjective} ${preposition} your cart.`;
+        return `${Math.abs(quantity)} '${item.name}' item${pluralizer} ${verb} been ${adjective} ${preposition} your cart.`;
       }
 
       let newStatusMessage = getStatusMessage(quantity);
@@ -337,15 +340,12 @@ export default new Vuex.Store({
         let getQuantityRegEx = /\d+/;
         let existingQuantity = Number(existingStatusMessage.match(getQuantityRegEx)[0]);
 
-        // deleteme
-        currentItemNameInExistingStatusMessage = true;
-
         if (existingQuantity) {
           quantity += existingQuantity;
           newStatusMessage = getStatusMessage(quantity);
         }
       }
-      context.dispatch('displayStatusMessage', {message: newStatusMessage})
+      context.dispatch('statusMessageDisplay', {message: newStatusMessage})
 
     },
     cartClear (context) {
@@ -358,7 +358,7 @@ export default new Vuex.Store({
       Cookies.remove('cartModifiedAt');
       // if userProfile is not present, perform all actions locally
 
-      context.dispatch('displayStatusMessage', {message: "Your cart has been cleared."});
+      context.dispatch('statusMessageDisplay', {message: "Your cart has been cleared."});
     }
   },
 })
