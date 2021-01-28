@@ -12,6 +12,7 @@ export default new Vuex.Store({
     // misc
     isLoading: false,
     statusMessage: '',
+    statusMessageTimeout: 4000,
 
     // users
     userIsAuthenticated: false,
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     statusMessage (state) {
       return state.statusMessage;
+    },
+    statusMessageTimeout (state) {
+      return state.statusMessageTimeout;
     },
     userIsAuthenticated (state) {
       return state.userIsAuthenticated;
@@ -63,6 +67,12 @@ export default new Vuex.Store({
     },
     statusMessage (state, message) {
       state.statusMessage = message;
+    },
+    statusMessageTimeout (state, timeout) {
+      state.statusMessageTimeout = timeout;
+    },
+    statusMessageTimeoutClear (state) {
+      clearTimeout(state.statusMessageTimeout);
     },
     userIsAuthenticated (state, bool) {
       state.userIsAuthenticated = bool;
@@ -160,12 +170,15 @@ export default new Vuex.Store({
   },
   actions: {
     displayStatusMessage (context, payload) {
+
       let message = payload.message ? payload.message : '';
-      let displayFor = payload.displayFor ? payload.displayFor : 4000;
+      let displayFor = payload.displayFor ? payload.displayFor : 2000;
+
       context.commit('statusMessage', message);
-      setTimeout(() => {
-        context.dispatch('clearStatusMessage');
-      }, displayFor)
+      context.commit('statusMessageTimeoutClear');
+      context.commit('statusMessageTimeout', setTimeout(() => {
+        context.commit('statusMessage', '');
+      }, displayFor))
     },
     clearStatusMessage (context) {
       context.dispatch('displayStatusMessage', {message: '', displayFor: 0});
