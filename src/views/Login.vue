@@ -2,12 +2,13 @@
   <div class="section">
     <div class="hero">
       <div class="hero body">
-        <div class="container has-text-centered">
+        <div class="container has-text-centered component-login-container">
           <div class="is-4 is-offset-4">
-            <h2 class="title has-text-black">Login</h2>
+            <div class="title has-text-black">Login</div>
             <div class="hr-container">
               <hr class="login-hr">
             </div>
+            <div class="mt-6 mb-4 has-text-weight-bold">Please login to your account to continue.</div>
             <div class="box">
               <form @submit="login">
                 <div class="field">
@@ -30,11 +31,20 @@
               </form>
             </div>
             <transition name="fade" mode="out-in">
-              <div v-if="loginResponse === 'Success!'" class="has-text-weight-bold">Success!</div>
-              <div v-for="message in loginResponse.form_errors" :key="message" class="has-text-weight-bold">{{ message }}</div>
-              <div v-for="message in loginResponse.non_field_errors" :key="message" class="has-text-weight-bold">Error: {{ message }}</div>
-              <div v-for="message in loginResponse.username" :key="message" class="has-text-weight-bold">Username: {{ message }}</div>
-              <div v-for="message in loginResponse.password" :key="message" class="has-text-weight-bold">Password: {{ message }}</div>
+              <div v-if="loginResponse === 'Success!'"
+                   class="is-size-4 has-text-success has-text-weight-bold">
+                Success!
+              </div>
+              <div v-for="message in loginResponse.form_errors"
+                   :key="message"
+                   class="is-size-5 has-text-danger has-text-weight-bold">
+                {{ message }}
+              </div>
+              <div v-for="message in loginResponse.non_field_errors"
+                   :key="message"
+                   class="is-size-5 has-text-danger has-text-weight-bold">
+                Error: {{ message }}
+              </div>
             </transition>
           </div>
         </div>
@@ -54,6 +64,7 @@ export default {
         password: ''
       },
       loginResponse: {},
+      messageTimeout: undefined
     }
   },
   mounted() {
@@ -71,7 +82,8 @@ export default {
       // do not continue if form fields are empty
       if (!this.form.username || !this.form.password) {
         this.loginResponse = {form_errors: ['Please complete the form before continuing.']};
-        setTimeout(() => {
+        clearTimeout(this.messageTimeout);
+        this.messageTimeout = setTimeout(() => {
           this.loginResponse = {};
         }, 4000)
         return false;
@@ -121,23 +133,16 @@ export default {
 
 <style>
 
-.csrftoken-container {
-  word-wrap: anywhere;
-}
-
-.this-container {
-  width: 80%;
+.component-login-container {
+  width: 25rem;
 }
 
 .box {
-  width: 25rem;
-  margin-left: auto;
-  margin-right: auto;
   padding: 1rem;
 }
 
 .login-hr {
-  margin: 2rem auto 3rem;
+  margin: 1rem auto;
   border-bottom: 2px solid black;
 }
 
