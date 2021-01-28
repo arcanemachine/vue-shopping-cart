@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie' // eslint-disable-line no-unused-vars
+import Cookies from 'js-cookie'
 
 import NavBar from './components/NavBar.vue'
 import StatusMessage from './components/StatusMessage.vue'
@@ -20,6 +20,11 @@ export default {
   name: 'App',
   components: {
     NavBar, StatusMessage
+  },
+  beforeCreate() {
+    if (!Cookies.get('introSeen')) {
+      this.$router.push({name: 'about'});
+    }
   },
   mounted() {
     // if userToken cookie exists, get user info from server
