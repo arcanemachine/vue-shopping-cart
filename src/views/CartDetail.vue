@@ -71,7 +71,7 @@
             </div>
           </transition>
           <transition name="fade">
-            <button v-if="false"
+            <button v-if="true && !cartIsEmpty"
                     @click="cartClear"
                     class="mt-6 button is-large is-danger clear-cart-button">
               Remove all Items <i class="trash-icon bi-trash navbar-show-icon-touch"></i>

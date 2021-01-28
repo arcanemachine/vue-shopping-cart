@@ -164,7 +164,7 @@ export default new Vuex.Store({
       let displayFor = payload.displayFor ? payload.displayFor : 4000;
       context.commit('statusMessage', message);
       setTimeout(() => {
-        context.commit('clearstatusMessage');
+        context.dispatch('clearStatusMessage');
       }, displayFor)
     },
     clearStatusMessage (context) {
@@ -266,8 +266,7 @@ export default new Vuex.Store({
       let item = payload.item;
       let quantity = payload.quantity;
 
-      // TODO: check this
-      if (context.getters.cart[String(item.id)] >= 99) {
+      if (quantity >= 1 && context.getters.cart[String(item.id)] >= 99) {
         context.dispatch('displayStatusMessage', {message: "You cannot have more than 99 of a given item in your cart."})
         return false;
       }
@@ -305,14 +304,35 @@ export default new Vuex.Store({
       Cookies.set('cart', JSON.stringify(context.getters.cart));
       Cookies.set('cartModifiedAt', JSON.stringify(context.getters.cartModifiedAt));
 
-      let verb = Math.abs(quantity) === 1 ? 'has' : 'have';
-      let adjective = quantity >= 0 ? 'added' : 'removed';
-      let preposition = quantity >= 0 ? 'to' : 'from';
-      
-      context.dispatch('displayStatusMessage', {
-        message: `${Math.abs(quantity)} '${item.name}' ${verb} been ${adjective} ${preposition} your cart.`
-      })
+      let getStatusMessage = (quantity) => {
+        let verb = Math.abs(quantity) === 1 ? 'has' : 'have';
+        let adjective = quantity >= 0 ? 'added' : 'removed';
+        let preposition = quantity >= 0 ? 'to' : 'from';
+        let plural = quantity != 1 ? 's' : '';
+        
+        return `${Math.abs(quantity)} '${item.name}' item${plural} ${verb} been ${adjective} ${preposition} your cart.`;
+      }
 
+      let newStatusMessage = getStatusMessage(quantity);
+
+      // if adding more than one of an item to the cart, add up the total quantity being added
+      let existingStatusMessage = context.getters.statusMessage;
+      let currentItemNameRegEx = new RegExp(`'${item.name}'`);
+      let currentItemNameInExistingStatusMessage = existingStatusMessage.match(currentItemNameRegEx);
+      if (existingStatusMessage && currentItemNameInExistingStatusMessage) {
+
+        let getQuantityRegEx = /\d+/;
+        let existingQuantity = Number(existingStatusMessage.match(getQuantityRegEx)[0]);
+
+        // deleteme
+        currentItemNameInExistingStatusMessage = true;
+
+        if (existingQuantity) {
+          quantity += existingQuantity;
+          newStatusMessage = getStatusMessage(quantity);
+        }
+      }
+      context.dispatch('displayStatusMessage', {message: newStatusMessage})
 
     },
     cartClear (context) {
