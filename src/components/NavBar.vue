@@ -48,12 +48,12 @@
            class="navbar-menu is-dark"
            :class="navbarMenuClass">
           <div class="navbar-end">
-            <router-link :to="{name: 'cartDetail'}" class="navbar-item is-hidden-mobile is-hidden-tablet-only">
-              Your Cart <span class="navbar-icon-container-wide"><i class="bi-cart2 is-size-5"></i></span>
-            </router-link>
             <router-link @click.native="navbarToggle"
                          :to="{name: 'storeList'}"
                          class="navbar-item has-text-centered">View Stores</router-link>
+            <router-link :to="{name: 'cartDetail'}" class="navbar-item is-hidden-mobile is-hidden-tablet-only">
+              Your Cart <span class="navbar-icon-container-wide"><i class="bi-cart2 is-size-5"></i></span>
+            </router-link>
             <router-link v-if="!$store.getters.userIsAuthenticated"
                          @click.native="navbarToggle"
                          :to="{name: 'login'}"
@@ -129,7 +129,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 nav {
-  width: 100vw;
+  width: 100%;
 }
 
 .border-top {
