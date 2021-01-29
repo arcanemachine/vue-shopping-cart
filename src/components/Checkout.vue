@@ -5,12 +5,12 @@
       <div v-if="!currentStep && isLoading" class="loading-container">
         <div>
           <transition-group name="fade" class="loading-box">
-            <img v-if="!purchaseComplete"
-                 :key="purchaseComplete"
+            <img v-if="!orderComplete"
+                 :key="orderComplete"
                  src="../assets/img/spinner.svg"
                  class="loading-icon">
             <svg v-else
-                 :key="purchaseComplete"
+                 :key="orderComplete"
                  class="checkmark"
                  xmlns="http://www.w3.org/2000/svg"
                  viewBox="0 0 52 52">
@@ -33,7 +33,7 @@
           <div v-if="hasPreviousStep" @click="goToPreviousStep" class="pt-1 back-arrow-container">
             <font-awesome-icon icon="arrow-left" class="back-arrow" />
           </div>
-          <p class="modal-card-title has-text-centered">{{ currentStep }}</p>
+          <p class="ml-3 modal-card-title has-text-centered">{{ currentStep }}</p>
           <button @click="$emit('cancel-checkout')" class="delete" aria-label="close"></button>
         </header>
 
@@ -137,7 +137,14 @@
             <span class="is-size-4">Total Price:</span>
             <span class="ml-2 is-size-4 bold">{{ totalFormattedPrice }}</span>
           </div>
+        </section>
 
+        <!-- orderSuccess -->
+        <section v-if="currentStep === steps.orderSuccess" class="pb-5 modal-card-body">
+          <div class="is-size-5">Your order is complete! Your order number is <strong>#{{ Math.floor(Math.random() * 10**6) }}</strong>.</div>
+          <div class="mt-6">
+            <span class="is-size-5">Thanks for using the Vue Shopping Cart Demo.</span>
+          </div>
         </section>
 
         <footer class="modal-card-foot">
@@ -149,7 +156,7 @@
                       class="button is-warning">
                 {{ secondaryButtonText }}
               </button>
-              <button @click="checkoutCancel" class="button is-danger">Cancel</button>
+              <button v-if="!orderComplete" @click="checkoutCancel" class="button is-danger">Cancel</button>
             </div>
           </div>
         </footer>
@@ -176,7 +183,7 @@ export default {
         addressConfirm: 'Confirm Your Address',
         addressUpdate: 'Change Your Address',
         orderConfirmFinal: 'Final Order Confirmation',
-        orderSuccess: 'Order Complete!'
+        orderSuccess: 'Order Complete'
       },
 
       currentStep: '',
@@ -188,13 +195,13 @@ export default {
       loadingMessage: '',
       loadingMessageTimeout: undefined,
       defaultLoadingTime: 1500,
-      purchaseComplete: false,
+      orderComplete: false,
 
       address: {
         name: 'Jamie Smith',
         address: '123 Fake St.',
         city: 'Fakeville',
-        state: 'Alberta',
+        state: 'FK',
         zip: '90210',
         country: 'USA',
       },
@@ -231,14 +238,25 @@ export default {
 
     this.stepTransitionName = 'fade';
     this.$nextTick(() => {
-      // this.goToOrderConfirm(0);
-      this.goToOrderConfirmFinal(0);
+      // load the first step
+      this.goToOrderConfirm(0);
+
+      // show the loading icon
+      // this.currentStep = undefined;
+      // this.isLoading = true;
+
     })
 
     // cancel checkout when Esc key is pressed
     document.addEventListener('keyup', this.checkoutCancelOnKeyEsc)
   },
   methods: {
+    checkoutCancelOnKeyEsc(e) {
+      if (e.key === 'Escape') {
+        this.checkoutCancel();
+        // console.log('checkoutCancelOnKeyEsc()');
+      }
+    },
     addressUpdate() {
       event.preventDefault();
 
@@ -258,12 +276,6 @@ export default {
       this.address = Object.assign({}, this.newAddress);
       return true;
     },
-    checkoutCancelOnKeyEsc(e) {
-      if (e.key === 'Escape') {
-        this.checkoutCancel();
-        // console.log('checkoutCancelOnKeyEsc()');
-      }
-    },
     displayLoadingMessage(message, loadingTime=undefined) {
       if (loadingTime === undefined) {
         loadingTime = this.defaultLoadingTime;
@@ -272,6 +284,13 @@ export default {
       setTimeout(() => {
         this.loadingMessage = '';
       }, loadingTime)
+    },
+    loadingMessageDisplay(message, timeout=2250) {
+      this.loadingMessage = message;
+      clearTimeout(this.loadingMessageTimeout);
+      this.loadingMessageTimeout = setTimeout(() => {
+        this.loadingMessage = '';
+      }, timeout)
     },
     goToOrderConfirm(loadingTime=undefined) {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
@@ -297,6 +316,7 @@ export default {
       this.secondaryButtonText = 'Undo changes';
       setTimeout(() => {
         this.currentStep = this.steps.addressUpdate;
+        this.newAddress = Object.assign({}, this.address);
       }, loadingTime)
     },
     goToOrderConfirmFinal(loadingTime=undefined) {
@@ -308,13 +328,6 @@ export default {
         this.currentStep = this.steps.orderConfirmFinal;
       }, loadingTime)
     },
-    loadingMessageDisplay(message, timeout=1750) {
-      this.loadingMessage = message;
-      clearTimeout(this.loadingMessageTimeout);
-      this.loadingMessageTimeout = setTimeout(() => {
-        this.loadingMessage = '';
-      }, timeout)
-    },
     goToOrderSuccess(loadingTime=undefined) {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
@@ -323,16 +336,18 @@ export default {
       this.cancelButtonText = '';
 
       this.loadingMessageDisplay('Processing payment...');
-      this.$helpers.delay(2000).then(() => this.loadingMessageDisplay('Fulfilling your order...'));
-      this.$helpers.delay(4000).then(() => {
-        // this.currentStep = this.steps.orderConfirmFinal;
-        // empty the cart and clear cartData
-        // this.$emit('cart-clear');
-        this.purchaseComplete = true;
+      this.$helpers.delay(2500).then(() => this.loadingMessageDisplay('Fulfilling your order...'));
+      this.$helpers.delay(5000).then(() => {
         this.loadingMessage = 'Success!'
+        this.orderComplete = true;
         document.removeEventListener('keyup', this.checkoutCancelOnKeyEsc)
-      }, 1500)
-      this.$helpers.delay(6000).then(() => this.currentStep = this.steps.orderSuccess);
+      }, 2500)
+      this.$helpers.delay(7500).then(() => this.isLoading = false);
+      this.$helpers.delay(8000).then(() => {
+        // finalize the order and clear the cart
+        this.currentStep = this.steps.orderSuccess;
+        setTimeout(() => this.$store.dispatch('cartClear', true), 500);
+      })
     },
     goToNextStep() {
       console.log('goToNextStep()');
@@ -358,7 +373,7 @@ export default {
           this.goToOrderSuccess();
         }
         else if (this.currentStep === this.steps.orderSuccess) {
-          this.router.reload({name: 'cartDetail'});
+          this.$router.push({name: 'storeList'});
         }
       })
     },
@@ -458,7 +473,7 @@ div.modal-card {
 }
 
 .loading-icon {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   height: 4rem;
   width: 4rem;
   animation: loading-animation 1s infinite linear;  
