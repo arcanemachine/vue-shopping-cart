@@ -79,7 +79,7 @@ a {
 
 /* unnamed transitions (same as fade) */
 .v-enter-active, .v-leave-active {
-  transition: opacity .3s;
+  transition: opacity .25s;
 }
 
 .v-enter, .v-leave-to {

@@ -3,8 +3,8 @@
     <div class="section has-text-centered">
       <div class="columns">
         <div class="column">
-          <h1 class="title">Shopping Cart Demo</h1>
-          <h2 class="subtitle">Enjoy the Vue</h2>
+          <div id="store-list-title" class="title">Shopping Cart Demo</div>
+          <div id="store-list-subtitle" class="subtitle">Enjoy the Vue</div>
         </div>
       </div>
       <div class="row columns is-multiline">
@@ -38,10 +38,8 @@ export default {
     })
   },
   methods: {
-    getStores() {
-      fetch(this.$helpers.urls.storeList)
-      .then(response => response.json())
-      .then(data => this.stores = data)
+    async getStores() {
+      this.stores = await fetch(this.$helpers.urls.storeList).then(response => response.json())
     }
   }
 }
