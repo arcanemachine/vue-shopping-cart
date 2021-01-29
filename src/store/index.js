@@ -351,17 +351,34 @@ export default new Vuex.Store({
       context.dispatch('statusMessageDisplay', {message: newStatusMessage})
 
     },
-    cartClear (context) {
-      // if userProfile is present, perform the reset via API and clear the local cart as a confirmation
+    cartClear (context, orderComplete=false) {
 
+      // if the user is logged in, perform the reset via API and clear the local cart locally
+      if (context.getters.userProfile) {
+        let url = helpers.urls.cartClearAll;
+        fetch(url, {
+          method: 'POST'
+        })
+        .then(response => {
+          if (!response.status !== 200) {
+            console.log('$store.dispatch.cartClear(): ' + response.status);
+          }
+        })
+        .catch(e => console.log(e))
+      }
+
+      // whether or not the user is logged in, clear the cart contents on the client
       context.commit('cartIs', {});
       context.commit('cartModifiedAt', undefined);
 
       Cookies.remove('cart');
       Cookies.remove('cartModifiedAt');
-      // if userProfile is not present, perform all actions locally
 
-      context.dispatch('statusMessageDisplay', {message: "Your cart has been cleared."});
+      if (orderComplete) {
+        context.dispatch('statusMessageDisplay', {message: "Thanks for trying out this demo!", displayFor: 10000});
+      } else {
+        context.dispatch('statusMessageDisplay', {message: "Your cart has been cleared."});
+      }
     }
   },
 })

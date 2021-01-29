@@ -103,6 +103,32 @@
             </form>
         </section>
 
+        <!-- orderConfirmFinal -->
+        <section v-if="currentStep === steps.orderConfirmFinal" class="pb-5 modal-card-body">
+          <div class="is-size-5">Items:</div>
+          <ol class="mt-3">
+            <div v-for="item in cartData" :key="item.id" class="ml-6 list-item">
+              <li>
+                {{ item.name }}: {{ cart[item.id] }} x {{ $helpers.getFormattedPrice(item.price) }} = {{ $helpers.getFormattedPrice(item.price * cart[item.id]) }}
+              </li>
+            </div>
+          </ol>
+          <div class="mt-6 is-size-5">This order will be shipped to:</div>
+            <div class="mt-3 ml-4 address-display">
+              <div class="name">{{ address.name }}</div>
+              <div class="address1">{{ address.address1 }}</div>
+              <div class="city-state-zip">
+                {{ address.city }}, {{ address.state }}{{ noCommaIfStateIsAbbreviated }}{{ address.zip }}
+              </div>
+              <div class="country">{{ address.country }}</div>
+            </div>
+          <div class="mt-6">
+            <span class="is-size-4">Total Price:</span>
+            <span class="ml-2 is-size-4 bold">{{ totalFormattedPrice }}</span>
+          </div>
+
+        </section>
+
         <footer class="modal-card-foot">
           <div class="columns is-multiline">
             <div class="column">
@@ -138,10 +164,13 @@ export default {
         orderConfirm: 'Confirm Your Order',
         addressConfirm: 'Confirm Your Address',
         addressUpdate: 'Change Your Address',
+        orderConfirmFinal: 'Final Order Confirmation',
+        orderSuccess: 'Order Complete!'
       },
 
       currentStep: '',
       secondaryButtonText: '',
+      cancelButtonText: 'Cancel',
       stepTransitionName: 'slide-next',
 
       isLoading: false,
@@ -178,7 +207,9 @@ export default {
       return this.address.state.length <= 2 ? ' ' : ', ';
     },
     hasPreviousStep() {
-      if (this.currentStep !== Object.values(this.steps)[0]) {
+      let firstStep = Object.values(this.steps)[0];
+      let orderCompleteStep = Object.values(this.steps).slice(-1)[0];
+      if (this.currentStep !== firstStep && this.currentStep !== orderCompleteStep) {
         return true;
       } else return false;
     },
@@ -189,7 +220,7 @@ export default {
     this.stepTransitionName = 'fade';
     this.$nextTick(() => {
       // this.goToOrderConfirm(0);
-      this.goToAddressUpdate(0);
+      this.goToOrderConfirmFinal(0);
     })
 
     // cancel checkout when Esc key is pressed
@@ -242,7 +273,7 @@ export default {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
 
-      this.secondaryButtonText = 'Update';
+      this.secondaryButtonText = 'Change address';
       setTimeout(() => {
         this.currentStep = this.steps.addressConfirm;
       }, loadingTime)
@@ -256,18 +287,35 @@ export default {
         this.currentStep = this.steps.addressUpdate;
       }, loadingTime)
     },
-    goToPaymentMethodConfirm(loadingTime=undefined) {
+    goToOrderConfirmFinal(loadingTime=undefined) {
       if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
       this.currentStep = undefined;
+
+      this.secondaryButtonText = '';
       setTimeout(() => {
-        this.currentStep = this.steps.paymentMethodConfirm;
-        this.secondaryButtonText = '';
+        this.currentStep = this.steps.orderConfirmFinal;
       }, loadingTime)
     },
-    checkoutFinish() {
-      this.$helpers.delay(1500).then(() => this.currentStep = this.steps.orderConfirm);
+    goToOrderSuccess(loadingTime=undefined) {
+      if (loadingTime === undefined) {loadingTime = this.defaultLoadingTime}
+      this.currentStep = undefined;
+
+      this.secondaryButtonText = '';
+      this.cancelButtonText = '';
+
+      this.$helpers.delay(750).then(() => this.loadingMessage = 'donkey')
+      .then(this.$helpers.delay(750).then(() => this.loadingMessage = 'peanut'))
+      this.$helpers.delay(750).then(() => this.loadingMessage = 'waffle');
+      this.$helpers.delay(750).then(() => {
+        // this.currentStep = this.steps.orderConfirmFinal;
+        // empty the cart and clear cartData
+        // this.$emit('cart-clear');
+        this.currentStep = this.steps.orderSuccess;
+        document.removeEventListener('keyup', this.checkoutCancelOnKeyEsc)
+      })
     },
     goToNextStep() {
+      console.log('goToNextStep()');
       this.stepTransitionName = 'slide-next';
       this.isLoading = true;
       this.$nextTick(() => {
@@ -275,7 +323,7 @@ export default {
           this.goToAddressConfirm();
         }
         else if (this.currentStep === this.steps.addressConfirm) {
-          this.goToPaymentMethodConfirm();
+          this.goToOrderConfirmFinal();
         }
         else if (this.currentStep === this.steps.addressUpdate) {
           this.stepTransitionName = 'slide-previous';
@@ -286,9 +334,16 @@ export default {
             })
           }
         }
+        else if (this.currentStep === this.steps.orderConfirmFinal) {
+          this.goToOrderSuccess();
+        }
+        else if (this.currentStep === this.steps.orderSuccess) {
+          this.router.reload({name: 'cartDetail'});
+        }
       })
     },
     goToPreviousStep() {
+      console.log('goToPreviousStep()');
       let loadingTime = 600;
       // this.isLoading = false;
       this.stepTransitionName = 'slide-previous';
@@ -301,6 +356,9 @@ export default {
           this.goToOrderConfirm(loadingTime);
         }
         else if (this.currentStep === this.steps.addressUpdate) {
+          this.goToAddressConfirm(loadingTime);
+        }
+        else if (this.currentStep === this.steps.orderConfirmFinal) {
           this.goToAddressConfirm(loadingTime);
         }
       })

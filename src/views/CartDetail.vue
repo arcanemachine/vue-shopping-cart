@@ -85,7 +85,8 @@
                 :cart="cart"
                 :cartData="cartData"
                 :totalFormattedPrice="totalFormattedPrice"
-                @cancel-checkout="toggleCheckout()" />
+                @cancel-checkout="toggleCheckout()"
+                @cart-clear="cartClear()" />
     </transition>
   </div>
 </template>
