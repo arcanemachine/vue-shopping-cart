@@ -6,7 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "test:watch": "vue-cli-service test:unit --watch",
     "test:debug": "node --inspect-brk=[0.0.0.0] ./node_modules/.bin/vue-cli-service test:unit --runInBand",
+    "test:debug-watch": "node --inspect-brk=[0.0.0.0] ./node_modules/.bin/vue-cli-service test:unit --runInBand --watch",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },

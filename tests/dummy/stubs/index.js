@@ -1,0 +1,1 @@
+export const storeListFetchResult = [{"id":1,"name":"MallMart","description":"We've got everything you need!","registrant":1,"image":"http://192.168.1.120:8000/media/images/MallMart/mallmart.jpg"},{"id":2,"name":"Food Stop","description":"Stop in and get what you want.","registrant":1,"image":null}];
