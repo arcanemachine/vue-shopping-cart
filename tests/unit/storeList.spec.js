@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import StoreList from '@/views/StoreList.vue'
 
 import * as m from '../dummy/mocks/'
@@ -19,7 +19,9 @@ beforeEach(() => {
 describe('StoreList.vue', () => {
   it('loads info from getStores()', async () => {
     
-    const storeList = mount(StoreList);
+    const storeList = mount(StoreList, {
+      stubs: ['router-link', 'router-view']
+    });
 
     // get expected result
     const expected = JSON.stringify(await m.fetchResponse(helpers.urls.storeList));
