@@ -14,8 +14,19 @@ const fetch = jest.fn((url) => {
   }
 });
 
-const fetchResponse = function (url) {
+export const fetchResponse = function (url) {
   return fetch(url).then(response => response.json());
+}
+
+export const store = {
+  state: {
+    cart: {},
+    isLoading: false,
+    userIsAuthenticated: false
+  },
+  getters: {
+    cartItemCount: 0
+  }
 }
 
 module.exports.fetch = fetch;

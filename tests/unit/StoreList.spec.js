@@ -10,14 +10,14 @@ import * as helpers from '@/assets/js/helpers.js'
 const localVue = createLocalVue()
 localVue.prototype.$helpers = helpers;
 
-beforeEach(() => {
-  fetch.mockClear();
-});
-
 describe('StoreList.vue', () => {
+  beforeEach(() => {
+    fetch.mockClear();
+  });
+
   it('loads info from getStores()', async () => {
     
-    const storeList = mount(StoreList, {
+    const thisComponent = mount(StoreList, {
       localVue,
       stubs: ['router-link', 'router-view']
     });
@@ -27,11 +27,9 @@ describe('StoreList.vue', () => {
     console.log(`expected: ${expected}`);
     console.log(`helpers.urls.storeList: ${helpers.urls.storeList}`);
 
-    debugger;
-
     // get actual result
-    await storeList.vm.getStores();
-    const actual = JSON.stringify(storeList.vm.$data.stores);
+    await thisComponent.vm.getStores();
+    const actual = JSON.stringify(thisComponent.vm.$data.stores);
     console.log(`actual: ${actual}`);
 
     expect(actual).toMatch(expected);
