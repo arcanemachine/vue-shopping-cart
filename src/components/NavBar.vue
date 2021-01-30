@@ -1,12 +1,12 @@
 <template>
-  <nav class="navbar is-fixed-top is-dark border-bottom navbar-color-custom">
+  <nav class="navbar is-fixed-top is-dark navbar-color-custom">
     <div class="container">
       <div class="navbar-brand">
         <router-link :to="{name: 'storeList'}"
                      @click.native="navbarIsActive = false"
                      class="navbar-item brand-text has-text-weight-bold">Vue Shopping Cart Demo</router-link>
         <transition name="fade">
-          <div v-if="$store.getters.isLoading" class="navbar-item-touch-container-start is-hidden-desktop is-hidden-widescreen">
+          <div v-if="isLoading" class="navbar-item-touch-container-start is-hidden-desktop is-hidden-widescreen">
             <a class="navbar-item navbar-show-icon-touch-container loading-animation" alt="Loading Icon" title="Loading...">
               <svg class="bi bi-arrow-repeat navbar-show-icon-touch has-text-light loading-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
@@ -54,19 +54,19 @@
             <router-link :to="{name: 'cartDetail'}" class="navbar-item is-hidden-mobile is-hidden-tablet-only">
               Your Cart <span class="navbar-icon-container-wide"><i class="bi-cart2 is-size-5"></i></span>
             </router-link>
-            <router-link v-if="!$store.getters.userIsAuthenticated"
+            <router-link v-if="!userIsAuthenticated"
                          @click.native="navbarToggle"
                          :to="{name: 'login'}"
                          class="navbar-item has-text-centered">Login</router-link>
-            <router-link v-if="!$store.getters.userIsAuthenticated"
+            <router-link v-if="!userIsAuthenticated"
                          @click.native="navbarToggle"
                          :to="{name: 'register'}"
                          class="navbar-item has-text-centered">Register</router-link>
-            <router-link v-if="$store.getters.userIsAuthenticated"
+            <router-link v-if="userIsAuthenticated"
                          @click.native="navbarToggle"
                          :to="{name: 'userDetail'}"
                          class="navbar-item has-text-centered">Your Account</router-link>
-            <router-link v-if="$store.getters.userIsAuthenticated"
+            <router-link v-if="userIsAuthenticated"
                          @click.native="navbarToggle"
                          :to="{name: 'logoutConfirm'}"
                          class="navbar-item has-text-centered">Logout</router-link>
@@ -85,14 +85,25 @@ export default {
     }
   },
   computed: {
+    // store
     cart() {
       return this.$store.getters.cart;
     },
     cartItemCount() {
-      if (this.$store.getters.cartItemCount > 99) {
+      return this.$store.getters.cartItemCount;
+    },
+    isLoading() {
+      return this.$store.getters.isLoading;
+    },
+    userIsAuthenticated() {
+      return this.$store.getters.userIsAuthenticated;
+    },
+    // end store
+    iconCartItemCount() {
+      if (this.cartItemCount > 99) {
         return '99';
       } else {
-        return this.$store.getters.cartItemCount;
+        return this.cartItemCount;
       }
     },
     navbarMenuClass() {
@@ -101,7 +112,7 @@ export default {
       }
     },
     userIconUrl() {
-      if (!this.$store.getters.userIsAuthenticated) {
+      if (!this.userIsAuthenticated) {
         return {name: 'login'};
       } else {
         return {name: 'userDetail'};
@@ -109,14 +120,14 @@ export default {
     },
     userProfileIconStyle() {
       return {
-        color: this.$store.getters.userIsAuthenticated ? '#88f' : 'white'
+        color: this.userIsAuthenticated ? '#88f' : 'white'
       }
     },
     cartIconStyle() {
       return {
         color: this.$store.getters.cartItemCount ? '#88f' : 'white'
       }
-    }
+    },
   },
   methods: {
     navbarToggle() {
@@ -135,11 +146,6 @@ nav {
 .border-top {
   border: 2px solid black;
   border-width: 2px 0 0;
-}
-
-.border-bottom {
-  border: 2px solid black;
-  border-width: 0 0 2px;
 }
 
 .navbar-item-touch-container-start {
