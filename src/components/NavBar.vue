@@ -77,6 +77,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'NavBar',
   data() {
@@ -85,20 +87,6 @@ export default {
     }
   },
   computed: {
-    // store
-    cart() {
-      return this.$store.getters.cart;
-    },
-    cartItemCount() {
-      return this.$store.getters.cartItemCount;
-    },
-    isLoading() {
-      return this.$store.getters.isLoading;
-    },
-    userIsAuthenticated() {
-      return this.$store.getters.userIsAuthenticated;
-    },
-    // end store
     iconCartItemCount() {
       if (this.cartItemCount > 99) {
         return '99';
@@ -128,6 +116,11 @@ export default {
         color: this.$store.getters.cartItemCount ? '#88f' : 'white'
       }
     },
+    // store
+    cartItemCount() {
+      return this.$store.getters.cartItemCount;
+    },
+    ...mapState(['cart', 'isLoading', 'lastName']),
   },
   methods: {
     navbarToggle() {
