@@ -20,27 +20,14 @@ describe('NavBar.vue', () => {
   let localStore;
 
   beforeEach(() => {
-    // localStore = new Vuex.Store({
-      // store
-    // })
   })
 
   it('methods.navbarToggle() toggles data.navbarIsActive', async () => {
     const wrapper = mount(NavBar, {
       localVue,
-      // localStore,
       stubs: ['router-link', 'router-view'],
       mocks: {
-        $store: {
-          state: {
-            cart: {},
-            isLoading: false,
-            userIsAuthenticated: false
-          },
-          getters: {
-            cartItemCount: 0
-          }
-        }
+        $store: store
        }
     })
 
