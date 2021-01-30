@@ -22,15 +22,11 @@ describe('StoreList.vue', () => {
       stubs: ['router-link', 'router-view']
     });
 
-    // get expected result
-    const expected = JSON.stringify(await m.fetchResponse(helpers.urls.storeList));
-    console.log(`expected: ${expected}`);
-    console.log(`helpers.urls.storeList: ${helpers.urls.storeList}`);
-
-    // get actual result
+    // getStores()
     await thisComponent.vm.getStores();
+
+    const expected = JSON.stringify(await m.fetchResponse(helpers.urls.storeList));
     const actual = JSON.stringify(thisComponent.vm.$data.stores);
-    console.log(`actual: ${actual}`);
 
     expect(actual).toMatch(expected);
   })
