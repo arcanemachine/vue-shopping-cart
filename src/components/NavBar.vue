@@ -31,7 +31,7 @@
             <i class="bi-cart2 navbar-show-icon-touch" :style="cartIconStyle"></i>
           </router-link>
           <div v-if="Object.keys(cart).length" class="cart-item-container">
-            <div class="cart-item-count">{{ cartItemCount }}</div>
+            <div class="cart-item-count">{{ iconCartItemCount }}</div>
           </div>
         </div>
         <span @click="navbarToggle"
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'NavBar',
@@ -89,7 +89,7 @@ export default {
   computed: {
     iconCartItemCount() {
       if (this.cartItemCount > 99) {
-        return '99';
+        return 99;
       } else {
         return this.cartItemCount;
       }
@@ -117,9 +117,7 @@ export default {
       }
     },
     // store
-    cartItemCount() {
-      return this.$store.getters.cartItemCount;
-    },
+    ...mapGetters(['cartItemCount']),
     ...mapState(['cart', 'isLoading', 'lastName']),
   },
   methods: {
