@@ -113,7 +113,7 @@ export default {
     },
     cartIconStyle() {
       return {
-        color: this.$store.getters.cartItemCount ? '#88f' : 'white'
+        color: this.cartItemCount ? '#88f' : 'white'
       }
     },
     // store
