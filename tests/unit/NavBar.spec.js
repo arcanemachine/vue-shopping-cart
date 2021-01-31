@@ -21,20 +21,27 @@ describe('NavBar.vue', () => {
   beforeEach(() => {
     defaultParams = {
       localVue,
-      store,
       stubs: ['router-link', 'router-view'],
-      // mocks: {
-      //   $store: store
-      // }
+      mocks: {
+        $store: store
+      }
     }
   })
 
   let mountComponent = ((params={}, data={}, mocks={}, stubs=[], computed={}) => {
+
+    //// if no store object is passed in, use the default mocked store
+    // if (!Object.keys(params).filter(x => x === 'store').length) {
+    //   params['store'] = store;
+    // }
+    
+    // assign all custom params onto defaultParams
     let componentArgs = Object.assign(defaultParams, params)
+
+    //// overwrite all existing default params
     // Object.keys(params).forEach((key, index) => {
     //   componentArgs.key = params.key;
     // })
-    // Object.assign(componentArgs.mocks, mocks);
     wrapper = mount(NavBar, componentArgs)
   });
 
@@ -71,16 +78,42 @@ describe('NavBar.vue', () => {
   })
 
   // computed.userIconUrl
-  it("computed.userIconUrl returns {name: 'login'} if !store.state.userIsAuthenticated", () => {
-    
-    mountComponent({
-    })
+  it("computed.userIconUrl returns {name: 'login'} if !$store.state.userIsAuthenticated", () => {
+    mountComponent({});
     expect(wrapper.vm.userIconUrl).toEqual({name: 'login'});
   })
 
-  it("computed.userIconUrl returns {name: 'login'} if !store.state.userIsAuthenticated", () => {
-    mountComponent({})
-    expect(wrapper.vm.userIconUrl).toEqual({name: 'login'});
+  it("computed.userIconUrl returns {name: 'userDetail'} if $store.state.userIsAuthenticated", () => {
+    mountComponent({
+      computed: {userIsAuthenticated: () => true}
+    })
+    expect(wrapper.vm.userIconUrl).toEqual({name: 'userDetail'});
+  })
+
+  // computed.userProfileIconStyle
+  it("computed.userProfileIconStyle returns {color: 'white'} if !$store.state.userIsAuthenticated", () => {
+    mountComponent({});
+    expect(wrapper.vm.userProfileIconStyle).toEqual({color: 'white'});
+  })
+
+  it("computed.userProfileIconStyle returns {color: '#88f'} if $store.state.userIsAuthenticated", () => {
+    mountComponent({
+      computed: {userIsAuthenticated: () => true}
+    });
+    expect(wrapper.vm.userProfileIconStyle).toEqual({color: '#88f'});
+  })
+
+  // computed.cartIconStyle
+  it("computed.cartIconStyle returns {color: 'white'} if !$store.state.userIsAuthenticated", () => {
+    mountComponent({});
+    expect(wrapper.vm.cartIconStyle).toEqual({color: 'white'});
+  })
+
+  it("computed.cartIconStyle returns {color: '#88f'} if $store.state.userIsAuthenticated", () => {
+    mountComponent({
+      computed: {cartItemCount: () => 1}
+    });
+    expect(wrapper.vm.cartIconStyle).toEqual({color: '#88f'});
   })
 
   // methods.navbarMenuClass
