@@ -118,7 +118,7 @@ export default {
     },
     // store
     ...mapGetters(['cartItemCount']),
-    ...mapState(['cart', 'isLoading', 'lastName']),
+    ...mapState(['cart', 'isLoading', 'lastName', 'userIsAuthenticated']),
   },
   methods: {
     navbarToggle() {
