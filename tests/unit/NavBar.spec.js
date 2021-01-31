@@ -7,8 +7,8 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 // mocks
-// import { store } from '../dummy/mocks/'
-import store from '@/store/index.js'
+import { store } from '../dummy/mocks/'
+// import store from '@/store/index.js'
 
 // helpers
 import * as helpers from '@/assets/js/helpers.js'
@@ -23,15 +23,18 @@ describe('NavBar.vue', () => {
       localVue,
       store,
       stubs: ['router-link', 'router-view'],
-      mocks: {
-        // $store: store
-      }
+      // mocks: {
+      //   $store: store
+      // }
     }
   })
 
   let mountComponent = ((params={}, data={}, mocks={}, stubs=[], computed={}) => {
     let componentArgs = Object.assign(defaultParams, params)
-    Object.assign(componentArgs.mocks, mocks);
+    // Object.keys(params).forEach((key, index) => {
+    //   componentArgs.key = params.key;
+    // })
+    // Object.assign(componentArgs.mocks, mocks);
     wrapper = mount(NavBar, componentArgs)
   });
 
