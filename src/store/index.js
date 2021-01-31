@@ -53,8 +53,8 @@ export default new Vuex.Store({
     },
     cartItemCount (state) {
       if (!Object.keys(state.cart).length) {return 0;}
-      let cartCountList = Object.values(state.cart);
-      let result = cartCountList.reduce((a, b) => a + b, 0);
+      let cartCountArray = Object.values(state.cart);
+      let result = cartCountArray.reduce((a, b) => a + b, 0);
       return result;
     },
     checkoutData (state) {
