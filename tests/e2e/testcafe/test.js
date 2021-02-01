@@ -1,48 +1,20 @@
-import { Selector, RequestLogger, ClientFunction } from 'testcafe';
+import { Selector, RequestLogger } from 'testcafe';
 import * as helpers from '../../../src/assets/js/helpers.js'
+import * as tHelpers from './testHelpers.js'
 
-// fixture `Getting Started`
-//   .page `http://devexpress.github.io/testcafe/example`;
-// 
-// test('My first test', async t => {
-// 	const myName = 'John Smith';
-// 
-//   await t
-// 		.typeText('#developer-name', myName)
-// 		.click('#submit-button')
-// 		.expect(Selector('#article-header').innerText).eql(`Thank you, ${myName}!`);
-// 
-// });
+const frontendUrl = helpers.FRONTEND_SERVER_URL;
+let testPageUrl;
 
-const domainUrl = `${helpers.FRONTEND_SERVER_URL}`
+// intro/about
 
+testPageUrl = `${frontendUrl}/about/`;
 
-const setCookie = ClientFunction((key, value) => {
-	document.cookie = `${key}=${value}`;
-})
-
-const getCookie = ClientFunction((key) => {
-	try {
-		document.cookie.split('; ').map(x => x.split('=')).filter(x => x[0] === key)[0][1];
-	}
-	catch(err) {
-		return false;
-	}
-	return document.cookie;
-})
-
-const getCookies = ClientFunction(() => {
-	return document.cookie;
-})
-
-
-// intro
-const logger = RequestLogger({domainUrl}, {
+const logger = RequestLogger({frontendUrl}, {
 	logResponseHeaders: true
 });
 
-fixture `Intro`
-	.page(`${domainUrl}/`)
+fixture `About`
+	.page(testPageUrl)
 	.requestHooks(logger);
 
 test('Page returns 200', async t => {
@@ -50,24 +22,62 @@ test('Page returns 200', async t => {
 })
 
 test('Browser sets introSeen cookie on page load', async t => {
-	await t.expect(getCookie('introSeen')).ok();;
+	await t.expect(tHelpers.getCookie('introSeen')).ok();
+})
+
+
+test(`Button "Let's go shopping!" goes to storeList`, async t => {
+	await t.click('#button-lets-go-shopping');
 })
 
 
 // login
-fixture `views.Login`
-	.page(`${domainUrl}/login/`)
+testPageUrl = `${frontendUrl}/login/`
 
-test('User can login', async t => {
+fixture `views.Login`
+	.page(testPageUrl)
+	.beforeEach(async t => {
+		// ENSURE THIS WORKS
+		tHelpers.setCookie('introSeen', '1');
+		await t.navigateTo(testPageUrl);
+	})
+
+test('User can login with Enter key', async t => {
 	const username = 'test_user';
 	const password = 'drowssap';
 
-	const usernameField = Selector('#login-input-username');
-	const passwordField = Selector('#login-input-password');
+	const usernameField = await Selector('#login-input-username');
+	const passwordField = await Selector('#login-input-password');
 
-	// username field is autofocused
-	// await t.expect(usernameField.value).eql('', 'input is empty');
+	await t.expect(usernameField.getAttribute('autofocus')).eql('autofocus', 'username field is autofocused');
 
 	// submit username and password
+	await t.typeText(usernameField, username);
+	await t
+		.typeText(passwordField, password)
+		.pressKey('enter');
 
+	// user is logged in
+	tHelpers.getCookie('userToken');
+	await t.expect(tHelpers.getWindowLocation()).eql(`${frontendUrl}/my-account/`);
+})
+
+test('User can login by clicking Login button', async t => {
+	const username = 'test_user';
+	const password = 'drowssap';
+
+	const usernameField = await Selector('#login-input-username');
+	const passwordField = await Selector('#login-input-password');
+	const loginButton = await Selector('#login-button-submit');
+
+	await t.expect(usernameField.getAttribute('autofocus')).eql('autofocus', 'username field is autofocused');
+
+	// submit username and password
+	await t.typeText(usernameField, username);
+	await t.typeText(passwordField, password)
+	await t.click('#login-button-submit')
+
+	// user is logged in and redirected to userDetail
+	tHelpers.getCookie('userToken');
+	await t.expect(tHelpers.getWindowLocation()).eql(`${frontendUrl}/my-account/`);
 })
