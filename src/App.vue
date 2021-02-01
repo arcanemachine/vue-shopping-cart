@@ -22,7 +22,7 @@ export default {
     NavBar, StatusMessage
   },
   beforeCreate() {
-    if (!Cookies.get('introSeen')) {
+    if (Cookies.get('introSeen') !== '1') {
       this.$router.push({name: 'about'});
     }
   },
