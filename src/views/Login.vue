@@ -15,6 +15,7 @@
                   <div class="control">
                     <input type="text"
                            v-model="form.username"
+                           id="login-input-username"
                            class="input is-large"
                            placeholder="Username"
                            autofocus="">
@@ -22,12 +23,12 @@
                   <div class="control">
                     <input type="password"
                            v-model="form.password"
+                           id="login-input-password"
                            class="input is-large"
-                           placeholder="Password"
-                           autofocus="">
+                           placeholder="Password">
                   </div>
                 </div>
-                <button ref="loginButton" class="button is-block is-info is-large is-fullwidth">Login</button>
+                <button id="login-submit-button" ref="loginButton" class="button is-block is-info is-large is-fullwidth">Login</button>
               </form>
             </div>
             <transition name="fade" mode="out-in">
