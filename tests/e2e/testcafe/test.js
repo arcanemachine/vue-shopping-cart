@@ -27,3 +27,11 @@ fixture `Hello World`
 test('Page returns 200', async t => {
 	await t.expect(logger.contains(r => r.response.statusCode === 200)).ok();
 })
+
+
+fixture `views.Login`
+
+test('User can login', async t => {
+	const username = 'test_user';
+	const password = 'drowssap';
+})
