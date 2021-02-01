@@ -20,7 +20,7 @@
           </div>
           <div class="mt-5 container has-text-centered">
             <router-link :to="{name: 'storeList'}">
-              <button class="mt-3 button is-large is-success">Let's go shopping!</button>
+              <button id="button-lets-go-shopping" class="mt-3 button is-large is-success">Let's go shopping!</button>
             </router-link>
           </div>
         </div>

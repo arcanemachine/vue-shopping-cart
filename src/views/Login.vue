@@ -18,7 +18,7 @@
                            id="login-input-username"
                            class="input is-large"
                            placeholder="Username"
-                           autofocus="">
+                           autofocus>
                   </div>
                   <div class="control">
                     <input type="password"
@@ -28,7 +28,7 @@
                            placeholder="Password">
                   </div>
                 </div>
-                <button id="login-submit-button" ref="loginButton" class="button is-block is-info is-large is-fullwidth">Login</button>
+                <button id="login-button-submit" ref="loginButton" class="button is-block is-info is-large is-fullwidth">Login</button>
               </form>
             </div>
             <transition name="fade" mode="out-in">
