@@ -198,8 +198,6 @@ export default new Vuex.Store({
       context.commit('userIs', undefined);
       context.commit('userProfileIs', undefined);
       Cookies.remove('userToken');
-      // Cookies.remove('cart');
-      // Cookies.remove('cartModifiedAt');
     },
     async getUser (context, token) {
       let url = helpers.urls.getUser;
