@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import Cookies from 'js-cookie'
 
-import * as helpers from '../assets/js/helpers.js'
+import * as helpers from '@/assets/js/helpers.js'
 
 Vue.use(Vuex)
 

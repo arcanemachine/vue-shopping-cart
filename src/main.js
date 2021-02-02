@@ -18,7 +18,7 @@ require('@/assets/base.css');
 
 
 // helper functions
-import * as helpers from './assets/js/helpers.js'
+import * as helpers from '@/assets/js/helpers.js'
 Vue.prototype.$helpers = helpers;
 
 
