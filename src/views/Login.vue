@@ -69,9 +69,11 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.getters.userIsAuthenticated) {
-      this.$router.push({name: 'userDetail'});
-    }
+    this.$nextTick(() => {
+      if (this.$store.getters.userIsAuthenticated) {
+        this.$router.push({name: 'userDetail'});
+      }
+    })
   },
   methods: {
     async getUser() {

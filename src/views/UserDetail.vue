@@ -22,18 +22,16 @@ export default {
   name: 'UserDetail',
   data() {
     return {
-      user: {},
+      isMounted: false,
     }
   },
-  beforeCreate() {
-    if (!this.$store.getters.userIsAuthenticated) {
-      this.$router.push({name: 'login'});
+  computed: {
+    user() {
+      if (this.$store.state.user) {
+        return this.$store.state.user;
+      }
+      return {username: ''}
     }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.user = this.$store.getters.user;
-    })
   }
 }
 </script>

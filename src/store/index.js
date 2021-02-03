@@ -34,7 +34,7 @@ export default new Vuex.Store({
       return state.statusMessageTimeout;
     },
     userIsAuthenticated (state) {
-      return state.userIsAuthenticated;
+      return !!Cookies.get('userToken') || !!state.userToken; // TODO: fix this line
     },
     user (state) {
       return state.user;
