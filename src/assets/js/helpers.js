@@ -1,5 +1,5 @@
-export const BACKEND_SERVER_URL = 'https://django-shopping-cart.nicholasmoen.com/'
-export const FRONTEND_URL = 'https://arcanemachine.github.io/vue-shopping-cart/'
+export const BACKEND_SERVER_URL = 'https://django-shopping-cart.nicholasmoen.com'
+export const FRONTEND_URL = 'https://arcanemachine.github.io/vue-shopping-cart'
 
 export const urls = {
 
