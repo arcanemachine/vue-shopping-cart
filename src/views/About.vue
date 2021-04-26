@@ -5,7 +5,7 @@
       <div class="columns">
         <div class="column is-half is-offset-one-quarter">
           <div class="about">
-            <p class="mt-4">This demo simulates a user-base shopping/checkout experience. Users can browse items, add them to their cart, manage the cart (add/remove items), and perform a checkout process.</p>
+            <p class="mt-4">This demo simulates a user-based shopping/checkout experience. Users can browse items, add them to their cart, manage the cart (add/remove items), and perform a checkout process.</p>
             <p class="mt-2"><strong>This demo is a simulation only. No real money is spent when using this demo.</strong></p>
           </div>
           <div class="about">
