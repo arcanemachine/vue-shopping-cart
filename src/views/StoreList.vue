@@ -14,6 +14,12 @@
                     class="column">
         </store-card>
       </div>
+      <div class="mt-6 has-text-centered is-size-4">
+          <router-link @click.native="navbarToggle"
+                       :to="{name: 'about'}">
+            Learn more about this project
+          </router-link>
+      </div>
     </div>
   </div>
 </template>
