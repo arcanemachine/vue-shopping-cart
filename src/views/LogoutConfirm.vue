@@ -14,6 +14,9 @@
             <router-link :to="{name: 'logout', query: {clearCart: clearCartCheckbox}}">
               <button class="button is-block is-info is-large is-fullwidth">Logout</button>
             </router-link>
+            <router-link :to="{name: 'userDetail'}">
+              <button class="mt-3 button is-block has-background-grey has-text-white is-large is-fullwidth">Cancel</button>
+            </router-link>
             <div class="clear-cart-text">
               <label for="clear-cart-checkbox">
                 <input id="clear-cart-checkbox"

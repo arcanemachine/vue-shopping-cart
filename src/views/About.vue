@@ -11,8 +11,8 @@
           <div class="about">
             <h4 class="mt-4 is-size-4 has-text-centered">Features</h4>
           <ul class="ml-5 mr-5 list-style-dashed has-text-left">
-            <li class="mt-2">The frontend is powered by Vue/Node.js.</li>
-            <li>The backend uses a REST API powered by Django + Django Rest Framework</li>
+            <li class="mt-2">The frontend is powered by Vue.</li>
+            <li>The backend uses a REST API powered by Django + Django Rest Framework.</li>
             <li>The shopping cart will be stored locally unless the user creates an account.</li>
             <li>If the user creates an account, all items will be synced to the the backend server and can be accessed from any computer the user logs in to.</li>
             <li>Users can add and edit their address and preferred payment methods.</li>

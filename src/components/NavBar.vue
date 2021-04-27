@@ -51,6 +51,9 @@
             <router-link @click.native="navbarToggle"
                          :to="{name: 'about'}"
                          class="navbar-item has-text-centered">About</router-link>
+            <router-link @click.native="navbarToggle"
+                         :to="{name: 'storeList'}"
+                         class="navbar-item has-text-centered">View Stores</router-link>
             <router-link :to="{name: 'cartDetail'}" class="navbar-item is-hidden-mobile is-hidden-tablet-only">
               Your Cart <span class="navbar-icon-container-wide"><i class="bi-cart2 is-size-5"></i></span>
             </router-link>
@@ -70,9 +73,6 @@
                          @click.native="navbarToggle"
                          :to="{name: 'logoutConfirm'}"
                          class="navbar-item has-text-centered">Logout</router-link>
-            <router-link @click.native="navbarToggle"
-                         :to="{name: 'storeList'}"
-                         class="navbar-item has-text-centered">View Stores</router-link>
           </div>
       </div>
     </div>

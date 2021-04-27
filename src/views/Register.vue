@@ -8,21 +8,10 @@
             <div class="hr-container">
               <hr class="login-hr">
             </div>
-            <p class="login-text subtitle has-text-black">Login to your account</p>
-            <p class="subtitle has-text-black">(This part doesn't work yet.)</p>
-            <div class="box">
-              <form>
-                <div class="field">
-                  <div class="control">
-                    <input class="input is-large" type="text" placeholder="Username" autofocus="">
-                  </div>
-                  <div class="control">
-                    <input class="input is-large" type="password" placeholder="Password" autofocus="">
-                  </div>
-                </div>
-                <button class="button is-block is-info is-large is-fullwidth">Login</button>
-              </form>
-            </div>
+            <p class="login-text subtitle has-text-black">Register a new account by clicking the link below:</p>
+              <a :href="registerUrl">
+                <button class="button is-block is-info is-large is-fullwidth">Register</button>
+              </a>
           </div>
         </div>
       </div>
@@ -32,6 +21,7 @@
 
 <script>
 
+
 export default {
   name: 'Register',
   components: {
@@ -40,7 +30,14 @@ export default {
     return {
     }
   },
+  computed: {
+    registerUrl() {
+      return this.$helpers.urls.registerBackend + '?frontend=1';
+    }
+  },
   mounted() {
+
+
   },
   methods: {
   }

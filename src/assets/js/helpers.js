@@ -7,7 +7,9 @@ export const urls = {
   getSessionCookie: BACKEND_SERVER_URL + '/get-session-cookie/',
 
   // user
+  registerBackend: BACKEND_SERVER_URL + '/users/register/',
   login: BACKEND_SERVER_URL + '/api/rest-auth/login/',
+  loginBackend: BACKEND_SERVER_URL + '/users/login/',
   logout: BACKEND_SERVER_URL + '/api/rest-auth/logout/',
   getUser: BACKEND_SERVER_URL + `/api/v1/user/`,
   getProfile: BACKEND_SERVER_URL + `/api/v1/user/profile/`,

@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="mt-4">
+      <div class="mt-6 is-size-4 has-text-centered">
         <!--p>Update your address</p-->
         <p><router-link :to="{name: 'cartDetail'}">View your cart</router-link></p>
         <p><router-link :to="{name: 'logoutConfirm'}">Logout</router-link></p>
