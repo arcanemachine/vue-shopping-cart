@@ -32,3 +32,6 @@ pnpm-debug.log*
 Session.vim
 *.un~
 *~
+
+# Local Netlify folder
+.netlify
